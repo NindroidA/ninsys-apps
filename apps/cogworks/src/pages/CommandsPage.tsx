@@ -1,7 +1,7 @@
-import { FadeIn, StaggerContainer } from "@ninsys/ui/components/animations";
 import { CommandCard } from "@/components/cogworks";
-import { Input } from "@ninsys/ui/components";
 import { commandCategories, commands } from "@/data/commands";
+import { Input } from "@ninsys/ui/components";
+import { FadeIn, StaggerContainer } from "@ninsys/ui/components/animations";
 import { cn } from "@ninsys/ui/lib";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";

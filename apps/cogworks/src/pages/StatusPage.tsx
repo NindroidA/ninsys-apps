@@ -1,6 +1,6 @@
-import { FadeIn, StaggerContainer } from "@ninsys/ui/components/animations";
 import { BotStatusBadge, StatCard } from "@/components/cogworks";
 import { formatUptime, useBotStats, useBotStatus } from "@/hooks/useBotStatus";
+import { FadeIn, StaggerContainer } from "@ninsys/ui/components/animations";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
 import { Activity, Clock, Server, Ticket, Users, Zap } from "lucide-react";

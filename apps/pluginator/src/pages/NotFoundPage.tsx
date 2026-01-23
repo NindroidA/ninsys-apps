@@ -1,15 +1,19 @@
-import { ParallaxElement } from "@ninsys/ui/components/scroll";
 import { Button } from "@ninsys/ui/components";
+import { ParallaxElement } from "@ninsys/ui/components/scroll";
 import { motion } from "framer-motion";
-import { Home, ArrowLeft, Search } from "lucide-react";
+import { ArrowLeft, Home, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export function NotFoundPage() {
 	return (
 		<div className="min-h-screen flex flex-col items-center justify-center py-32 px-4 relative overflow-hidden">
 			{/* Floating Background Elements */}
-			<div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }} aria-hidden="true">
-				<ParallaxElement speed={0.15} className="absolute" style={{ top: '20%', left: '15%' }}>
+			<div
+				className="absolute inset-0 overflow-hidden pointer-events-none"
+				style={{ zIndex: 0 }}
+				aria-hidden="true"
+			>
+				<ParallaxElement speed={0.15} className="absolute" style={{ top: "20%", left: "15%" }}>
 					<motion.div
 						animate={{
 							y: [0, -30, 0],
@@ -22,13 +26,13 @@ export function NotFoundPage() {
 						}}
 						className="rounded-full blur-3xl"
 						style={{
-							width: '300px',
-							height: '300px',
-							background: 'oklch(0.627 0.265 303.9 / 0.15)',
+							width: "300px",
+							height: "300px",
+							background: "oklch(0.627 0.265 303.9 / 0.15)",
 						}}
 					/>
 				</ParallaxElement>
-				<ParallaxElement speed={-0.1} className="absolute" style={{ bottom: '25%', right: '20%' }}>
+				<ParallaxElement speed={-0.1} className="absolute" style={{ bottom: "25%", right: "20%" }}>
 					<motion.div
 						animate={{
 							y: [0, 20, 0],
@@ -42,13 +46,13 @@ export function NotFoundPage() {
 						}}
 						className="rounded-full blur-3xl"
 						style={{
-							width: '250px',
-							height: '250px',
-							background: 'oklch(0.70 0.20 290 / 0.12)',
+							width: "250px",
+							height: "250px",
+							background: "oklch(0.70 0.20 290 / 0.12)",
 						}}
 					/>
 				</ParallaxElement>
-				<ParallaxElement speed={0.2} className="absolute" style={{ top: '60%', left: '60%' }}>
+				<ParallaxElement speed={0.2} className="absolute" style={{ top: "60%", left: "60%" }}>
 					<motion.div
 						animate={{
 							x: [0, 15, 0],
@@ -62,9 +66,9 @@ export function NotFoundPage() {
 						}}
 						className="rounded-full blur-2xl"
 						style={{
-							width: '150px',
-							height: '150px',
-							background: 'oklch(0.627 0.265 303.9 / 0.1)',
+							width: "150px",
+							height: "150px",
+							background: "oklch(0.627 0.265 303.9 / 0.1)",
 						}}
 					/>
 				</ParallaxElement>
@@ -149,10 +153,7 @@ export function NotFoundPage() {
 					transition={{ duration: 0.5, delay: 0.6 }}
 					className="flex flex-col sm:flex-row items-center justify-center gap-4"
 				>
-					<motion.div
-						whileHover={{ scale: 1.05 }}
-						whileTap={{ scale: 0.95 }}
-					>
+					<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
 						<Button variant="primary" asChild>
 							<Link to="/">
 								<Home className="mr-2 h-4 w-4" />
@@ -160,10 +161,7 @@ export function NotFoundPage() {
 							</Link>
 						</Button>
 					</motion.div>
-					<motion.div
-						whileHover={{ scale: 1.05 }}
-						whileTap={{ scale: 0.95 }}
-					>
+					<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
 						<Button variant="outline" onClick={() => window.history.back()}>
 							<ArrowLeft className="mr-2 h-4 w-4" />
 							Go Back

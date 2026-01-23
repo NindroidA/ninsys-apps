@@ -99,7 +99,10 @@ export function TextReveal({
 				tween.kill();
 			};
 		},
-		{ scope: containerRef, dependencies: [mode, revealedColor, unrevealedColor, start, end, scrub] },
+		{
+			scope: containerRef,
+			dependencies: [mode, revealedColor, unrevealedColor, start, end, scrub],
+		},
 	);
 
 	return (

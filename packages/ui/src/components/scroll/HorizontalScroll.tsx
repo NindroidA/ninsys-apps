@@ -60,10 +60,7 @@ export function HorizontalScroll({
 
 	return (
 		<div ref={containerRef} className={`overflow-hidden ${className}`}>
-			<div
-				ref={trackRef}
-				className={`flex items-center will-change-transform ${trackClassName}`}
-			>
+			<div ref={trackRef} className={`flex items-center will-change-transform ${trackClassName}`}>
 				{children}
 			</div>
 		</div>

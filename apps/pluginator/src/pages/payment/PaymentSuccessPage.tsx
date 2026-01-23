@@ -2,9 +2,9 @@
  * Payment success page
  */
 
+import { TIER_DISPLAY, type Tier } from "@/types/tier";
 import { Button } from "@ninsys/ui/components";
 import { FadeIn } from "@ninsys/ui/components/animations";
-import { TIER_DISPLAY, type Tier } from "@/types/tier";
 import { useQueryClient } from "@tanstack/react-query";
 import { CheckCircle2, PartyPopper } from "lucide-react";
 import { useEffect } from "react";
@@ -43,10 +43,7 @@ export function PaymentSuccessPage() {
 					<div className="p-6 rounded-xl bg-card border border-border mb-6">
 						<p className="text-muted-foreground">
 							Your account has been upgraded. You now have access to all{" "}
-							<span className="font-semibold text-foreground">
-								{tierInfo?.name}
-							</span>{" "}
-							features.
+							<span className="font-semibold text-foreground">{tierInfo?.name}</span> features.
 						</p>
 					</div>
 

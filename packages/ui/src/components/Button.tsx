@@ -1,4 +1,3 @@
-import { cn } from "../lib/utils";
 import { motion } from "framer-motion";
 import {
 	type ButtonHTMLAttributes,
@@ -7,6 +6,7 @@ import {
 	cloneElement,
 	isValidElement,
 } from "react";
+import { cn } from "../lib/utils";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	children: ReactNode;
@@ -21,7 +21,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const variants = {
 	primary: "bg-primary text-primary-foreground hover:bg-primary-hover shadow-md hover:shadow-lg",
 	secondary: "bg-secondary text-secondary-foreground hover:bg-muted",
-	outline: "border-[3px] border-primary text-primary hover:bg-primary hover:text-primary-foreground shadow-sm hover:shadow-md",
+	outline:
+		"border-[3px] border-primary text-primary hover:bg-primary hover:text-primary-foreground shadow-sm hover:shadow-md",
 	ghost: "text-foreground hover:bg-muted",
 	destructive: "bg-error text-error-foreground hover:opacity-90",
 };

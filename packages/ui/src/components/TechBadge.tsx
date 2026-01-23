@@ -1,4 +1,3 @@
-import { cn } from "../lib/utils";
 import { Blocks } from "lucide-react";
 import type { ReactNode } from "react";
 import {
@@ -11,6 +10,7 @@ import {
 	SiTypescript,
 	SiVite,
 } from "react-icons/si";
+import { cn } from "../lib/utils";
 
 export interface TechBadgeProps {
 	/** The technology name to display */

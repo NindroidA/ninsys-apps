@@ -2,18 +2,15 @@
  * Checkout page - redirects to Stripe Checkout
  */
 
-import { FadeIn } from "@ninsys/ui/components/animations";
 import { useCreateCheckout } from "@/hooks/useSubscription";
+import type { Tier } from "@/types/tier";
+import { FadeIn } from "@ninsys/ui/components/animations";
 import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import type { Tier } from "@/types/tier";
 
 /** Allowed Stripe checkout URL prefixes */
-const ALLOWED_CHECKOUT_DOMAINS = [
-	"https://checkout.stripe.com",
-	"https://billing.stripe.com",
-];
+const ALLOWED_CHECKOUT_DOMAINS = ["https://checkout.stripe.com", "https://billing.stripe.com"];
 
 /**
  * Validates that a URL is a legitimate Stripe checkout URL
@@ -22,7 +19,7 @@ function isValidStripeUrl(url: string): boolean {
 	try {
 		const parsed = new URL(url);
 		return ALLOWED_CHECKOUT_DOMAINS.some(
-			(domain) => url.startsWith(domain) && parsed.protocol === "https:"
+			(domain) => url.startsWith(domain) && parsed.protocol === "https:",
 		);
 	} catch {
 		return false;
@@ -63,9 +60,7 @@ export function CheckoutPage() {
 				<div className="text-center">
 					<Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-primary" />
 					<h1 className="text-xl font-semibold mb-2">Preparing Checkout</h1>
-					<p className="text-muted-foreground">
-						Redirecting you to secure payment...
-					</p>
+					<p className="text-muted-foreground">Redirecting you to secure payment...</p>
 				</div>
 			</FadeIn>
 		</div>

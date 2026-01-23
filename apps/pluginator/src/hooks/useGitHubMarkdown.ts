@@ -7,7 +7,7 @@ const GITHUB_RAW_BASE = "https://raw.githubusercontent.com/NindroidA/pluginator-
 export const DOC_PATHS: Record<string, string> = {
 	"cli-commands": "/docs/quick-reference/cli-commands.md",
 	"config-options": "/docs/quick-reference/config-options.md",
-	"troubleshooting": "/docs/quick-reference/troubleshooting.md",
+	troubleshooting: "/docs/quick-reference/troubleshooting.md",
 	"plugin-json": "/docs/quick-reference/plugin-json.md",
 	"user-guide": "/docs/USER_GUIDE.md",
 	changelog: "/docs/CHANGELOG.md",

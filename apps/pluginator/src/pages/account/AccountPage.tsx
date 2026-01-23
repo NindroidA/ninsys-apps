@@ -3,12 +3,12 @@
  * User profile and subscription management
  */
 
+import { UsageDashboard } from "@/components/pluginator/UsageDashboard";
+import { useAuth } from "@/hooks/useAuth";
+import { useCreatePortalSession, useSubscription } from "@/hooks/useSubscription";
+import { TIER_DISPLAY } from "@/types/tier";
 import { Button, Card } from "@ninsys/ui/components";
 import { FadeIn } from "@ninsys/ui/components/animations";
-import { useAuth } from "@/hooks/useAuth";
-import { useSubscription, useCreatePortalSession } from "@/hooks/useSubscription";
-import { UsageDashboard } from "@/components/pluginator/UsageDashboard";
-import { TIER_DISPLAY } from "@/types/tier";
 import { ExternalLink, Settings, User } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -44,11 +44,11 @@ export function AccountPage() {
 							</div>
 							<div className="space-y-4">
 								<div>
-									<label className="text-sm text-muted-foreground">Email</label>
+									<span className="text-sm text-muted-foreground">Email</span>
 									<p className="font-medium">{user?.email || "Not logged in"}</p>
 								</div>
 								<div>
-									<label className="text-sm text-muted-foreground">Name</label>
+									<span className="text-sm text-muted-foreground">Name</span>
 									<p className="font-medium">{user?.name || "Not set"}</p>
 								</div>
 							</div>

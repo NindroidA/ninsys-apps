@@ -3,10 +3,10 @@
  * Displays daily usage statistics and limits
  */
 
-import { Card } from "@ninsys/ui/components";
-import { useUsage } from "@/hooks/useUsage";
 import { useSubscription } from "@/hooks/useSubscription";
+import { useUsage } from "@/hooks/useUsage";
 import { TIER_DISPLAY, type UsageStat } from "@/types/tier";
+import { Card } from "@ninsys/ui/components";
 import { AlertTriangle, Download, RefreshCw, Zap } from "lucide-react";
 
 export function UsageDashboard() {
@@ -65,8 +65,7 @@ export function UsageDashboard() {
 					<div className="flex items-center gap-3">
 						<AlertTriangle className="h-5 w-5 text-warning flex-shrink-0" />
 						<p className="text-sm text-warning">
-							You're running low on daily usage. Consider upgrading for higher
-							limits.
+							You're running low on daily usage. Consider upgrading for higher limits.
 						</p>
 					</div>
 				</Card>
@@ -106,11 +105,7 @@ function UsageCard({ title, icon, stat }: UsageCardProps) {
 					<div className="h-2 bg-muted rounded-full overflow-hidden">
 						<div
 							className={`h-full transition-all ${
-								isDanger
-									? "bg-destructive"
-									: isWarning
-										? "bg-warning"
-										: "bg-primary"
+								isDanger ? "bg-destructive" : isWarning ? "bg-warning" : "bg-primary"
 							}`}
 							style={{ width: `${Math.min(100, percentage)}%` }}
 						/>

@@ -14,13 +14,7 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
-import {
-	type ReactNode,
-	createContext,
-	useContext,
-	useEffect,
-	useState,
-} from "react";
+import { type ReactNode, createContext, useContext, useEffect, useState } from "react";
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -63,9 +57,7 @@ export function ScrollProvider({
 
 	useEffect(() => {
 		// Respect prefers-reduced-motion
-		const prefersReducedMotion = window.matchMedia(
-			"(prefers-reduced-motion: reduce)",
-		).matches;
+		const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 		if (!smoothScroll || prefersReducedMotion) {
 			// Still set up ScrollTrigger without Lenis
@@ -109,10 +101,7 @@ export function ScrollProvider({
 		};
 	}, [smoothScroll, duration, easing]);
 
-	const scrollTo = (
-		target: string | number | HTMLElement,
-		options: ScrollToOptions = {},
-	) => {
+	const scrollTo = (target: string | number | HTMLElement, options: ScrollToOptions = {}) => {
 		if (lenis) {
 			lenis.scrollTo(target, {
 				offset: options.offset ?? 0,
@@ -132,9 +121,5 @@ export function ScrollProvider({
 		}
 	};
 
-	return (
-		<ScrollContext.Provider value={{ lenis, scrollTo }}>
-			{children}
-		</ScrollContext.Provider>
-	);
+	return <ScrollContext.Provider value={{ lenis, scrollTo }}>{children}</ScrollContext.Provider>;
 }

@@ -24,9 +24,7 @@ export function PrivacyPage() {
 						<span className="text-sm font-medium text-primary">Legal</span>
 					</div>
 					<h1 className="text-3xl font-bold mb-2">Privacy Policy</h1>
-					<p className="text-muted-foreground">
-						Last updated: January 22, 2025
-					</p>
+					<p className="text-muted-foreground">Last updated: January 22, 2025</p>
 				</FadeIn>
 
 				{/* Content */}
@@ -36,8 +34,8 @@ export function PrivacyPage() {
 							<section>
 								<h2 className="text-xl font-semibold mb-3">1. Information We Collect</h2>
 								<p className="text-muted-foreground leading-relaxed">
-																		When you use Pluginator, we may collect certain information to provide and improve our services.
-									This includes:
+									When you use Pluginator, we may collect certain information to provide and improve
+									our services. This includes:
 								</p>
 								<ul className="list-disc list-inside mt-2 space-y-1 text-muted-foreground">
 									<li>Account information (email, username) when you create an account</li>
@@ -49,7 +47,7 @@ export function PrivacyPage() {
 							<section>
 								<h2 className="text-xl font-semibold mb-3">2. How We Use Your Information</h2>
 								<p className="text-muted-foreground leading-relaxed">
-																		We use the information we collect to:
+									We use the information we collect to:
 								</p>
 								<ul className="list-disc list-inside mt-2 space-y-1 text-muted-foreground">
 									<li>Provide and maintain our services</li>
@@ -62,7 +60,7 @@ export function PrivacyPage() {
 							<section>
 								<h2 className="text-xl font-semibold mb-3">3. Data Security</h2>
 								<p className="text-muted-foreground leading-relaxed">
-																		We implement appropriate security measures to protect your personal information.
+									We implement appropriate security measures to protect your personal information.
 									All data is transmitted securely using SSL/TLS encryption.
 								</p>
 							</section>
@@ -70,7 +68,7 @@ export function PrivacyPage() {
 							<section>
 								<h2 className="text-xl font-semibold mb-3">4. Third-Party Services</h2>
 								<p className="text-muted-foreground leading-relaxed">
-																		We use trusted third-party services to help operate Pluginator:
+									We use trusted third-party services to help operate Pluginator:
 								</p>
 								<ul className="list-disc list-inside mt-2 space-y-1 text-muted-foreground">
 									<li>Stripe for payment processing</li>
@@ -81,8 +79,8 @@ export function PrivacyPage() {
 							<section>
 								<h2 className="text-xl font-semibold mb-3">5. Your Rights</h2>
 								<p className="text-muted-foreground leading-relaxed">
-																		You have the right to access, update, or delete your personal information at any time.
-									Contact us at the email below for any privacy-related requests.
+									You have the right to access, update, or delete your personal information at any
+									time. Contact us at the email below for any privacy-related requests.
 								</p>
 							</section>
 

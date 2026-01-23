@@ -1,8 +1,8 @@
-import { FadeIn, StaggerContainer } from "@ninsys/ui/components/animations";
 import { BotStatusBadge, FeatureCard, StatCard } from "@/components/cogworks";
-import { Button } from "@ninsys/ui/components";
 import { features } from "@/data/features";
 import { formatUptime, useBotStats, useBotStatus } from "@/hooks/useBotStatus";
+import { Button } from "@ninsys/ui/components";
+import { FadeIn, StaggerContainer } from "@ninsys/ui/components/animations";
 import { motion } from "framer-motion";
 import { ArrowRight, Bot, Server, Ticket, Users } from "lucide-react";
 import { SiDiscord } from "react-icons/si";
@@ -17,25 +17,29 @@ export function HomePage() {
 			{/* Hero Section */}
 			<section className="relative overflow-hidden py-20 sm:py-32">
 				{/* Background gradient orbs - use fixed positioning values and ensure visibility */}
-				<div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }} aria-hidden="true">
+				<div
+					className="absolute inset-0 overflow-hidden pointer-events-none"
+					style={{ zIndex: 0 }}
+					aria-hidden="true"
+				>
 					<div
 						className="absolute rounded-full blur-3xl"
 						style={{
-							top: '-5%',
-							left: '15%',
-							width: '400px',
-							height: '400px',
-							background: 'oklch(0.55 0.20 280 / 0.25)',
+							top: "-5%",
+							left: "15%",
+							width: "400px",
+							height: "400px",
+							background: "oklch(0.55 0.20 280 / 0.25)",
 						}}
 					/>
 					<div
 						className="absolute rounded-full blur-3xl"
 						style={{
-							bottom: '-10%',
-							right: '20%',
-							width: '350px',
-							height: '350px',
-							background: 'oklch(0.70 0.18 350 / 0.20)',
+							bottom: "-10%",
+							right: "20%",
+							width: "350px",
+							height: "350px",
+							background: "oklch(0.70 0.18 350 / 0.20)",
 						}}
 					/>
 				</div>

@@ -1,6 +1,6 @@
-import { useThemeStore } from "../stores/themeStore";
 import { motion } from "framer-motion";
 import { Moon, Sun } from "lucide-react";
+import { useThemeStore } from "../stores/themeStore";
 
 export function ThemeToggle() {
 	const { isDark, toggle } = useThemeStore();

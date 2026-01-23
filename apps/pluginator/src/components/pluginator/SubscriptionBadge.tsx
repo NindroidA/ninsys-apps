@@ -1,5 +1,5 @@
-import { cn } from "@ninsys/ui/lib";
 import type { Tier } from "@/types/tier";
+import { cn } from "@ninsys/ui/lib";
 
 interface SubscriptionBadgeProps {
 	tier: Tier;

@@ -1,6 +1,6 @@
-import { FadeIn, StaggerContainer } from "@ninsys/ui/components/animations";
 import { FeatureCard } from "@/components/cogworks";
 import { features } from "@/data/features";
+import { FadeIn, StaggerContainer } from "@ninsys/ui/components/animations";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 

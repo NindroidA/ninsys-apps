@@ -1,47 +1,47 @@
-import { FadeIn } from "@ninsys/ui/components/animations";
-import {
-	ParallaxElement,
-	ScrollProgress,
-	TextReveal,
-} from "@ninsys/ui/components/scroll";
 import { PricingCard } from "@/components/pluginator";
-import { getPricingTiers, COMPARISON_FEATURES } from "@/config/pricing";
+import { COMPARISON_FEATURES, getPricingTiers } from "@/config/pricing";
+import { FadeIn } from "@ninsys/ui/components/animations";
+import { ParallaxElement, ScrollProgress, TextReveal } from "@ninsys/ui/components/scroll";
 import { motion } from "framer-motion";
-import { Check, X, Sparkles } from "lucide-react";
+import { Check, Sparkles, X } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export function PricingPage() {
 	return (
 		<div className="min-h-screen py-20 relative overflow-hidden">
 			{/* Parallax Background Orbs */}
-			<div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }} aria-hidden="true">
-				<ParallaxElement speed={0.15} className="absolute" style={{ top: '5%', right: '10%' }}>
+			<div
+				className="absolute inset-0 overflow-hidden pointer-events-none"
+				style={{ zIndex: 0 }}
+				aria-hidden="true"
+			>
+				<ParallaxElement speed={0.15} className="absolute" style={{ top: "5%", right: "10%" }}>
 					<div
 						className="rounded-full blur-3xl"
 						style={{
-							width: '350px',
-							height: '350px',
-							background: 'oklch(0.627 0.265 303.9 / 0.2)',
+							width: "350px",
+							height: "350px",
+							background: "oklch(0.627 0.265 303.9 / 0.2)",
 						}}
 					/>
 				</ParallaxElement>
-				<ParallaxElement speed={-0.1} className="absolute" style={{ bottom: '20%', left: '5%' }}>
+				<ParallaxElement speed={-0.1} className="absolute" style={{ bottom: "20%", left: "5%" }}>
 					<div
 						className="rounded-full blur-3xl"
 						style={{
-							width: '300px',
-							height: '300px',
-							background: 'oklch(0.70 0.20 290 / 0.15)',
+							width: "300px",
+							height: "300px",
+							background: "oklch(0.70 0.20 290 / 0.15)",
 						}}
 					/>
 				</ParallaxElement>
-				<ParallaxElement speed={0.2} className="absolute" style={{ top: '40%', left: '50%' }}>
+				<ParallaxElement speed={0.2} className="absolute" style={{ top: "40%", left: "50%" }}>
 					<div
 						className="rounded-full blur-2xl"
 						style={{
-							width: '200px',
-							height: '200px',
-							background: 'oklch(0.627 0.265 303.9 / 0.1)',
+							width: "200px",
+							height: "200px",
+							background: "oklch(0.627 0.265 303.9 / 0.1)",
 						}}
 					/>
 				</ParallaxElement>
@@ -57,7 +57,9 @@ export function PricingPage() {
 						className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6"
 					>
 						<Sparkles className="h-4 w-4 text-primary" />
-						<span className="text-sm font-medium text-primary">Simple pricing, powerful features</span>
+						<span className="text-sm font-medium text-primary">
+							Simple pricing, powerful features
+						</span>
 					</motion.div>
 
 					<TextReveal
@@ -96,7 +98,9 @@ export function PricingPage() {
 											<div
 												className="relative"
 												style={{
-													transform: isHighlighted ? `translateY(${-cardProgress * 10}px)` : undefined,
+													transform: isHighlighted
+														? `translateY(${-cardProgress * 10}px)`
+														: undefined,
 												}}
 											>
 												<PricingCard
@@ -108,11 +112,7 @@ export function PricingPage() {
 													features={plan.features}
 													highlighted={plan.highlighted}
 													ctaText={plan.ctaText}
-													ctaHref={
-														plan.tier === "free"
-															? "/download"
-															: "/signup"
-													}
+													ctaHref={plan.tier === "free" ? "/download" : "/signup"}
 												/>
 											</div>
 										</motion.div>

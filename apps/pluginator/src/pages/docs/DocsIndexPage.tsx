@@ -1,7 +1,7 @@
-import { FadeIn, StaggerContainer } from "@ninsys/ui/components/animations";
 import { Card } from "@ninsys/ui/components";
+import { FadeIn, StaggerContainer } from "@ninsys/ui/components/animations";
 import { motion } from "framer-motion";
-import { BookOpen, Terminal, Settings, HelpCircle, FileText, Shield } from "lucide-react";
+import { BookOpen, FileText, HelpCircle, Settings, Shield, Terminal } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const docsSections = [
@@ -58,7 +58,8 @@ export function DocsIndexPage() {
 					</div>
 					<h1 className="text-4xl sm:text-5xl font-bold mb-4">Pluginator Docs</h1>
 					<p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-						Everything you need to know about using Pluginator to manage your Minecraft server plugins.
+						Everything you need to know about using Pluginator to manage your Minecraft server
+						plugins.
 					</p>
 				</FadeIn>
 
@@ -82,9 +83,7 @@ export function DocsIndexPage() {
 										<h3 className="font-semibold mb-2 group-hover:text-primary transition-colors">
 											{section.title}
 										</h3>
-										<p className="text-sm text-muted-foreground">
-											{section.description}
-										</p>
+										<p className="text-sm text-muted-foreground">{section.description}</p>
 									</Card>
 								</Link>
 							</motion.div>
@@ -121,14 +120,9 @@ export function DocsIndexPage() {
 
 				{/* Help CTA */}
 				<FadeIn className="text-center mt-16">
-					<p className="text-muted-foreground mb-4">
-						Can't find what you're looking for?
-					</p>
+					<p className="text-muted-foreground mb-4">Can't find what you're looking for?</p>
 					<div className="flex flex-wrap justify-center gap-4">
-						<Link
-							to="/contact"
-							className="text-primary hover:underline"
-						>
+						<Link to="/contact" className="text-primary hover:underline">
 							Contact support
 						</Link>
 						<span className="text-border">|</span>

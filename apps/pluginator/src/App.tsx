@@ -5,25 +5,25 @@
  * Removes auth routes and protected routes.
  */
 
-import { PageTransition } from "@ninsys/ui/components/animations";
 import { Layout } from "@/components/layout";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 import {
+	CLICommandsPage,
+	ConfigPage,
+	DocsIndexPage,
+	SecurityPage,
+	TroubleshootingPage,
+	UserGuidePage,
+} from "@/pages/docs";
+import { PrivacyPage, TermsPage } from "@/pages/legal";
+import {
+	ChangelogPage,
+	ContactPage,
 	DownloadPage,
 	HomePage,
 	PricingPage,
-	ChangelogPage,
-	ContactPage,
 } from "@/pages/public";
-import {
-	DocsIndexPage,
-	CLICommandsPage,
-	ConfigPage,
-	UserGuidePage,
-	TroubleshootingPage,
-	SecurityPage,
-} from "@/pages/docs";
-import { PrivacyPage, TermsPage } from "@/pages/legal";
+import { PageTransition } from "@ninsys/ui/components/animations";
 import { AnimatePresence } from "framer-motion";
 import { Route, Routes, useLocation } from "react-router-dom";
 

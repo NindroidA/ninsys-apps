@@ -24,9 +24,7 @@ export function TermsPage() {
 						<span className="text-sm font-medium text-primary">Legal</span>
 					</div>
 					<h1 className="text-3xl font-bold mb-2">Terms of Service</h1>
-					<p className="text-muted-foreground">
-						Last updated: January 22, 2025
-					</p>
+					<p className="text-muted-foreground">Last updated: January 22, 2025</p>
 				</FadeIn>
 
 				{/* Content */}
@@ -36,15 +34,15 @@ export function TermsPage() {
 							<section>
 								<h2 className="text-xl font-semibold mb-3">1. Acceptance of Terms</h2>
 								<p className="text-muted-foreground leading-relaxed">
-																		By accessing and using Pluginator, you agree to be bound by these Terms of Service.
-									If you do not agree to these terms, please do not use our service.
+									By accessing and using Pluginator, you agree to be bound by these Terms of
+									Service. If you do not agree to these terms, please do not use our service.
 								</p>
 							</section>
 
 							<section>
 								<h2 className="text-xl font-semibold mb-3">2. Description of Service</h2>
 								<p className="text-muted-foreground leading-relaxed">
-																		Pluginator is a Minecraft server plugin management tool that helps you manage,
+									Pluginator is a Minecraft server plugin management tool that helps you manage,
 									update, and sync plugins across your servers. We offer both free and paid tiers
 									with varying features and usage limits.
 								</p>
@@ -53,7 +51,7 @@ export function TermsPage() {
 							<section>
 								<h2 className="text-xl font-semibold mb-3">3. User Accounts</h2>
 								<p className="text-muted-foreground leading-relaxed">
-																		To use certain features, you must create an account. You are responsible for:
+									To use certain features, you must create an account. You are responsible for:
 								</p>
 								<ul className="list-disc list-inside mt-2 space-y-1 text-muted-foreground">
 									<li>Maintaining the security of your account</li>
@@ -65,16 +63,14 @@ export function TermsPage() {
 							<section>
 								<h2 className="text-xl font-semibold mb-3">4. Subscription and Payments</h2>
 								<p className="text-muted-foreground leading-relaxed">
-																		Paid subscriptions are billed according to the plan you select. Subscriptions
+									Paid subscriptions are billed according to the plan you select. Subscriptions
 									automatically renew unless cancelled. Refunds are handled on a case-by-case basis.
 								</p>
 							</section>
 
 							<section>
 								<h2 className="text-xl font-semibold mb-3">5. Acceptable Use</h2>
-								<p className="text-muted-foreground leading-relaxed">
-																		You agree not to:
-								</p>
+								<p className="text-muted-foreground leading-relaxed">You agree not to:</p>
 								<ul className="list-disc list-inside mt-2 space-y-1 text-muted-foreground">
 									<li>Use the service for any illegal purpose</li>
 									<li>Attempt to gain unauthorized access to any systems</li>
@@ -86,15 +82,16 @@ export function TermsPage() {
 							<section>
 								<h2 className="text-xl font-semibold mb-3">6. Intellectual Property</h2>
 								<p className="text-muted-foreground leading-relaxed">
-																		The Pluginator service, including its original content, features, and functionality,
-									is owned by its creators and is protected by copyright, trademark, and other laws.
+									The Pluginator service, including its original content, features, and
+									functionality, is owned by its creators and is protected by copyright, trademark,
+									and other laws.
 								</p>
 							</section>
 
 							<section>
 								<h2 className="text-xl font-semibold mb-3">7. Limitation of Liability</h2>
 								<p className="text-muted-foreground leading-relaxed">
-																		Pluginator is provided "as is" without warranties of any kind. We are not liable
+									Pluginator is provided "as is" without warranties of any kind. We are not liable
 									for any damages arising from your use of the service, including but not limited to
 									data loss or server issues.
 								</p>
@@ -103,7 +100,7 @@ export function TermsPage() {
 							<section>
 								<h2 className="text-xl font-semibold mb-3">8. Changes to Terms</h2>
 								<p className="text-muted-foreground leading-relaxed">
-																		We reserve the right to modify these terms at any time. We will notify users of
+									We reserve the right to modify these terms at any time. We will notify users of
 									significant changes via email or through the service. Continued use after changes
 									constitutes acceptance of the new terms.
 								</p>
