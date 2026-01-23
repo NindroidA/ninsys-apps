@@ -1,9 +1,15 @@
+/**
+ * Pluginator Header - Coming Soon Mode
+ *
+ * This file replaces Header.tsx on the production branch.
+ * Disables auth buttons and shows "Coming Soon" badges.
+ */
+
 import { ScrollLink } from "@ninsys/ui/components/navigation";
-import { Button } from "@ninsys/ui/components";
-import { useAuth } from "@/hooks/useAuth";
+import { Badge } from "@ninsys/ui/components";
 import { cn } from "@ninsys/ui/lib";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, Coffee, Menu, Scale, User, X } from "lucide-react";
+import { ChevronDown, Coffee, Menu, Scale, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
@@ -28,7 +34,6 @@ export function Header() {
 	const [legalDropdownOpen, setLegalDropdownOpen] = useState(false);
 	const legalDropdownRef = useRef<HTMLDivElement>(null);
 	const location = useLocation();
-	const { isAuthenticated } = useAuth();
 
 	// Close dropdown when clicking outside
 	useEffect(() => {
@@ -140,27 +145,12 @@ export function Header() {
 						{mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
 					</button>
 
-					{/* Auth buttons - Far right on desktop */}
-					{isAuthenticated ? (
-						<ScrollLink
-							to="/dashboard"
-							className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border hover:bg-muted transition-colors"
-						>
-							<div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center">
-								<User className="h-3.5 w-3.5 text-primary" />
-							</div>
-							<span className="text-sm font-medium">Dashboard</span>
-						</ScrollLink>
-					) : (
-						<>
-							<Button variant="primary" size="sm" className="hidden sm:flex" asChild>
-								<ScrollLink to="/signup">Get Started</ScrollLink>
-							</Button>
-							<Button variant="ghost" size="sm" className="hidden sm:flex" asChild>
-								<ScrollLink to="/login">Sign in</ScrollLink>
-							</Button>
-						</>
-					)}
+					{/* Coming Soon Auth Buttons */}
+					<div className="hidden sm:flex items-center gap-2">
+						<Badge variant="secondary" className="text-xs">
+							Coming Soon
+						</Badge>
+					</div>
 				</div>
 			</nav>
 
@@ -210,26 +200,14 @@ export function Header() {
 								))}
 							</div>
 
-							{isAuthenticated ? (
-								<Button variant="outline" className="w-full mt-4" asChild>
-									<ScrollLink to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
-										Dashboard
-									</ScrollLink>
-								</Button>
-							) : (
-								<>
-									<Button variant="outline" className="w-full mt-4" asChild>
-										<ScrollLink to="/login" onClick={() => setMobileMenuOpen(false)}>
-											Sign in
-										</ScrollLink>
-									</Button>
-									<Button variant="primary" className="w-full" asChild>
-										<ScrollLink to="/signup" onClick={() => setMobileMenuOpen(false)}>
-											Get Started
-										</ScrollLink>
-									</Button>
-								</>
-							)}
+							{/* Coming Soon Badge for Mobile */}
+							<div className="pt-4 border-t border-border mt-2">
+								<div className="px-4 py-3 rounded-lg bg-muted/50 text-center">
+									<Badge variant="secondary" className="text-xs">
+										Sign Up Coming Soon
+									</Badge>
+								</div>
+							</div>
 						</div>
 					</motion.div>
 				)}

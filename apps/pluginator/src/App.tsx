@@ -1,20 +1,20 @@
+/**
+ * Pluginator - Coming Soon Mode
+ *
+ * This file replaces App.tsx on the production branch.
+ * Removes auth routes and protected routes.
+ */
+
 import { PageTransition } from "@ninsys/ui/components/animations";
-import { ProtectedRoute } from "@/components/auth";
 import { Layout } from "@/components/layout";
 import { NotFoundPage } from "@/pages/NotFoundPage";
-import { DashboardPage } from "@/pages/dashboard";
 import {
 	DownloadPage,
 	HomePage,
-	LoginPage,
 	PricingPage,
-	SignupPage,
 	ChangelogPage,
 	ContactPage,
 } from "@/pages/public";
-import { AccountPage } from "@/pages/account";
-import { CheckoutPage, PaymentSuccessPage, PaymentCancelPage } from "@/pages/payment";
-import { AuthCallbackPage, AuthErrorPage } from "@/pages/auth";
 import {
 	DocsIndexPage,
 	CLICommandsPage,
@@ -60,22 +60,6 @@ export default function App() {
 						}
 					/>
 					<Route
-						path="/login"
-						element={
-							<PageTransition>
-								<LoginPage />
-							</PageTransition>
-						}
-					/>
-					<Route
-						path="/signup"
-						element={
-							<PageTransition>
-								<SignupPage />
-							</PageTransition>
-						}
-					/>
-					<Route
 						path="/changelog"
 						element={
 							<PageTransition>
@@ -88,24 +72,6 @@ export default function App() {
 						element={
 							<PageTransition>
 								<ContactPage />
-							</PageTransition>
-						}
-					/>
-
-					{/* Auth Routes */}
-					<Route
-						path="/auth/callback"
-						element={
-							<PageTransition>
-								<AuthCallbackPage />
-							</PageTransition>
-						}
-					/>
-					<Route
-						path="/auth/error"
-						element={
-							<PageTransition>
-								<AuthErrorPage />
 							</PageTransition>
 						}
 					/>
@@ -178,57 +144,7 @@ export default function App() {
 						}
 					/>
 
-					{/* Protected Routes */}
-					<Route
-						path="/dashboard"
-						element={
-							<ProtectedRoute>
-								<PageTransition>
-									<DashboardPage />
-								</PageTransition>
-							</ProtectedRoute>
-						}
-					/>
-					<Route
-						path="/account"
-						element={
-							<ProtectedRoute>
-								<PageTransition>
-									<AccountPage />
-								</PageTransition>
-							</ProtectedRoute>
-						}
-					/>
-					<Route
-						path="/checkout"
-						element={
-							<ProtectedRoute>
-								<PageTransition>
-									<CheckoutPage />
-								</PageTransition>
-							</ProtectedRoute>
-						}
-					/>
-					<Route
-						path="/payment/success"
-						element={
-							<ProtectedRoute>
-								<PageTransition>
-									<PaymentSuccessPage />
-								</PageTransition>
-							</ProtectedRoute>
-						}
-					/>
-					<Route
-						path="/payment/cancel"
-						element={
-							<PageTransition>
-								<PaymentCancelPage />
-							</PageTransition>
-						}
-					/>
-
-					{/* 404 */}
+					{/* 404 - Catch all including auth routes */}
 					<Route
 						path="*"
 						element={
