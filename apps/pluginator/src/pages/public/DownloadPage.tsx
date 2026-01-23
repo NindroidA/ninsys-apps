@@ -2,7 +2,7 @@ import { Button } from "@ninsys/ui/components";
 import { FadeIn } from "@ninsys/ui/components/animations";
 import { ParallaxElement, ScrollProgress, TextReveal } from "@ninsys/ui/components/scroll";
 import { motion } from "framer-motion";
-import { Apple, Clock, Download, Monitor, Shield, Terminal, Zap } from "lucide-react";
+import { Apple, Clock, Download, Monitor, Shield, Zap } from "lucide-react";
 
 const downloads = [
 	{
@@ -189,130 +189,16 @@ export function DownloadPage() {
 					)}
 				</ScrollProgress>
 
-				{/* Alternative Installation */}
-				<div className="max-w-2xl mx-auto">
-					<TextReveal
-						mode="word"
-						className="text-xl font-bold text-center mb-6"
-						as="h3"
-						start="top 90%"
-						end="top 70%"
-					>
-						Alternative Installation Methods
-					</TextReveal>
-
-					<ScrollProgress start="top 85%" end="top 45%">
-						{({ progress }) => (
-							<motion.div
-								className="rounded-xl border border-border bg-card p-6"
-								style={{
-									opacity: Math.max(0.3, progress),
-									transform: `translateY(${(1 - progress) * 40}px)`,
-								}}
-							>
-								<div className="space-y-4">
-									{[
-										{ label: "Via Cargo (Rust)", code: "cargo install pluginator" },
-										{
-											label: "Via Homebrew (macOS/Linux)",
-											code: "brew install nindroida/tap/pluginator",
-										},
-										{
-											label: "From Source",
-											code: "git clone https://github.com/NindroidA/pluginator-public && cd pluginator-public && cargo build --release",
-										},
-									].map((method, index) => {
-										const methodProgress = Math.max(
-											0,
-											Math.min(1, (progress - index * 0.15) * 2.5),
-										);
-										return (
-											<motion.div
-												key={method.label}
-												style={{
-													opacity: 0.3 + methodProgress * 0.7,
-													transform: `translateX(${(1 - methodProgress) * -20}px)`,
-												}}
-											>
-												<p className="text-sm font-medium mb-2 flex items-center gap-2">
-													<Terminal className="h-4 w-4 text-primary" />
-													{method.label}
-												</p>
-												<code className="block bg-muted px-4 py-3 rounded-lg text-sm font-mono overflow-x-auto">
-													{method.code}
-												</code>
-											</motion.div>
-										);
-									})}
-								</div>
-							</motion.div>
-						)}
-					</ScrollProgress>
-				</div>
-
-				{/* Quick Start */}
-				<div className="max-w-2xl mx-auto mt-12">
-					<TextReveal
-						mode="word"
-						className="text-xl font-bold text-center mb-6"
-						as="h3"
-						start="top 90%"
-						end="top 70%"
-					>
-						Quick Start Guide
-					</TextReveal>
-
-					<ScrollProgress start="top 85%" end="bottom 50%">
-						{({ progress }) => (
-							<motion.div
-								className="rounded-xl border border-border bg-card p-6"
-								style={{
-									opacity: Math.max(0.3, progress),
-									transform: `translateY(${(1 - progress) * 30}px)`,
-								}}
-							>
-								<ol className="space-y-4">
-									{[
-										{
-											step: 1,
-											title: "Navigate to your server's plugins folder",
-											code: "cd /path/to/server/plugins",
-										},
-										{ step: 2, title: "Initialize Pluginator", code: "pluginator init" },
-										{ step: 3, title: "Add your first plugin", code: "pluginator add EssentialsX" },
-										{ step: 4, title: "Check for updates", code: "pluginator check" },
-									].map((item, index) => {
-										const stepProgress = Math.max(0, Math.min(1, (progress - index * 0.1) * 2.5));
-										return (
-											<motion.li
-												key={item.step}
-												className="flex gap-4"
-												style={{
-													opacity: 0.3 + stepProgress * 0.7,
-													transform: `translateX(${(1 - stepProgress) * 30}px)`,
-												}}
-											>
-												<motion.span
-													className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold"
-													style={{
-														transform: `scale(${0.8 + stepProgress * 0.2})`,
-														boxShadow: `0 0 ${stepProgress * 15}px oklch(0.627 0.265 303.9 / ${stepProgress * 0.4})`,
-													}}
-												>
-													{item.step}
-												</motion.span>
-												<div>
-													<p className="font-medium">{item.title}</p>
-													<code className="text-sm text-muted-foreground">{item.code}</code>
-												</div>
-											</motion.li>
-										);
-									})}
-								</ol>
-							</motion.div>
-						)}
-					</ScrollProgress>
-				</div>
+				{/* Alternative Installation & Quick Start - Coming Soon */}
+				<FadeIn delay={0.3}>
+					<div className="max-w-2xl mx-auto mt-8">
+						<div className="rounded-xl border border-border bg-card/50 p-8 text-center">
+							<p className="text-muted-foreground">
+								Installation guides and quick start documentation coming soon.
+							</p>
+						</div>
+					</div>
+				</FadeIn>
 			</div>
 		</div>
 	);

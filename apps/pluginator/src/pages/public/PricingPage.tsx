@@ -188,58 +188,15 @@ export function PricingPage() {
 					</ScrollProgress>
 				</div>
 
-				{/* FAQ with Scroll Animations */}
-				<div className="max-w-3xl mx-auto mt-20">
-					<TextReveal
-						mode="word"
-						className="text-2xl font-bold text-center mb-8"
-						as="h2"
-						start="top 90%"
-						end="top 70%"
-					>
-						Frequently Asked Questions
-					</TextReveal>
-
-					<ScrollProgress start="top 85%" end="bottom 60%">
-						{({ progress }) => (
-							<div className="space-y-6">
-								{[
-									{
-										q: "What's the difference between Plus and Pro/Max?",
-										a: "Plus is a one-time purchase that permanently unlocks higher limits and gives you 40% off Pro and 20% off Max subscriptions. Pro and Max are monthly subscriptions for power users who need even more capacity and features like custom servers and API access.",
-									},
-									{
-										q: "Can I switch plans anytime?",
-										a: "Yes! You can upgrade or downgrade your subscription at any time. Changes take effect immediately, and we'll prorate any billing differences. Plus is a one-time purchase that never expires.",
-									},
-									{
-										q: "What payment methods do you accept?",
-										a: "We accept all major credit cards through Stripe. All transactions are secure and encrypted.",
-									},
-									{
-										q: "Can I use Pluginator without an account?",
-										a: "Absolutely! The CLI tool works completely offline and doesn't require an account. An account is only needed for cloud features, syncing across devices, and the web dashboard.",
-									},
-								].map((faq, index) => {
-									const faqProgress = Math.max(0, Math.min(1, (progress - index * 0.12) * 2.5));
-									return (
-										<motion.div
-											key={faq.q}
-											className="rounded-xl border border-border bg-card p-6 hover:border-primary/30 transition-colors"
-											style={{
-												opacity: 0.2 + faqProgress * 0.8,
-												transform: `translateX(${(1 - faqProgress) * (index % 2 === 0 ? -30 : 30)}px)`,
-											}}
-										>
-											<h3 className="font-semibold mb-2">{faq.q}</h3>
-											<p className="text-muted-foreground">{faq.a}</p>
-										</motion.div>
-									);
-								})}
-							</div>
-						)}
-					</ScrollProgress>
-				</div>
+				{/* FAQ - Coming Soon */}
+				<FadeIn delay={0.3}>
+					<div className="max-w-3xl mx-auto mt-20">
+						<h2 className="text-2xl font-bold text-center mb-8">Frequently Asked Questions</h2>
+						<div className="rounded-xl border border-border bg-card/50 p-8 text-center">
+							<p className="text-muted-foreground">FAQ coming soon.</p>
+						</div>
+					</div>
+				</FadeIn>
 
 				{/* CTA */}
 				<ScrollProgress start="top 90%" end="top 60%">
