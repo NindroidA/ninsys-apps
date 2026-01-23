@@ -35,9 +35,6 @@ const features = [
 ];
 
 export function DownloadPage() {
-	const getDownloadUrl = (fileName: string) =>
-		`https://github.com/NindroidA/pluginator-public/releases/latest/download/${fileName}`;
-
 	return (
 		<div className="min-h-screen py-20 relative overflow-hidden">
 			{/* Parallax Background Orbs */}
@@ -143,14 +140,12 @@ export function DownloadPage() {
 											<h2 className="text-xl font-bold mb-2">{dl.os}</h2>
 											<p className="text-sm text-muted-foreground mb-6">{dl.description}</p>
 											<Button
-												variant={dl.primary ? "primary" : "outline"}
-												className="w-full"
-												asChild
+												variant="outline"
+												className="w-full opacity-50 cursor-not-allowed"
+												disabled
 											>
-												<a href={getDownloadUrl(dl.fileName)} download>
-													<Download className="mr-2 h-4 w-4" />
-													Download
-												</a>
+												<Download className="mr-2 h-4 w-4" />
+												Coming Soon
 											</Button>
 										</div>
 									</motion.div>

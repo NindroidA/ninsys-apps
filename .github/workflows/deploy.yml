@@ -116,7 +116,7 @@ jobs:
             docker pull ghcr.io/${IMAGE_OWNER}/cogworks-webapp:latest
             docker pull ghcr.io/${IMAGE_OWNER}/pluginator-webapp:latest
 
-            docker-compose up -d cogworks-webapp pluginator-webapp
+            docker compose up -d cogworks-webapp pluginator-webapp
 
             docker image prune -f
 
