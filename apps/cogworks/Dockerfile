@@ -13,7 +13,7 @@ COPY packages/ui/package.json ./packages/ui/
 COPY apps/cogworks/package.json ./apps/cogworks/
 
 # Install all dependencies
-RUN bun install --frozen-lockfile
+RUN bun install
 
 # ============================================
 # Stage 2: Build the application
