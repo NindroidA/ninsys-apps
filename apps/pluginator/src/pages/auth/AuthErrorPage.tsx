@@ -11,11 +11,13 @@ interface ErrorMessage {
 const errorMessages: Record<string, ErrorMessage> = {
 	token_exchange_failed: {
 		title: "Authentication Failed",
-		description: "We couldn't complete the sign-in process. The authentication provider may be temporarily unavailable.",
+		description:
+			"We couldn't complete the sign-in process. The authentication provider may be temporarily unavailable.",
 	},
 	email_not_found: {
 		title: "Email Not Found",
-		description: "We couldn't retrieve your email address from the authentication provider. Please ensure your email is public or try a different sign-in method.",
+		description:
+			"We couldn't retrieve your email address from the authentication provider. Please ensure your email is public or try a different sign-in method.",
 	},
 	oauth_failed: {
 		title: "Sign In Failed",

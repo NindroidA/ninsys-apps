@@ -1,11 +1,11 @@
+import { features } from "@/data/features";
+import { Button } from "@ninsys/ui/components";
 import { FadeIn } from "@ninsys/ui/components/animations";
 import { ScrollProgress, TextReveal } from "@ninsys/ui/components/scroll";
-import { Button } from "@ninsys/ui/components";
-import { features } from "@/data/features";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Download, Sparkles, Zap, Shield, Clock, Globe, Check } from "lucide-react";
+import { ArrowRight, Check, Clock, Download, Globe, Shield, Sparkles, Zap } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { useRef, useState, useEffect } from "react";
 
 // Floating geometric elements for sections
 function FloatingElements({ variant = "default" }: { variant?: "default" | "alt" }) {
@@ -16,32 +16,38 @@ function FloatingElements({ variant = "default" }: { variant?: "default" | "alt"
 			{/* Floating ring */}
 			<motion.div
 				animate={{ rotate: 360 }}
-				transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+				transition={{ duration: 30, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
 				className="absolute top-[20%] right-[10%] w-20 h-20 rounded-full border-2 opacity-15"
 				style={{ borderColor: color }}
 			/>
 			{/* Floating dots */}
 			<motion.div
 				animate={{ y: [-6, 6, -6] }}
-				transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+				transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
 				className="absolute top-[40%] left-[15%] w-2 h-2 rounded-full opacity-30"
 				style={{ background: color }}
 			/>
 			<motion.div
 				animate={{ y: [5, -5, 5] }}
-				transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+				transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: 1 }}
 				className="absolute bottom-[30%] right-[20%] w-3 h-3 rounded-full opacity-25"
 				style={{ background: color }}
 			/>
 			{/* Cross */}
 			<motion.div
 				animate={{ rotate: [0, 180] }}
-				transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+				transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
 				className="absolute bottom-[25%] left-[8%] opacity-20"
 			>
 				<div className="relative w-5 h-5">
-					<div className="absolute top-1/2 left-0 w-full h-0.5 -translate-y-1/2" style={{ background: color }} />
-					<div className="absolute left-1/2 top-0 h-full w-0.5 -translate-x-1/2" style={{ background: color }} />
+					<div
+						className="absolute top-1/2 left-0 w-full h-0.5 -translate-y-1/2"
+						style={{ background: color }}
+					/>
+					<div
+						className="absolute left-1/2 top-0 h-full w-0.5 -translate-x-1/2"
+						style={{ background: color }}
+					/>
 				</div>
 			</motion.div>
 		</div>
@@ -87,10 +93,7 @@ export function HomePage() {
 	return (
 		<div className="min-h-screen bg-background">
 			{/* ===== HERO SECTION - STANDOUT ===== */}
-			<section
-				ref={heroRef}
-				className="relative overflow-hidden min-h-[100vh] flex items-center"
-			>
+			<section ref={heroRef} className="relative overflow-hidden min-h-[100vh] flex items-center">
 				{/* Hero dramatic background */}
 				<div className="absolute inset-0 overflow-hidden">
 					{/* Main gradient wash */}
@@ -99,19 +102,29 @@ export function HomePage() {
 					{/* Large animated orbs */}
 					<motion.div
 						animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-						transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+						transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
 						className="absolute -top-1/4 -left-1/4 w-[700px] h-[700px] rounded-full blur-3xl"
 						style={{ background: "rgb(168, 85, 247)" }}
 					/>
 					<motion.div
 						animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.4, 0.2] }}
-						transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+						transition={{
+							duration: 10,
+							repeat: Number.POSITIVE_INFINITY,
+							ease: "easeInOut",
+							delay: 2,
+						}}
 						className="absolute -bottom-1/4 -right-1/4 w-[600px] h-[600px] rounded-full blur-3xl"
 						style={{ background: "rgb(139, 92, 246)" }}
 					/>
 					<motion.div
 						animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.3, 0.15] }}
-						transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+						transition={{
+							duration: 12,
+							repeat: Number.POSITIVE_INFINITY,
+							ease: "easeInOut",
+							delay: 4,
+						}}
 						className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-3xl"
 						style={{ background: "rgb(192, 132, 252)" }}
 					/>
@@ -119,48 +132,53 @@ export function HomePage() {
 					{/* Floating geometric elements */}
 					<motion.div
 						animate={{ rotate: 360 }}
-						transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+						transition={{ duration: 40, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
 						className="absolute top-[15%] right-[15%] w-32 h-32 rounded-full border-2 opacity-20"
 						style={{ borderColor: "rgb(168, 85, 247)" }}
 					/>
 					<motion.div
 						animate={{ rotate: -360 }}
-						transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+						transition={{ duration: 50, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
 						className="absolute bottom-[20%] left-[10%] w-24 h-24 rounded-full border opacity-15"
 						style={{ borderColor: "rgb(139, 92, 246)" }}
 					/>
 					<motion.div
 						animate={{ y: [-10, 10, -10] }}
-						transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+						transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
 						className="absolute top-[30%] left-[20%] w-4 h-4 rounded-full opacity-40"
 						style={{ background: "rgb(168, 85, 247)" }}
 					/>
 					<motion.div
 						animate={{ y: [8, -8, 8] }}
-						transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+						transition={{
+							duration: 6,
+							repeat: Number.POSITIVE_INFINITY,
+							ease: "easeInOut",
+							delay: 1,
+						}}
 						className="absolute top-[60%] right-[25%] w-3 h-3 rounded-full opacity-50"
 						style={{ background: "rgb(192, 132, 252)" }}
 					/>
 					<motion.div
 						animate={{ scale: [1, 1.5, 1], opacity: [0.3, 0.6, 0.3] }}
-						transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+						transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
 						className="absolute bottom-[35%] right-[12%] w-3 h-3 rounded-full"
 						style={{
 							background: "rgb(168, 85, 247)",
-							boxShadow: "0 0 20px rgb(168, 85, 247), 0 0 40px rgb(168, 85, 247)"
+							boxShadow: "0 0 20px rgb(168, 85, 247), 0 0 40px rgb(168, 85, 247)",
 						}}
 					/>
 					{/* Diamond */}
 					<motion.div
 						animate={{ rotate: [45, 405] }}
-						transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+						transition={{ duration: 30, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
 						className="absolute top-[45%] right-[8%] w-10 h-10 border-2 opacity-20"
 						style={{ borderColor: "rgb(139, 92, 246)" }}
 					/>
 					{/* Cross */}
 					<motion.div
 						animate={{ rotate: [0, 180] }}
-						transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+						transition={{ duration: 25, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
 						className="absolute bottom-[40%] left-[8%] opacity-25"
 					>
 						<div className="relative w-8 h-8">
@@ -197,8 +215,7 @@ export function HomePage() {
 							transition={{ duration: 1.2, delay: 0.2, ease: "easeOut" }}
 							className="text-4xl sm:text-6xl lg:text-8xl font-bold tracking-tight mb-6"
 						>
-							Manage Your Minecraft Plugins{" "}
-							<span className="gradient-text">with Ease</span>
+							Manage Your Minecraft Plugins <span className="gradient-text">with Ease</span>
 						</motion.h1>
 
 						<motion.p
@@ -226,7 +243,12 @@ export function HomePage() {
 								</Button>
 							</motion.div>
 							<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
-								<Button variant="outline" size="lg" asChild className="text-lg px-8 py-6 bg-white/5 backdrop-blur-sm">
+								<Button
+									variant="outline"
+									size="lg"
+									asChild
+									className="text-lg px-8 py-6 bg-white/5 backdrop-blur-sm"
+								>
 									<Link to="/pricing">
 										View Pricing
 										<ArrowRight className="ml-2 h-5 w-5" />
@@ -234,7 +256,6 @@ export function HomePage() {
 								</Button>
 							</motion.div>
 						</motion.div>
-
 					</FadeIn>
 				</motion.div>
 
@@ -254,7 +275,11 @@ export function HomePage() {
 							<motion.div className="w-6 h-10 rounded-full border-2 border-primary/30 flex justify-center pt-2">
 								<motion.div
 									animate={{ y: [0, 12, 0] }}
-									transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+									transition={{
+										duration: 1.8,
+										repeat: Number.POSITIVE_INFINITY,
+										ease: "easeInOut",
+									}}
 									className="w-1.5 h-1.5 bg-primary rounded-full"
 								/>
 							</motion.div>
@@ -360,7 +385,9 @@ export function HomePage() {
 													<feature.icon className="h-6 w-6 sm:h-7 sm:w-7 text-primary" />
 												</motion.div>
 												<h3 className="text-lg sm:text-xl font-bold mb-3">{feature.title}</h3>
-												<p className="text-sm sm:text-base text-muted-foreground">{feature.description}</p>
+												<p className="text-sm sm:text-base text-muted-foreground">
+													{feature.description}
+												</p>
 											</motion.div>
 										);
 									})}
@@ -399,9 +426,22 @@ export function HomePage() {
 
 						<div className="grid sm:grid-cols-3 gap-12 max-w-5xl mx-auto">
 							{[
-								{ step: "1", title: "Scan", description: "Point Pluginator at your plugins folder and it auto-generates a config file." },
-								{ step: "2", title: "Check", description: "Run one command to check for updates across all sources." },
-								{ step: "3", title: "Update", description: "Apply updates safely with automatic backups before changes." },
+								{
+									step: "1",
+									title: "Scan",
+									description:
+										"Point Pluginator at your plugins folder and it auto-generates a config file.",
+								},
+								{
+									step: "2",
+									title: "Check",
+									description: "Run one command to check for updates across all sources.",
+								},
+								{
+									step: "3",
+									title: "Update",
+									description: "Apply updates safely with automatic backups before changes.",
+								},
 							].map((item, index) => (
 								<ScrollProgress key={item.step} start="top 90%" end="top 30%">
 									{({ progress }) => {
@@ -426,7 +466,9 @@ export function HomePage() {
 													{item.step}
 												</motion.div>
 												<h3 className="text-xl sm:text-2xl font-bold mb-3">{item.title}</h3>
-												<p className="text-base sm:text-lg text-muted-foreground">{item.description}</p>
+												<p className="text-base sm:text-lg text-muted-foreground">
+													{item.description}
+												</p>
 											</motion.div>
 										);
 									}}
@@ -446,12 +488,24 @@ export function HomePage() {
 								<div className="max-w-4xl mx-auto">
 									<div className="grid sm:grid-cols-2 gap-6 sm:gap-8">
 										{[
-											{ title: "Free Forever", description: "No hidden fees, no trials. Core features are always free." },
-											{ title: "Multiple Sources", description: "Spiget, Modrinth, Jenkins, and more." },
-											{ title: "Cross-Platform", description: "Works on Windows, macOS, and Linux." },
+											{
+												title: "Free Forever",
+												description: "No hidden fees, no trials. Core features are always free.",
+											},
+											{
+												title: "Multiple Sources",
+												description: "Spiget, Modrinth, Jenkins, and more.",
+											},
+											{
+												title: "Cross-Platform",
+												description: "Works on Windows, macOS, and Linux.",
+											},
 											{ title: "Fast Updates", description: "Check all your plugins in seconds." },
 										].map((item, index) => {
-											const itemProgress = Math.max(0, Math.min(1, (progress - index * 0.08) * 1.6));
+											const itemProgress = Math.max(
+												0,
+												Math.min(1, (progress - index * 0.08) * 1.6),
+											);
 											return (
 												<motion.div
 													key={item.title}
@@ -510,7 +564,8 @@ export function HomePage() {
 										className="text-lg sm:text-xl text-muted-foreground mb-10"
 										style={{ opacity: 0.2 + progress * 0.8 }}
 									>
-										Join thousands of server owners who trust Pluginator. Free to start, upgrade anytime.
+										Join thousands of server owners who trust Pluginator. Free to start, upgrade
+										anytime.
 									</p>
 									<motion.div
 										className="flex flex-col sm:flex-row items-center justify-center gap-5"

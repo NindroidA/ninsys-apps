@@ -1,10 +1,10 @@
-import { ScrollLink } from "@ninsys/ui/components/navigation";
 import { Button } from "@ninsys/ui/components";
+import { ScrollLink } from "@ninsys/ui/components/navigation";
 import { cn } from "@ninsys/ui/lib";
 import { AnimatePresence, motion } from "framer-motion";
 import { Coffee, Menu, X } from "lucide-react";
-import { SiDiscord } from "react-icons/si";
 import { useState } from "react";
+import { SiDiscord } from "react-icons/si";
 import { useLocation } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -31,11 +31,7 @@ export function Header() {
 			<nav className="container mx-auto flex h-16 items-center justify-between px-4">
 				{/* Logo */}
 				<ScrollLink to="/" className="flex items-center gap-2">
-					<img
-						src="/cogworks-bot-icon.png"
-						alt="Cogworks"
-						className="h-8 w-8 rounded-lg"
-					/>
+					<img src="/cogworks-bot-icon.png" alt="Cogworks" className="h-8 w-8 rounded-lg" />
 					<span className="font-semibold text-lg hidden sm:block">Cogworks</span>
 				</ScrollLink>
 

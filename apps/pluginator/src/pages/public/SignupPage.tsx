@@ -1,7 +1,7 @@
-import { ParallaxElement } from "@ninsys/ui/components/scroll";
 import { OAuthButtons } from "@/components/auth";
-import { Button, Input } from "@ninsys/ui/components";
 import { useAuth } from "@/hooks/useAuth";
+import { Button, Input } from "@ninsys/ui/components";
+import { ParallaxElement } from "@ninsys/ui/components/scroll";
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import { useState } from "react";
@@ -26,8 +26,12 @@ export function SignupPage() {
 	return (
 		<div className="min-h-screen flex items-center justify-center py-12 px-4 relative overflow-hidden">
 			{/* Floating Background Orbs */}
-			<div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }} aria-hidden="true">
-				<ParallaxElement speed={0.12} className="absolute" style={{ top: '10%', right: '15%' }}>
+			<div
+				className="absolute inset-0 overflow-hidden pointer-events-none"
+				style={{ zIndex: 0 }}
+				aria-hidden="true"
+			>
+				<ParallaxElement speed={0.12} className="absolute" style={{ top: "10%", right: "15%" }}>
 					<motion.div
 						animate={{
 							y: [0, -25, 0],
@@ -40,13 +44,13 @@ export function SignupPage() {
 						}}
 						className="rounded-full blur-3xl"
 						style={{
-							width: '350px',
-							height: '350px',
-							background: 'oklch(0.627 0.265 303.9 / 0.18)',
+							width: "350px",
+							height: "350px",
+							background: "oklch(0.627 0.265 303.9 / 0.18)",
 						}}
 					/>
 				</ParallaxElement>
-				<ParallaxElement speed={-0.08} className="absolute" style={{ bottom: '15%', left: '5%' }}>
+				<ParallaxElement speed={-0.08} className="absolute" style={{ bottom: "15%", left: "5%" }}>
 					<motion.div
 						animate={{
 							y: [0, 20, 0],
@@ -60,13 +64,13 @@ export function SignupPage() {
 						}}
 						className="rounded-full blur-3xl"
 						style={{
-							width: '280px',
-							height: '280px',
-							background: 'oklch(0.70 0.20 290 / 0.14)',
+							width: "280px",
+							height: "280px",
+							background: "oklch(0.70 0.20 290 / 0.14)",
 						}}
 					/>
 				</ParallaxElement>
-				<ParallaxElement speed={0.18} className="absolute" style={{ top: '45%', left: '70%' }}>
+				<ParallaxElement speed={0.18} className="absolute" style={{ top: "45%", left: "70%" }}>
 					<motion.div
 						animate={{
 							scale: [1, 1.1, 1],
@@ -80,9 +84,9 @@ export function SignupPage() {
 						}}
 						className="rounded-full blur-2xl"
 						style={{
-							width: '180px',
-							height: '180px',
-							background: 'oklch(0.627 0.265 303.9 / 0.12)',
+							width: "180px",
+							height: "180px",
+							background: "oklch(0.627 0.265 303.9 / 0.12)",
 						}}
 					/>
 				</ParallaxElement>

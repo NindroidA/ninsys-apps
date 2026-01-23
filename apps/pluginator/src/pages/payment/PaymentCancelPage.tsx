@@ -22,8 +22,8 @@ export function PaymentCancelPage() {
 
 					<div className="p-6 rounded-xl bg-card border border-border mb-6">
 						<p className="text-muted-foreground">
-							If you have any questions about our plans or need help choosing
-							the right tier, feel free to contact us.
+							If you have any questions about our plans or need help choosing the right tier, feel
+							free to contact us.
 						</p>
 					</div>
 

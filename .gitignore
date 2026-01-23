@@ -13,7 +13,7 @@ out/
 .turbo/
 
 # Bun
-bun.lock
+# bun.lock is committed for reproducible builds
 
 # Environment
 .env

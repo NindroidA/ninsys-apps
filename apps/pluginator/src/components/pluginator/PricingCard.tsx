@@ -1,7 +1,7 @@
+import type { Tier } from "@/types/tier";
 import { Button } from "@ninsys/ui/components";
 import { cn } from "@ninsys/ui/lib";
 import { Check } from "lucide-react";
-import type { Tier } from "@/types/tier";
 
 export type PricingTier = Tier;
 

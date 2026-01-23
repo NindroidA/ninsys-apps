@@ -1,5 +1,5 @@
-import { FadeIn } from "@ninsys/ui/components/animations";
 import { Button } from "@ninsys/ui/components";
+import { FadeIn } from "@ninsys/ui/components/animations";
 import { cn } from "@ninsys/ui/lib";
 import { motion } from "framer-motion";
 import { ArrowLeft, BookOpen, ExternalLink, RefreshCw } from "lucide-react";
@@ -108,18 +108,11 @@ export function DocsLayout({
 							<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 								<div>
 									<h1 className="text-3xl font-bold mb-2">{title}</h1>
-									{description && (
-										<p className="text-muted-foreground">{description}</p>
-									)}
+									{description && <p className="text-muted-foreground">{description}</p>}
 								</div>
 								<div className="flex items-center gap-2">
 									{onRefresh && (
-										<Button
-											variant="ghost"
-											size="sm"
-											onClick={onRefresh}
-											disabled={isLoading}
-										>
+										<Button variant="ghost" size="sm" onClick={onRefresh} disabled={isLoading}>
 											<RefreshCw className={cn("h-4 w-4 mr-2", isLoading && "animate-spin")} />
 											Refresh
 										</Button>
@@ -145,7 +138,7 @@ export function DocsLayout({
 							<div className="flex items-center justify-center py-20">
 								<motion.div
 									animate={{ rotate: 360 }}
-									transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+									transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
 								>
 									<RefreshCw className="h-8 w-8 text-primary" />
 								</motion.div>
@@ -163,9 +156,7 @@ export function DocsLayout({
 							</div>
 						) : (
 							<FadeIn>
-								<div className="prose prose-neutral dark:prose-invert max-w-none">
-									{children}
-								</div>
+								<div className="prose prose-neutral dark:prose-invert max-w-none">{children}</div>
 							</FadeIn>
 						)}
 					</main>

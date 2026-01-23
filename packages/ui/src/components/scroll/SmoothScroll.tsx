@@ -5,7 +5,7 @@
  * React Router. Uses continuous RAF loop for smooth wheel scrolling.
  */
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { type ReactNode, useEffect, useRef } from "react";
 
 interface SmoothScrollProps {
 	children: ReactNode;
@@ -15,20 +15,14 @@ interface SmoothScrollProps {
 	enabled?: boolean;
 }
 
-export function SmoothScroll({
-	children,
-	ease = 0.08,
-	enabled = true
-}: SmoothScrollProps) {
+export function SmoothScroll({ children, ease = 0.08, enabled = true }: SmoothScrollProps) {
 	const targetScroll = useRef(0);
 	const currentScroll = useRef(0);
 	const isScrolling = useRef(false);
 
 	useEffect(() => {
 		// Check for reduced motion preference
-		const prefersReducedMotion = window.matchMedia(
-			"(prefers-reduced-motion: reduce)"
-		).matches;
+		const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 		if (!enabled || prefersReducedMotion) {
 			return;

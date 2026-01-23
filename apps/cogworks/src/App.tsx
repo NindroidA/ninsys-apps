@@ -1,10 +1,10 @@
-import { PageTransition } from "@ninsys/ui/components/animations";
 import { Layout } from "@/components/layout";
 import { CommandsPage } from "@/pages/CommandsPage";
 import { FeaturesPage } from "@/pages/FeaturesPage";
 import { HomePage } from "@/pages/HomePage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 import { StatusPage } from "@/pages/StatusPage";
+import { PageTransition } from "@ninsys/ui/components/animations";
 import { AnimatePresence } from "framer-motion";
 import { Route, Routes, useLocation } from "react-router-dom";
 

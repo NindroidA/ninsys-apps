@@ -1,5 +1,5 @@
-import { FadeIn } from "@ninsys/ui/components/animations";
 import { Button } from "@ninsys/ui/components";
+import { FadeIn } from "@ninsys/ui/components/animations";
 import { Home } from "lucide-react";
 import { Link } from "react-router-dom";
 

@@ -2,9 +2,9 @@
  * Usage API hooks
  */
 
-import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import type { LimitCheckResult, UsageReport } from "@/types/tier";
+import { useQuery } from "@tanstack/react-query";
 
 export function useUsage() {
 	return useQuery<UsageReport | null>({

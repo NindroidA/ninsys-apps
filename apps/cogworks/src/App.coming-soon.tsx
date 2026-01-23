@@ -15,7 +15,10 @@ export default function App() {
 
 			{/* Animated orbs */}
 			<div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-			<div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-accent/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+			<div
+				className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-accent/20 rounded-full blur-3xl animate-pulse"
+				style={{ animationDelay: "1s" }}
+			/>
 
 			{/* Content */}
 			<div className="relative z-10 text-center px-4">
@@ -26,6 +29,8 @@ export default function App() {
 						viewBox="0 0 24 24"
 						fill="none"
 						xmlns="http://www.w3.org/2000/svg"
+						role="img"
+						aria-label="Cogworks logo"
 					>
 						<path
 							d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"
@@ -50,9 +55,7 @@ export default function App() {
 				</h1>
 
 				{/* Coming Soon */}
-				<p className="text-2xl sm:text-3xl text-muted-foreground mb-8">
-					Coming Soon
-				</p>
+				<p className="text-2xl sm:text-3xl text-muted-foreground mb-8">Coming Soon</p>
 
 				{/* Subtitle */}
 				<p className="text-muted-foreground max-w-md mx-auto">

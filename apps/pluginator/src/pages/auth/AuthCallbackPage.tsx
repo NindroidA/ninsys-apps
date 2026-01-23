@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { CheckCircle, Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export function AuthCallbackPage() {
 	const [searchParams] = useSearchParams();
@@ -16,7 +16,7 @@ export function AuthCallbackPage() {
 		if (errorParam) {
 			setStatus("error");
 			setError(errorParam);
-			setTimeout(() => navigate("/login?error=" + encodeURIComponent(errorParam)), 2000);
+			setTimeout(() => navigate(`/login?error=${encodeURIComponent(errorParam)}`), 2000);
 			return;
 		}
 

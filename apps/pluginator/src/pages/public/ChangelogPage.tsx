@@ -1,7 +1,7 @@
-import { FadeIn } from "@ninsys/ui/components/animations";
-import { Button } from "@ninsys/ui/components";
 import { MarkdownRenderer } from "@/components/docs";
-import { useGitHubMarkdown, DOC_PATHS } from "@/hooks/useGitHubMarkdown";
+import { DOC_PATHS, useGitHubMarkdown } from "@/hooks/useGitHubMarkdown";
+import { Button } from "@ninsys/ui/components";
+import { FadeIn } from "@ninsys/ui/components/animations";
 import { motion } from "framer-motion";
 import { ArrowLeft, ExternalLink, History, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -37,12 +37,7 @@ export function ChangelogPage() {
 							</p>
 						</div>
 						<div className="flex items-center gap-2">
-							<Button
-								variant="ghost"
-								size="sm"
-								onClick={() => refetch()}
-								disabled={isLoading}
-							>
+							<Button variant="ghost" size="sm" onClick={() => refetch()} disabled={isLoading}>
 								<RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
 								Refresh
 							</Button>
@@ -65,7 +60,7 @@ export function ChangelogPage() {
 					<div className="flex items-center justify-center py-20">
 						<motion.div
 							animate={{ rotate: 360 }}
-							transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+							transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
 						>
 							<RefreshCw className="h-8 w-8 text-primary" />
 						</motion.div>

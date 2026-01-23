@@ -1,29 +1,29 @@
-import { PageTransition } from "@ninsys/ui/components/animations";
 import { ProtectedRoute } from "@/components/auth";
 import { Layout } from "@/components/layout";
 import { NotFoundPage } from "@/pages/NotFoundPage";
+import { AccountPage } from "@/pages/account";
+import { AuthCallbackPage, AuthErrorPage } from "@/pages/auth";
 import { DashboardPage } from "@/pages/dashboard";
 import {
+	CLICommandsPage,
+	ConfigPage,
+	DocsIndexPage,
+	SecurityPage,
+	TroubleshootingPage,
+	UserGuidePage,
+} from "@/pages/docs";
+import { PrivacyPage, TermsPage } from "@/pages/legal";
+import { CheckoutPage, PaymentCancelPage, PaymentSuccessPage } from "@/pages/payment";
+import {
+	ChangelogPage,
+	ContactPage,
 	DownloadPage,
 	HomePage,
 	LoginPage,
 	PricingPage,
 	SignupPage,
-	ChangelogPage,
-	ContactPage,
 } from "@/pages/public";
-import { AccountPage } from "@/pages/account";
-import { CheckoutPage, PaymentSuccessPage, PaymentCancelPage } from "@/pages/payment";
-import { AuthCallbackPage, AuthErrorPage } from "@/pages/auth";
-import {
-	DocsIndexPage,
-	CLICommandsPage,
-	ConfigPage,
-	UserGuidePage,
-	TroubleshootingPage,
-	SecurityPage,
-} from "@/pages/docs";
-import { PrivacyPage, TermsPage } from "@/pages/legal";
+import { PageTransition } from "@ninsys/ui/components/animations";
 import { AnimatePresence } from "framer-motion";
 import { Route, Routes, useLocation } from "react-router-dom";
 

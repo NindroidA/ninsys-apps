@@ -1,12 +1,8 @@
-import { FadeIn } from "@ninsys/ui/components/animations";
-import {
-	ParallaxElement,
-	ScrollProgress,
-	TextReveal,
-} from "@ninsys/ui/components/scroll";
 import { Button } from "@ninsys/ui/components";
+import { FadeIn } from "@ninsys/ui/components/animations";
+import { ParallaxElement, ScrollProgress, TextReveal } from "@ninsys/ui/components/scroll";
 import { motion } from "framer-motion";
-import { Apple, Download, Monitor, Terminal, Zap, Shield, Clock } from "lucide-react";
+import { Apple, Clock, Download, Monitor, Shield, Terminal, Zap } from "lucide-react";
 
 const downloads = [
 	{
@@ -45,34 +41,38 @@ export function DownloadPage() {
 	return (
 		<div className="min-h-screen py-20 relative overflow-hidden">
 			{/* Parallax Background Orbs */}
-			<div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }} aria-hidden="true">
-				<ParallaxElement speed={0.2} className="absolute" style={{ top: '10%', left: '10%' }}>
+			<div
+				className="absolute inset-0 overflow-hidden pointer-events-none"
+				style={{ zIndex: 0 }}
+				aria-hidden="true"
+			>
+				<ParallaxElement speed={0.2} className="absolute" style={{ top: "10%", left: "10%" }}>
 					<div
 						className="rounded-full blur-3xl"
 						style={{
-							width: '400px',
-							height: '400px',
-							background: 'oklch(0.627 0.265 303.9 / 0.2)',
+							width: "400px",
+							height: "400px",
+							background: "oklch(0.627 0.265 303.9 / 0.2)",
 						}}
 					/>
 				</ParallaxElement>
-				<ParallaxElement speed={-0.15} className="absolute" style={{ bottom: '10%', right: '15%' }}>
+				<ParallaxElement speed={-0.15} className="absolute" style={{ bottom: "10%", right: "15%" }}>
 					<div
 						className="rounded-full blur-3xl"
 						style={{
-							width: '350px',
-							height: '350px',
-							background: 'oklch(0.70 0.20 290 / 0.15)',
+							width: "350px",
+							height: "350px",
+							background: "oklch(0.70 0.20 290 / 0.15)",
 						}}
 					/>
 				</ParallaxElement>
-				<ParallaxElement speed={0.25} className="absolute" style={{ top: '50%', right: '5%' }}>
+				<ParallaxElement speed={0.25} className="absolute" style={{ top: "50%", right: "5%" }}>
 					<div
 						className="rounded-full blur-2xl"
 						style={{
-							width: '200px',
-							height: '200px',
-							background: 'oklch(0.627 0.265 303.9 / 0.1)',
+							width: "200px",
+							height: "200px",
+							background: "oklch(0.627 0.265 303.9 / 0.1)",
 						}}
 					/>
 				</ParallaxElement>
@@ -88,7 +88,9 @@ export function DownloadPage() {
 						className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-success/10 border border-success/20 mb-6"
 					>
 						<Download className="h-4 w-4 text-success" />
-						<span className="text-sm font-medium text-success">Free forever, no account required</span>
+						<span className="text-sm font-medium text-success">
+							Free forever, no account required
+						</span>
 					</motion.div>
 
 					<TextReveal
@@ -102,7 +104,8 @@ export function DownloadPage() {
 					</TextReveal>
 					<FadeIn delay={0.2}>
 						<p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-							Get the CLI tool for your operating system. Manage all your Minecraft plugins with ease.
+							Get the CLI tool for your operating system. Manage all your Minecraft plugins with
+							ease.
 						</p>
 					</FadeIn>
 				</div>
@@ -139,7 +142,11 @@ export function DownloadPage() {
 											</motion.div>
 											<h2 className="text-xl font-bold mb-2">{dl.os}</h2>
 											<p className="text-sm text-muted-foreground mb-6">{dl.description}</p>
-											<Button variant={dl.primary ? "primary" : "outline"} className="w-full" asChild>
+											<Button
+												variant={dl.primary ? "primary" : "outline"}
+												className="w-full"
+												asChild
+											>
 												<a href={getDownloadUrl(dl.fileName)} download>
 													<Download className="mr-2 h-4 w-4" />
 													Download
@@ -211,10 +218,19 @@ export function DownloadPage() {
 								<div className="space-y-4">
 									{[
 										{ label: "Via Cargo (Rust)", code: "cargo install pluginator" },
-										{ label: "Via Homebrew (macOS/Linux)", code: "brew install nindroida/tap/pluginator" },
-										{ label: "From Source", code: "git clone https://github.com/NindroidA/pluginator-public && cd pluginator-public && cargo build --release" },
+										{
+											label: "Via Homebrew (macOS/Linux)",
+											code: "brew install nindroida/tap/pluginator",
+										},
+										{
+											label: "From Source",
+											code: "git clone https://github.com/NindroidA/pluginator-public && cd pluginator-public && cargo build --release",
+										},
 									].map((method, index) => {
-										const methodProgress = Math.max(0, Math.min(1, (progress - index * 0.15) * 2.5));
+										const methodProgress = Math.max(
+											0,
+											Math.min(1, (progress - index * 0.15) * 2.5),
+										);
 										return (
 											<motion.div
 												key={method.label}
@@ -262,7 +278,11 @@ export function DownloadPage() {
 							>
 								<ol className="space-y-4">
 									{[
-										{ step: 1, title: "Navigate to your server's plugins folder", code: "cd /path/to/server/plugins" },
+										{
+											step: 1,
+											title: "Navigate to your server's plugins folder",
+											code: "cd /path/to/server/plugins",
+										},
 										{ step: 2, title: "Initialize Pluginator", code: "pluginator init" },
 										{ step: 3, title: "Add your first plugin", code: "pluginator add EssentialsX" },
 										{ step: 4, title: "Check for updates", code: "pluginator check" },

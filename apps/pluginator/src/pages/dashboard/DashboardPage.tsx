@@ -1,39 +1,49 @@
-import {
-	ParallaxElement,
-	ScrollProgress,
-} from "@ninsys/ui/components/scroll";
 import { SubscriptionBadge } from "@/components/pluginator";
-import { Button } from "@ninsys/ui/components";
 import { useAuth } from "@/hooks/useAuth";
 import { useUsage } from "@/hooks/useUsage";
+import { Button } from "@ninsys/ui/components";
+import { ParallaxElement, ScrollProgress } from "@ninsys/ui/components/scroll";
 import { motion } from "framer-motion";
-import { HardDrive, Puzzle, RefreshCw, Server, Activity, TrendingUp, Gauge, Download, CloudUpload, Search } from "lucide-react";
+import {
+	Activity,
+	CloudUpload,
+	Download,
+	Gauge,
+	HardDrive,
+	Puzzle,
+	RefreshCw,
+	Search,
+	Server,
+	TrendingUp,
+} from "lucide-react";
 
 export function DashboardPage() {
 	const { user, logout } = useAuth();
 	const { data: usage, isLoading: usageLoading } = useUsage();
 
 	// Usage stats from API
-	const usageStats = usage ? [
-		{
-			label: "Checks Today",
-			used: usage.today.checks.used,
-			limit: usage.today.checks.limit,
-			icon: Search,
-		},
-		{
-			label: "Downloads Today",
-			used: usage.today.downloads.used,
-			limit: usage.today.downloads.limit,
-			icon: Download,
-		},
-		{
-			label: "Syncs Today",
-			used: usage.today.syncs.used,
-			limit: usage.today.syncs.limit,
-			icon: CloudUpload,
-		},
-	] : [];
+	const usageStats = usage
+		? [
+				{
+					label: "Checks Today",
+					used: usage.today.checks.used,
+					limit: usage.today.checks.limit,
+					icon: Search,
+				},
+				{
+					label: "Downloads Today",
+					used: usage.today.downloads.used,
+					limit: usage.today.downloads.limit,
+					icon: Download,
+				},
+				{
+					label: "Syncs Today",
+					used: usage.today.syncs.used,
+					limit: usage.today.syncs.limit,
+					icon: CloudUpload,
+				},
+			]
+		: [];
 
 	// Mock server stats - would come from CLI sync in future
 	const serverStats = {
@@ -46,8 +56,12 @@ export function DashboardPage() {
 	return (
 		<div className="min-h-screen py-8 relative overflow-hidden">
 			{/* Background Orbs */}
-			<div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }} aria-hidden="true">
-				<ParallaxElement speed={0.08} className="absolute" style={{ top: '5%', right: '5%' }}>
+			<div
+				className="absolute inset-0 overflow-hidden pointer-events-none"
+				style={{ zIndex: 0 }}
+				aria-hidden="true"
+			>
+				<ParallaxElement speed={0.08} className="absolute" style={{ top: "5%", right: "5%" }}>
 					<motion.div
 						animate={{
 							scale: [1, 1.1, 1],
@@ -60,13 +74,13 @@ export function DashboardPage() {
 						}}
 						className="rounded-full blur-3xl"
 						style={{
-							width: '300px',
-							height: '300px',
-							background: 'oklch(0.627 0.265 303.9 / 0.1)',
+							width: "300px",
+							height: "300px",
+							background: "oklch(0.627 0.265 303.9 / 0.1)",
 						}}
 					/>
 				</ParallaxElement>
-				<ParallaxElement speed={-0.05} className="absolute" style={{ bottom: '10%', left: '10%' }}>
+				<ParallaxElement speed={-0.05} className="absolute" style={{ bottom: "10%", left: "10%" }}>
 					<motion.div
 						animate={{
 							y: [0, -15, 0],
@@ -78,9 +92,9 @@ export function DashboardPage() {
 						}}
 						className="rounded-full blur-3xl"
 						style={{
-							width: '250px',
-							height: '250px',
-							background: 'oklch(0.70 0.20 290 / 0.08)',
+							width: "250px",
+							height: "250px",
+							background: "oklch(0.70 0.20 290 / 0.08)",
 						}}
 					/>
 				</ParallaxElement>
@@ -141,7 +155,8 @@ export function DashboardPage() {
 							</div>
 							<div className="grid sm:grid-cols-3 gap-6">
 								{usageStats.map((stat, index) => {
-									const percentage = stat.limit === -1 ? 0 : Math.min((stat.used / stat.limit) * 100, 100);
+									const percentage =
+										stat.limit === -1 ? 0 : Math.min((stat.used / stat.limit) * 100, 100);
 									const isUnlimited = stat.limit === -1;
 									return (
 										<motion.div
@@ -163,7 +178,11 @@ export function DashboardPage() {
 											<div className="h-2 bg-muted rounded-full overflow-hidden">
 												<motion.div
 													className={`h-full rounded-full ${
-														percentage > 90 ? "bg-destructive" : percentage > 70 ? "bg-warning" : "bg-primary"
+														percentage > 90
+															? "bg-destructive"
+															: percentage > 70
+																? "bg-warning"
+																: "bg-primary"
 													}`}
 													initial={{ width: 0 }}
 													animate={{ width: isUnlimited ? "100%" : `${percentage}%` }}

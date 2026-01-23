@@ -5,12 +5,12 @@
  * Disables auth buttons and shows "Coming Soon" badges.
  */
 
-import { ScrollLink } from "@ninsys/ui/components/navigation";
 import { Badge } from "@ninsys/ui/components";
+import { ScrollLink } from "@ninsys/ui/components/navigation";
 import { cn } from "@ninsys/ui/lib";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, Coffee, Menu, Scale, X } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -88,7 +88,9 @@ export function Header() {
 						>
 							<Scale className="h-4 w-4" />
 							Legal
-							<ChevronDown className={cn("h-3 w-3 transition-transform", legalDropdownOpen && "rotate-180")} />
+							<ChevronDown
+								className={cn("h-3 w-3 transition-transform", legalDropdownOpen && "rotate-180")}
+							/>
 						</button>
 
 						<AnimatePresence>
@@ -182,7 +184,9 @@ export function Header() {
 
 							{/* Legal links in mobile */}
 							<div className="pt-2 border-t border-border mt-2">
-								<p className="px-4 py-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">Legal</p>
+								<p className="px-4 py-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+									Legal
+								</p>
 								{legalLinks.map((link) => (
 									<ScrollLink
 										key={link.name}

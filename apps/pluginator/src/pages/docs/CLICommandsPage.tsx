@@ -1,5 +1,5 @@
 import { DocsLayout, MarkdownRenderer } from "@/components/docs";
-import { useGitHubMarkdown, DOC_PATHS } from "@/hooks/useGitHubMarkdown";
+import { DOC_PATHS, useGitHubMarkdown } from "@/hooks/useGitHubMarkdown";
 
 export function CLICommandsPage() {
 	const { content, isLoading, error, refetch } = useGitHubMarkdown("cli-commands");
