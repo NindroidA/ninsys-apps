@@ -12,7 +12,7 @@ COPY package.json bun.lock turbo.json ./
 COPY packages/ui/package.json ./packages/ui/
 COPY apps/cogworks/package.json ./apps/cogworks/
 
-# Install all dependencies
+# Install all dependencies (Bun hoists to root node_modules)
 RUN bun install
 
 # ============================================
@@ -21,10 +21,8 @@ RUN bun install
 FROM oven/bun:1-alpine AS builder
 WORKDIR /app
 
-# Copy dependencies from deps stage
+# Copy dependencies from deps stage (only root node_modules)
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/packages/ui/node_modules ./packages/ui/node_modules
-COPY --from=deps /app/apps/cogworks/node_modules ./apps/cogworks/node_modules
 
 # Copy source files
 COPY . .
