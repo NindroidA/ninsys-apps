@@ -29,7 +29,7 @@ const downloads = [
 ];
 
 const features = [
-	{ icon: Zap, title: "Lightning Fast", description: "Written in Rust for maximum performance" },
+	{ icon: Zap, title: "Lightning Fast", description: "Built with TypeScript and powered by Bun" },
 	{ icon: Shield, title: "Secure", description: "Automatic backups before every update" },
 	{ icon: Clock, title: "Time Saver", description: "Update all plugins with one command" },
 ];

@@ -90,7 +90,7 @@ export const features = [
 		id: "fast-downloads",
 		title: "Fast & Efficient",
 		description:
-			"Built with Rust for maximum performance. Parallel downloads and minimal resource usage.",
+			"Built with TypeScript and powered by Bun. Parallel downloads and minimal resource usage.",
 		icon: Zap,
 		highlights: [
 			"Parallel downloads",

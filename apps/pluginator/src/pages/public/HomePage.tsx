@@ -302,7 +302,7 @@ export function HomePage() {
 									style={{ opacity: 0.1 + progress * 0.9 }}
 								>
 									{[
-										{ icon: Zap, label: "Lightning Fast", sublabel: "Rust-powered CLI" },
+										{ icon: Zap, label: "Lightning Fast", sublabel: "TypeScript & Bun" },
 										{ icon: Shield, label: "Secure", sublabel: "Auto-backups" },
 										{ icon: Globe, label: "8 Sources", sublabel: "All platforms" },
 										{ icon: Clock, label: "Time Saver", sublabel: "One command" },
