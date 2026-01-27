@@ -65,10 +65,7 @@ export function PricingPage() {
 								<Clock className="h-8 w-8 text-primary" />
 							</div>
 							<h2 className="text-xl font-semibold mb-3">Pricing Coming Soon</h2>
-							<p className="text-muted-foreground text-sm">
-								We're finalizing our pricing tiers. In the meantime, Pluginator is free to download
-								and use with basic features.
-							</p>
+							<p className="text-muted-foreground text-sm">We're finalizing our pricing tiers.</p>
 						</div>
 					</div>
 				</FadeIn>
