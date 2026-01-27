@@ -113,10 +113,9 @@ jobs:
 
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-            docker pull ghcr.io/${IMAGE_OWNER}/cogworks-webapp:latest
-            docker pull ghcr.io/${IMAGE_OWNER}/pluginator-webapp:latest
-
-            docker-compose up -d --force-recreate cogworks-webapp pluginator-webapp
+            # --pull always ensures fresh images even if Docker thinks it has latest
+            docker-compose pull cogworks-webapp pluginator-webapp
+            docker-compose up -d --force-recreate --pull always cogworks-webapp pluginator-webapp
 
             docker image prune -f
 
