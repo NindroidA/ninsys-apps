@@ -5,6 +5,195 @@ All notable changes to Pluginator Web will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2026-02-13
+
+### Added
+- **Error Boundary**: Global `ErrorBoundary` component wrapping the app in `main.tsx` for graceful crash recovery with refresh button
+- **Route-Based Code Splitting**: All non-acquisition routes lazy-loaded with `React.lazy()` and `Suspense`
+  - Eagerly loaded: Home, Pricing, Download, Login, Signup (acquisition funnel)
+  - Lazy loaded: 25+ remaining routes (docs, marketplace, dashboard, account, etc.)
+- **Vite Manual Chunks**: Configured `rollupOptions.manualChunks` for vendor, query, motion, and markdown bundles
+- **Nginx Security Headers**: X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, HSTS, CSP
+
+### Fixed
+- **Critical: Checkout Infinite Re-render** (C1): Added `useRef` guard in `CheckoutPage` to prevent duplicate Stripe sessions from `useEffect` re-firing
+- **Critical: Hardcoded Dev Bypass Secret** (C2): `api.ts` now reads bypass secret from `VITE_DEV_BYPASS_SECRET` env var instead of hardcoded value
+- **Critical: Dev Auth Bypass Always Active** (C3): `useAuth.ts` now requires explicit `VITE_ENABLE_AUTH_BYPASS=true` to enable dev bypass; `DEV_SESSION` changed to function for fresh `expiresAt`
+- **Unhandled Mutation Errors** (H1): `UsageDashboard` and `PricingPage` mutation calls wrapped in try/catch
+- **Auth Token Leak in URL** (H2): `AuthCallbackPage` clears token/error from URL with `history.replaceState`
+- **Raw Error Reflection** (H2/M2): Auth error codes mapped to predefined safe messages instead of reflecting URL params
+- **Unsafe Tier Cast** (H4): `PaymentSuccessPage` validates tier param against allowlist before casting
+- **Non-JSON Response Crash** (H5): `auth.ts` login/register check `Content-Type` before calling `.json()`
+- **Token Not Cleared on Logout Failure** (H6): `localStorage.removeItem` moved before fetch in `logout()` with try/catch
+- **Payment Success Not Protected** (M1): `/payment/success` route wrapped in `ProtectedRoute`
+- **Open Redirect via Login State** (M3): `LoginPage` validates redirect path starts with `/` and not `//`
+- **ConfirmDialog Accessibility** (M4): Added `role="dialog"`, `aria-modal`, `aria-labelledby`, and body scroll lock
+- **Redundant Ternary** (M5): Fixed `originalPrice ? "mt-2" : "mt-2"` → `"mt-2"` in `PricingCard`
+- **Unstable onCancel Reference** (M7): `ConfirmDialog` stabilizes callback with `useRef`/`useCallback` pattern
+
+### Removed
+- **`Header.full.tsx`**: Deleted orphaned file with no imports
+- **`PricingTier` type alias**: Removed redundant `export type PricingTier = Tier` from `PricingCard` and re-export from `pluginator/index.ts`
+- **`TierPricing` interface**: Removed unused interface from `types/tier.ts`
+
+### Performance
+- **Bundle size**: Main chunk reduced from 1,177 KB to 425 KB with code splitting
+- Build produces optimized vendor (React/Router), query, motion, and markdown chunks
+
+## [0.8.0] - 2026-02-11
+
+### Added
+- **Account Page Rebuild**: Full profile management with 6 sections
+  - **Profile**: Inline name editing with pencil icon, member since date, read-only email
+  - **Password**: Change password form with current/new/confirm fields, visibility toggles, client-side validation
+  - **Connected Accounts**: Google and GitHub OAuth connection status with connect buttons
+  - **Danger Zone**: Red-tinted delete account section requiring "DELETE" typed confirmation
+- **Account Management Hooks**: New `useAccount.ts` with `useUpdateProfile()`, `useChangePassword()`, `useConnections()`, `useDeleteAccount()`
+
+### Changed
+- **Frosted Glass Subscription Badges**: Plus/Pro/Max badges now use translucent gradient effects matching the established frosted glass pattern (SubscriptionBadge and PricingCard tier labels)
+- **PricingCard Downgrade Button**: Changed from barely-visible ghost variant to outline with `text-foreground/70` for better visibility
+- **Account Page Layout**: Switched from 2-column grid to single-column `max-w-3xl` with distinct Card sections
+
+### Fixed
+- **Non-JSON API Response Handling**: `api.ts` now checks Content-Type before parsing as JSON, preventing `SyntaxError` crashes when API returns HTML error pages (e.g. 404)
+
+## [0.7.0] - 2026-02-10
+
+### Added
+- **Header User Menu**: Replaced single "Dashboard" button with dropdown menu showing Dashboard, Account, and Sign Out links when authenticated
+- **Mobile Account Access**: Added Account and Sign Out buttons to mobile navigation menu
+- **Dynamic Pricing Page CTAs**: Pricing cards now show context-aware button states based on user's current subscription
+  - "Current Plan" for active tier (disabled)
+  - "Upgrade" for higher tiers
+  - "Downgrade" for lower tiers with confirmation dialogs
+  - "Get Plus" / "Purchased" for Plus add-on (independent of subscription tier)
+  - Free card disabled when user has Plus (can't go below Plus)
+- **Plus as Independent Purchase**: Pro/Max subscribers can now purchase Plus add-on for permanent discounts
+- **Plan Change Support**: Added `useChangePlan()` hook for switching between subscription tiers (e.g. Max to Pro) with Stripe proration
+- **Downgrade Confirmation Dialogs**: Cancel and plan-change flows on pricing page with appropriate messaging
+
+### Changed
+- **PricingCard**: Added `ctaStyle` prop for visual differentiation of downgrade buttons (ghost style)
+
+### Fixed
+- **Tier Badge Not Updating**: DashboardPage now uses `useSubscription()` data for tier badge instead of stale auth session data
+- **Post-Payment Cache**: PaymentSuccessPage now also invalidates `auth/session` cache so tier updates immediately
+
+## [0.6.0] - 2026-02-10
+
+### Added
+- **Stripe Checkout Integration**: Pricing page CTAs now trigger real Stripe Checkout sessions
+  - Logged out users directed to login with returnTo for seamless flow
+  - Logged in users on Free tier see upgrade buttons that redirect to Stripe
+  - Current plan shown as disabled "Current Plan" button
+  - Loading spinner on button while checkout session is created
+  - Plus discount automatically applied to Pro/Max pricing display
+- **Payment Routes**: Enabled checkout, success, and cancel page routes
+  - `/checkout` — creates Stripe session and redirects (protected route)
+  - `/payment/success` — confirms payment, invalidates subscription cache
+  - `/payment/cancel` — user-friendly cancel message with retry option
+- **Billing Management on Account Page**: Full subscription lifecycle UI
+  - **Free tier**: "Upgrade Plan" button to pricing page
+  - **Plus only**: Plus discount active notice, link to subscribe to Pro/Max
+  - **Active subscription**: Shows price, next billing date, with "Change Plan", "Manage Billing" (Stripe portal), and "Cancel" actions
+  - **Canceling**: Warning banner with end date and "Reactivate" button
+  - **Past due**: Error banner with "Update Payment Method" button (Stripe portal)
+- **Cancel/Reactivate Subscription Hooks**: `useCancelSubscription()` and `useReactivateSubscription()` in useSubscription.ts
+- **ConfirmDialog Component**: Animated modal overlay for destructive action confirmations (used for cancel subscription)
+- **Extended SubscriptionInfo Type**: Added `status`, `cancelAtPeriodEnd`, `currentPeriodEnd`, `priceFormatted` fields
+- **PricingCard Enhancements**: Added `ctaDisabled` and `ctaLoading` props with loading spinner
+
+### Changed
+- App.tsx: Removed "Coming Soon" payment route redirects, replaced with real page components
+- PricingPage: Dynamic CTA text and behavior based on auth state and current subscription tier
+
+## [0.5.1] - 2026-02-10
+
+### Style
+- **Frosted glass accent cards**: Full frosted glass effect across all accent cards
+  - Cards use gradient backgrounds (`bg-gradient-to-br`) with `/25` opacity and `backdrop-blur-sm`
+  - Color spans the entire card area with matching `/40` borders and glow shadows
+  - Pricing cards: blue (Plus), purple (Pro), amber (Max) frosted glass
+  - Plugin detail: purple (Quick Install), red (Conflicts), blue (Notes)
+  - Theme detail: purple (Use This Theme), amber (Premium Features)
+  - Homepage beta notice + Pricing beta banner: amber frosted glass
+  - Docs security warning: yellow frosted glass
+- **Hero badge**: "Open Beta" badge on homepage uses amber gradient frosted glass
+- **Navbar BETA badge**: Uses matching amber gradient frosted glass pill
+- **Footer version badge**: Blue/indigo/purple gradient pill showing "v{version} beta"
+
+### Fixed
+- Download page: Windows card no longer permanently highlighted over macOS/Linux
+- Route transitions no longer scroll current page to top before navigating
+  - `ScrollLink` default `scrollToTop` changed to `false`
+  - `PageTransition` handles scroll-to-top on new page mount (correct timing)
+
+## [0.5.0] - 2026-02-09
+
+### Added
+- **Beta Launch**: Full transition from "Coming Soon" to public beta
+  - Auth enabled (login, signup, dashboard, account)
+  - Payment/checkout routes disabled with redirects to pricing
+  - Beta badges throughout the app (header, hero, signup)
+  - Beta pricing banner on pricing page with real tier cards
+  - Beta disclaimer section on homepage with GitHub Issues link
+- **Pricing Page**: Full rewrite with 4 tier cards (Free, Plus, Pro, Max)
+  - All purchase CTAs show "Coming Soon" (disabled)
+  - Feature comparison table
+  - Beta pricing notice
+- **Marketplace Routes**: Plugin registry, theme gallery, plugin detail pages
+- **Documentation Improvements**:
+  - Themes and Security added to docs sidebar navigation
+  - "Coming Soon" placeholder for docs not yet published
+  - Theme names clickable to copy to clipboard on User Files page
+  - Auto-regeneration info added to User Files docs
+
+### Changed
+- Header: switched to full auth header with BETA badge, login/signup buttons
+- Footer: fixed GitHub repo URL, added bug report link, Buy Me a Coffee URL
+- Homepage: hero badge → "Open Beta", CTA subhead → community-focused text
+- Homepage: "Secure" highlight → "Smart Backups" to match feature description
+- Homepage: improved feature card scroll animation timing
+- Download page: platform icons updated (Windows, Apple, Linux brand logos)
+- Download page: "Secure" badge → "Smart Backups"
+- Minecraft versions: updated to 1.21.4 across registry and version filters
+- Cursor: added pointer cursor to theme toggle, hamburger menu, legal dropdown
+- Signup page: changed trial badge to "Public Beta"
+- Account page: upgrade button shows "Coming Soon" placeholder
+
+### Fixed
+- GitHub repo URL: corrected from `pluginator-public` to `pluginator` across all files
+- Documentation fetch: removed non-existent `quick-reference/` paths from DOC_PATHS
+- Documentation pages that can't fetch content now show helpful "Coming Soon" messages
+- Contact page: removed non-existent Discord card, added beta feedback note
+- Plugin cards: fixed "0" rendering bug when download count is zero (JSX falsy number issue)
+- "Smart Backups" icon: replaced Shield with Archive icon for better visual clarity
+- Feature cards: replaced scroll-driven animation with smooth `whileInView` reveal (fixes glitchy/slow cards)
+- Header: swapped "Sign in" / "Get Started" button order (primary action first)
+- Download cards: consistent height across all OS cards regardless of description length
+
+## [0.3.0] - 2025-01-23
+
+### Added
+- **User Files Documentation Page**: Comprehensive guide for Pluginator CLI user files
+  - New route: `/docs/user-files`
+  - Six documentation sections:
+    - Overview of user files location and structure
+    - Config file documentation (settings, authentication)
+    - Plugin registry file format
+    - Sources configuration (Modrinth, Spigot, etc.)
+    - Theme customization options
+    - Tips and best practices
+- **New Components**:
+  - `CodeBlock` - JSON syntax highlighting with copy-to-clipboard functionality
+  - Responsive card-based documentation layout
+
+### Technical Details
+- Uses `react-markdown` with `rehype-highlight` for syntax highlighting
+- Accessible code blocks with copy button
+- Mobile-responsive layout
+
 ## [0.2.0] - 2025-01-22
 
 ### Added

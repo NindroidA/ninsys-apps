@@ -83,4 +83,4 @@ The app expects these endpoints from NinSys-API:
 
 ## License
 
-MIT - NindroidSystems
+MIT - Nindroid Systems

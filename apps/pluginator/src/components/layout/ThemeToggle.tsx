@@ -9,7 +9,7 @@ export function ThemeToggle() {
 		<button
 			type="button"
 			onClick={toggle}
-			className="relative p-2 rounded-lg hover:bg-muted transition-colors"
+			className="relative p-2 rounded-lg hover:bg-muted transition-colors cursor-pointer"
 			aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
 		>
 			<motion.div

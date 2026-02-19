@@ -55,3 +55,57 @@ export function useCreatePortalSession() {
 		},
 	});
 }
+
+export function useCancelSubscription() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: async () => {
+			const res = await api.post("/v2/pluginator/subscription/cancel");
+			if (!res.success) {
+				throw new Error(res.error || "Failed to cancel subscription");
+			}
+			return res.data;
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["subscription"] });
+			queryClient.invalidateQueries({ queryKey: ["auth", "session"] });
+		},
+	});
+}
+
+export function useChangePlan() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: async (tier: Tier) => {
+			const res = await api.post("/v2/pluginator/subscription/change-plan", { tier });
+			if (!res.success) {
+				throw new Error(res.error || "Failed to change plan");
+			}
+			return res.data;
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["subscription"] });
+			queryClient.invalidateQueries({ queryKey: ["auth", "session"] });
+		},
+	});
+}
+
+export function useReactivateSubscription() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: async () => {
+			const res = await api.post("/v2/pluginator/subscription/reactivate");
+			if (!res.success) {
+				throw new Error(res.error || "Failed to reactivate subscription");
+			}
+			return res.data;
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["subscription"] });
+			queryClient.invalidateQueries({ queryKey: ["auth", "session"] });
+		},
+	});
+}

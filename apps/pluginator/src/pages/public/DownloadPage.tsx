@@ -2,26 +2,34 @@ import { Button } from "@ninsys/ui/components";
 import { FadeIn } from "@ninsys/ui/components/animations";
 import { ParallaxElement, ScrollProgress, TextReveal } from "@ninsys/ui/components/scroll";
 import { motion } from "framer-motion";
-import { Apple, Clock, Download, Monitor, Shield, Zap } from "lucide-react";
+import { Archive, Clock, Download, Zap } from "lucide-react";
+import type { ComponentType, SVGAttributes } from "react";
+import { FaApple, FaLinux, FaWindows } from "react-icons/fa";
 
-const downloads = [
+const downloads: {
+	os: string;
+	icon: ComponentType<SVGAttributes<SVGElement>>;
+	description: string;
+	fileName: string;
+	primary: boolean;
+}[] = [
 	{
 		os: "Windows",
-		icon: Monitor,
+		icon: FaWindows,
 		description: "Windows 10/11 (64-bit)",
 		fileName: "pluginator-windows-x64.exe",
-		primary: true,
+		primary: false,
 	},
 	{
 		os: "macOS",
-		icon: Apple,
+		icon: FaApple,
 		description: "macOS 12+ (Apple Silicon & Intel)",
 		fileName: "pluginator-macos-universal.tar.gz",
 		primary: false,
 	},
 	{
 		os: "Linux",
-		icon: Monitor,
+		icon: FaLinux,
 		description: "Linux (64-bit)",
 		fileName: "pluginator-linux-x64.tar.gz",
 		primary: false,
@@ -30,7 +38,7 @@ const downloads = [
 
 const features = [
 	{ icon: Zap, title: "Lightning Fast", description: "Built with TypeScript and powered by Bun" },
-	{ icon: Shield, title: "Secure", description: "Automatic backups before every update" },
+	{ icon: Archive, title: "Smart Backups", description: "Automatic backups before every update" },
 	{ icon: Clock, title: "Time Saver", description: "Update all plugins with one command" },
 ];
 
@@ -124,24 +132,24 @@ export function DownloadPage() {
 										<div
 											className={`rounded-2xl border-2 ${
 												dl.primary ? "border-primary" : "border-border"
-											} bg-card p-8 text-center hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10`}
+											} bg-card p-8 text-center hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 h-full flex flex-col`}
 											style={{
 												transform: dl.primary ? `scale(${1 + cardProgress * 0.03})` : undefined,
 											}}
 										>
 											<motion.div
-												className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-4"
+												className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-4 mx-auto"
 												style={{
 													transform: `rotate(${(1 - cardProgress) * -10}deg)`,
 												}}
 											>
-												<dl.icon className="h-8 w-8 text-primary" />
+												<dl.icon className="text-primary" style={{ width: "2rem", height: "2rem" }} />
 											</motion.div>
 											<h2 className="text-xl font-bold mb-2">{dl.os}</h2>
-											<p className="text-sm text-muted-foreground mb-6">{dl.description}</p>
+											<p className="text-sm text-muted-foreground mb-6 flex-1">{dl.description}</p>
 											<Button
 												variant="outline"
-												className="w-full opacity-50 cursor-not-allowed"
+												className="w-full opacity-50 cursor-not-allowed mt-auto"
 												disabled
 											>
 												<Download className="mr-2 h-4 w-4" />
@@ -193,9 +201,17 @@ export function DownloadPage() {
 				<FadeIn delay={0.3}>
 					<div className="max-w-2xl mx-auto mt-8">
 						<div className="rounded-xl border border-border bg-card/50 p-8 text-center">
-							<p className="text-muted-foreground">
-								Installation guides and quick start documentation coming soon.
+							<p className="text-muted-foreground mb-3">
+								Installation guides coming soon. Pluginator is currently in public beta.
 							</p>
+							<a
+								href="https://github.com/NindroidA/pluginator/releases"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="text-sm text-primary hover:underline"
+							>
+								View releases on GitHub
+							</a>
 						</div>
 					</div>
 				</FadeIn>

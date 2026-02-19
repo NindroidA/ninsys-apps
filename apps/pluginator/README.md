@@ -6,8 +6,8 @@ The official web application for Pluginator - a CLI tool for managing Minecraft 
 
 - **Plugin Management** - Search, install, update, and remove plugins from popular repositories
 - **User Authentication** - OAuth login with GitHub and Google
-- **Subscription Tiers** - Free, Pro, and Enterprise plans with different feature sets
-- **License Management** - Activate and manage your Pluginator license
+- **Subscription Tiers** - Free, Plus, Pro, and Max plans with usage limits
+- **Plugin Marketplace** - Browse and install plugins from the registry
 - **Download Portal** - Get the latest CLI releases for all platforms
 
 ## Quick Start
@@ -42,16 +42,26 @@ bun turbo build --filter=@ninsys/pluginator
 ```
 src/
 ├── components/
-│   ├── layout/       # Header, Footer, Layout, ThemeToggle
-│   ├── auth/         # ProtectedRoute, OAuthButtons
-│   └── pluginator/   # PricingCard, SubscriptionBadge
-├── data/             # Static data (pricing, features)
-├── hooks/            # useAuth, custom hooks
-├── lib/              # Auth utilities, helpers
+│   ├── ErrorBoundary.tsx  # Global error boundary
+│   ├── layout/            # Header, Footer, Layout, ThemeToggle
+│   ├── auth/              # ProtectedRoute, OAuthButtons
+│   ├── pluginator/        # PricingCard, SubscriptionBadge, UsageDashboard
+│   └── ui/                # ConfirmDialog
+├── config/                # Pricing configuration
+├── data/                  # Static data (features, registry, themes)
+├── hooks/                 # useAuth, useSubscription, useAccount, etc.
+├── lib/                   # Auth utilities, API client
 ├── pages/
-│   ├── public/       # HomePage, PricingPage, LoginPage, etc.
-│   └── dashboard/    # Protected user dashboard
-└── styles/           # Global CSS and Pluginator theme
+│   ├── public/            # HomePage, PricingPage, LoginPage, etc.
+│   ├── dashboard/         # Protected user dashboard
+│   ├── account/           # Account management
+│   ├── payment/           # Checkout, success, cancel
+│   ├── docs/              # Documentation pages
+│   ├── marketplace/       # Plugin & theme browsing
+│   ├── auth/              # OAuth callback & error
+│   └── legal/             # Privacy, Terms
+├── types/                 # TypeScript types (tier, registry, theme)
+└── styles/                # Global CSS and Pluginator theme
 ```
 
 ## Shared Components
@@ -74,12 +84,15 @@ import { cn } from "@ninsys/ui/lib";
 - `/signup` - New user registration
 
 ### Protected Pages
-- `/dashboard` - User dashboard with license and subscription info
+- `/dashboard` - User dashboard with usage stats
+- `/account` - Account and subscription management
+- `/checkout` - Stripe checkout redirect
 
 ## Environment Variables
 
 ```env
 VITE_API_URL=https://api.nindroidsystems.com
+VITE_STRIPE_PUBLISHABLE_KEY=pk_...
 ```
 
 ## Docker Deployment
@@ -99,7 +112,7 @@ docker-compose up -d pluginator
 Pluginator uses a blue/cyan color scheme with OKLCH colors for better color consistency. The theme includes:
 
 - Primary blue gradient
-- Pricing tier accent colors (Free, Pro, Enterprise)
+- Pricing tier accent colors (Free/gray, Plus/blue, Pro/purple, Max/amber)
 - Dark mode optimized with light mode support
 
 ## Related Projects
@@ -109,4 +122,4 @@ Pluginator uses a blue/cyan color scheme with OKLCH colors for better color cons
 
 ## License
 
-MIT - NindroidSystems
+MIT - Nindroid Systems

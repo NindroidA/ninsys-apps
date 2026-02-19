@@ -18,7 +18,10 @@ interface DocsLayoutProps {
 const docsNavigation = [
 	{ name: "CLI Commands", href: "/docs/cli" },
 	{ name: "Configuration", href: "/docs/config" },
+	{ name: "User Files", href: "/docs/user-files" },
+	{ name: "Themes", href: "/docs/themes" },
 	{ name: "User Guide", href: "/docs/user-guide" },
+	{ name: "Security", href: "/docs/security" },
 	{ name: "Troubleshooting", href: "/docs/troubleshooting" },
 ];
 
@@ -87,7 +90,7 @@ export function DocsLayout({
 									</li>
 									<li>
 										<a
-											href="https://github.com/NindroidA/pluginator-public"
+											href="https://github.com/NindroidA/pluginator"
 											target="_blank"
 											rel="noopener noreferrer"
 											className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
@@ -120,7 +123,7 @@ export function DocsLayout({
 									{githubPath && (
 										<Button variant="outline" size="sm" asChild>
 											<a
-												href={`https://github.com/NindroidA/pluginator-public/blob/main${githubPath}`}
+												href={`https://github.com/NindroidA/pluginator/blob/main${githubPath}`}
 												target="_blank"
 												rel="noopener noreferrer"
 											>

@@ -1,4 +1,4 @@
-import { Clock, Cloud, Puzzle, RefreshCw, Server, Shield, Terminal, Zap } from "lucide-react";
+import { Archive, Clock, Cloud, Puzzle, RefreshCw, Server, Terminal, Zap } from "lucide-react";
 
 export const features = [
 	{
@@ -32,7 +32,7 @@ export const features = [
 		title: "Smart Backups",
 		description:
 			"Never lose your plugin configurations. Automatic backups before every update with easy restore.",
-		icon: Shield,
+		icon: Archive,
 		highlights: [
 			"Pre-update snapshots",
 			"Config preservation",

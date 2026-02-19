@@ -13,15 +13,18 @@ const tierConfig: Record<Tier, { label: string; className: string }> = {
 	},
 	plus: {
 		label: "Plus",
-		className: "bg-blue-500 text-white",
+		className:
+			"bg-gradient-to-r from-blue-400/25 via-blue-500/25 to-indigo-500/25 backdrop-blur-sm border border-blue-500/40 text-blue-400",
 	},
 	pro: {
 		label: "Pro",
-		className: "pro-gradient text-white",
+		className:
+			"bg-gradient-to-r from-violet-500/25 via-purple-500/25 to-fuchsia-500/25 backdrop-blur-sm border border-purple-500/40 text-purple-400",
 	},
 	max: {
 		label: "Max",
-		className: "bg-amber-500 text-white",
+		className:
+			"bg-gradient-to-r from-amber-400/25 via-orange-500/25 to-rose-500/25 backdrop-blur-sm border border-amber-500/40 text-amber-400",
 	},
 };
 
