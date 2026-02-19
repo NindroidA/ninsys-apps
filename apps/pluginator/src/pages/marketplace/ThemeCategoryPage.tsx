@@ -25,9 +25,7 @@ export function ThemeCategoryPage() {
 
 	// Validate category
 	const isValidCategory = category && category in THEME_CATEGORY_INFO;
-	const categoryInfo = isValidCategory
-		? THEME_CATEGORY_INFO[category as ThemeCategory]
-		: null;
+	const categoryInfo = isValidCategory ? THEME_CATEGORY_INFO[category as ThemeCategory] : null;
 
 	// Parse filters from URL (excluding category which comes from route)
 	const initialFilters: ThemeFilters = {
@@ -58,8 +56,7 @@ export function ThemeCategoryPage() {
 			if (newFilters.search) params.set("search", newFilters.search);
 			if (newFilters.type) params.set("type", newFilters.type);
 			if (newFilters.tier) params.set("tier", newFilters.tier);
-			if (newFilters.sort && newFilters.sort !== "name")
-				params.set("sort", newFilters.sort);
+			if (newFilters.sort && newFilters.sort !== "name") params.set("sort", newFilters.sort);
 
 			setSearchParams(params, { replace: true });
 		},
@@ -78,9 +75,7 @@ export function ThemeCategoryPage() {
 				<div className="container mx-auto px-4 text-center">
 					<Palette className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
 					<h1 className="text-2xl font-bold mb-2">Category Not Found</h1>
-					<p className="text-muted-foreground mb-6">
-						The category "{category}" doesn't exist.
-					</p>
+					<p className="text-muted-foreground mb-6">The category "{category}" doesn't exist.</p>
 					<Link to="/marketplace/themes">
 						<Button variant="outline">
 							<ArrowLeft className="h-4 w-4 mr-2" />
@@ -98,17 +93,11 @@ export function ThemeCategoryPage() {
 				{/* Breadcrumb */}
 				<FadeIn>
 					<nav className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
-						<Link
-							to="/marketplace"
-							className="hover:text-foreground transition-colors"
-						>
+						<Link to="/marketplace" className="hover:text-foreground transition-colors">
 							Marketplace
 						</Link>
 						<span>/</span>
-						<Link
-							to="/marketplace/themes"
-							className="hover:text-foreground transition-colors"
-						>
+						<Link to="/marketplace/themes" className="hover:text-foreground transition-colors">
 							Themes
 						</Link>
 						<span>/</span>
@@ -124,20 +113,15 @@ export function ThemeCategoryPage() {
 								<ThemeCategoryIcon iconKey={categoryInfo.iconKey} className="h-6 w-6" />
 							</div>
 						)}
-						<h1 className="text-2xl sm:text-3xl font-bold">
-							{categoryInfo?.name} Themes
-						</h1>
+						<h1 className="text-2xl sm:text-3xl font-bold">{categoryInfo?.name} Themes</h1>
 						{data && (
 							<span className="text-muted-foreground">
-								({data.pagination.total}{" "}
-								{data.pagination.total === 1 ? "theme" : "themes"})
+								({data.pagination.total} {data.pagination.total === 1 ? "theme" : "themes"})
 							</span>
 						)}
 					</div>
 					{categoryInfo?.description && (
-						<p className="text-muted-foreground mb-6">
-							{categoryInfo.description}
-						</p>
+						<p className="text-muted-foreground mb-6">{categoryInfo.description}</p>
 					)}
 				</FadeIn>
 
@@ -178,9 +162,7 @@ export function ThemeCategoryPage() {
 							</p>
 							<Button
 								variant="outline"
-								onClick={() =>
-									handleFiltersChange({ category: category as ThemeCategory })
-								}
+								onClick={() => handleFiltersChange({ category: category as ThemeCategory })}
 							>
 								Clear Filters
 							</Button>
@@ -207,16 +189,9 @@ export function ThemeCategoryPage() {
 								</Button>
 
 								<div className="flex items-center gap-1">
-									{Array.from(
-										{ length: data.pagination.totalPages },
-										(_, i) => i + 1,
-									)
+									{Array.from({ length: data.pagination.totalPages }, (_, i) => i + 1)
 										.filter((p) => {
-											return (
-												p === 1 ||
-												p === data.pagination.totalPages ||
-												Math.abs(p - page) <= 1
-											);
+											return p === 1 || p === data.pagination.totalPages || Math.abs(p - page) <= 1;
 										})
 										.map((p, idx, arr) => {
 											const prevPage = arr[idx - 1];
@@ -226,9 +201,7 @@ export function ThemeCategoryPage() {
 											return (
 												<span key={p} className="flex items-center">
 													{showEllipsisBefore && (
-														<span className="px-2 text-muted-foreground">
-															...
-														</span>
+														<span className="px-2 text-muted-foreground">...</span>
 													)}
 													<Button
 														variant={p === page ? "primary" : "outline"}

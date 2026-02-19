@@ -25,9 +25,7 @@ export function PluginCategoryPage() {
 
 	// Validate category
 	const isValidCategory = category && category in CATEGORY_INFO;
-	const categoryInfo = isValidCategory
-		? CATEGORY_INFO[category as PluginCategory]
-		: null;
+	const categoryInfo = isValidCategory ? CATEGORY_INFO[category as PluginCategory] : null;
 
 	// Parse filters from URL (excluding category which comes from route)
 	const initialFilters: RegistryFilters = {
@@ -78,9 +76,7 @@ export function PluginCategoryPage() {
 				<div className="container mx-auto px-4 text-center">
 					<Package className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
 					<h1 className="text-2xl font-bold mb-2">Category Not Found</h1>
-					<p className="text-muted-foreground mb-6">
-						The category "{category}" doesn't exist.
-					</p>
+					<p className="text-muted-foreground mb-6">The category "{category}" doesn't exist.</p>
 					<Link to="/marketplace">
 						<Button variant="outline">
 							<ArrowLeft className="h-4 w-4 mr-2" />
@@ -194,15 +190,12 @@ export function PluginCategoryPage() {
 								<div className="flex items-center gap-1">
 									{Array.from({ length: data.pagination.totalPages }, (_, i) => i + 1)
 										.filter((p) => {
-											return (
-												p === 1 ||
-												p === data.pagination.totalPages ||
-												Math.abs(p - page) <= 1
-											);
+											return p === 1 || p === data.pagination.totalPages || Math.abs(p - page) <= 1;
 										})
 										.map((p, idx, arr) => {
 											const prevPage = arr[idx - 1];
-											const showEllipsisBefore = idx > 0 && prevPage !== undefined && p - prevPage > 1;
+											const showEllipsisBefore =
+												idx > 0 && prevPage !== undefined && p - prevPage > 1;
 
 											return (
 												<span key={p} className="flex items-center">

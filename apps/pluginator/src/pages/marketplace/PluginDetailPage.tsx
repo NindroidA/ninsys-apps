@@ -95,14 +95,15 @@ export function PluginDetailPage() {
 									</Badge>
 								)}
 								{plugin.premium && (
-									<Badge variant="secondary" className="bg-amber-500/10 text-amber-500 border-amber-500/20">
+									<Badge
+										variant="secondary"
+										className="bg-amber-500/10 text-amber-500 border-amber-500/20"
+									>
 										<Crown className="h-3 w-3 mr-1" />
 										Premium
 									</Badge>
 								)}
-								{plugin.popular && (
-									<Badge variant="secondary">Popular</Badge>
-								)}
+								{plugin.popular && <Badge variant="secondary">Popular</Badge>}
 							</div>
 
 							{/* Authors */}
@@ -164,9 +165,7 @@ export function PluginDetailPage() {
 
 										<div className="flex items-center gap-3">
 											<div className="flex-1 sm:flex-none bg-background rounded-lg px-4 py-3 font-mono text-sm flex items-center gap-3 min-w-0 overflow-x-auto">
-												<code className="whitespace-nowrap">
-													pluginator install {plugin.id}
-												</code>
+												<code className="whitespace-nowrap">pluginator install {plugin.id}</code>
 												<button
 													type="button"
 													onClick={handleCopy}
@@ -190,9 +189,7 @@ export function PluginDetailPage() {
 						<FadeIn delay={0.25}>
 							<section className="rounded-xl border border-border bg-card p-6">
 								<h2 className="text-lg font-semibold mb-3">About</h2>
-								<p className="text-muted-foreground leading-relaxed">
-									{plugin.description}
-								</p>
+								<p className="text-muted-foreground leading-relaxed">{plugin.description}</p>
 							</section>
 						</FadeIn>
 
@@ -311,9 +308,7 @@ export function PluginDetailPage() {
 									{plugin.downloads && (
 										<div className="flex justify-between">
 											<dt className="text-muted-foreground">Downloads</dt>
-											<dd className="font-medium">
-												{plugin.downloads.toLocaleString()}
-											</dd>
+											<dd className="font-medium">{plugin.downloads.toLocaleString()}</dd>
 										</div>
 									)}
 									{plugin.rating && (

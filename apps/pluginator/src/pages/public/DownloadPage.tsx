@@ -143,7 +143,10 @@ export function DownloadPage() {
 													transform: `rotate(${(1 - cardProgress) * -10}deg)`,
 												}}
 											>
-												<dl.icon className="text-primary" style={{ width: "2rem", height: "2rem" }} />
+												<dl.icon
+													className="text-primary"
+													style={{ width: "2rem", height: "2rem" }}
+												/>
 											</motion.div>
 											<h2 className="text-xl font-bold mb-2">{dl.os}</h2>
 											<p className="text-sm text-muted-foreground mb-6 flex-1">{dl.description}</p>

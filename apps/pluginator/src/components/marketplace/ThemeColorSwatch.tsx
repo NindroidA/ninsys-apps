@@ -18,11 +18,7 @@ interface ColorGroup {
 	colors: { name: string; value: string }[];
 }
 
-export function ThemeColorSwatch({
-	colors,
-	compact = false,
-	className,
-}: ThemeColorSwatchProps) {
+export function ThemeColorSwatch({ colors, compact = false, className }: ThemeColorSwatchProps) {
 	const groups: ColorGroup[] = [
 		{
 			name: "Background",
@@ -104,9 +100,7 @@ export function ThemeColorSwatch({
 		<div className={cn("space-y-4", className)}>
 			{groups.map((group) => (
 				<div key={group.name}>
-					<h4 className="text-sm font-medium text-muted-foreground mb-2">
-						{group.name}
-					</h4>
+					<h4 className="text-sm font-medium text-muted-foreground mb-2">{group.name}</h4>
 					<div className="flex flex-wrap gap-2">
 						{group.colors.map((color) => (
 							<div key={color.name} className="flex flex-col items-center gap-1">
@@ -115,9 +109,7 @@ export function ThemeColorSwatch({
 									style={{ backgroundColor: color.value }}
 									title={`${color.name}: ${color.value}`}
 								/>
-								<span className="text-[10px] text-muted-foreground">
-									{color.name}
-								</span>
+								<span className="text-[10px] text-muted-foreground">{color.name}</span>
 							</div>
 						))}
 					</div>
@@ -149,11 +141,7 @@ export function ThemeColorStrip({
 	return (
 		<div className={cn("flex h-1.5 rounded-full overflow-hidden", className)}>
 			{stripColors.map((color, idx) => (
-				<div
-					key={idx}
-					className="flex-1"
-					style={{ backgroundColor: color }}
-				/>
+				<div key={idx} className="flex-1" style={{ backgroundColor: color }} />
 			))}
 		</div>
 	);

@@ -4,22 +4,12 @@
  * Theme gallery and marketplace hub
  */
 
-import {
-	ThemeCard,
-	ThemeCardSkeleton,
-} from "@/components/marketplace";
+import { ThemeCard, ThemeCardSkeleton } from "@/components/marketplace";
 import { useFeaturedThemes } from "@/hooks/useThemes";
 import { Button } from "@ninsys/ui/components";
 import { FadeIn } from "@ninsys/ui/components/animations";
 import { motion } from "framer-motion";
-import {
-	ArrowRight,
-	Download,
-	Moon,
-	Palette,
-	Sparkles,
-	Sun,
-} from "lucide-react";
+import { ArrowRight, Download, Moon, Palette, Sparkles, Sun } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export function MarketplacePage() {
@@ -45,7 +35,12 @@ export function MarketplacePage() {
 				/>
 				<motion.div
 					animate={{ y: [8, -8, 8] }}
-					transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: 1 }}
+					transition={{
+						duration: 5,
+						repeat: Number.POSITIVE_INFINITY,
+						ease: "easeInOut",
+						delay: 1,
+					}}
 					className="absolute top-40 right-[15%] w-2 h-2 rounded-full bg-accent/40"
 				/>
 
@@ -82,8 +77,8 @@ export function MarketplacePage() {
 							transition={{ delay: 0.3 }}
 							className="text-lg text-muted-foreground mb-8"
 						>
-							Browse beautiful themes to personalize Pluginator.
-							From dark mode classics to vibrant color schemes.
+							Browse beautiful themes to personalize Pluginator. From dark mode classics to vibrant
+							color schemes.
 						</motion.p>
 
 						{/* Quick links */}
@@ -174,12 +169,10 @@ export function MarketplacePage() {
 			<section className="container mx-auto px-4 py-16">
 				<FadeIn delay={0.3}>
 					<div className="text-center rounded-2xl bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 border border-primary/20 p-8 sm:p-12">
-						<h2 className="text-2xl sm:text-3xl font-bold mb-4">
-							Ready to customize your CLI?
-						</h2>
+						<h2 className="text-2xl sm:text-3xl font-bold mb-4">Ready to customize your CLI?</h2>
 						<p className="text-muted-foreground mb-6 max-w-lg mx-auto">
-							Download the Pluginator CLI to apply themes and manage your
-							Minecraft server plugins from the terminal.
+							Download the Pluginator CLI to apply themes and manage your Minecraft server plugins
+							from the terminal.
 						</p>
 						<a
 							href="/download"

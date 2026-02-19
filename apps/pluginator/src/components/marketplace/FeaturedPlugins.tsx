@@ -26,9 +26,7 @@ export function FeaturedPlugins({
 
 	if (error) {
 		return (
-			<div className="text-center py-8 text-muted-foreground">
-				Failed to load featured plugins
-			</div>
+			<div className="text-center py-8 text-muted-foreground">Failed to load featured plugins</div>
 		);
 	}
 

@@ -130,9 +130,7 @@ export function PluginSourceIcons({
 					<SourceIcon type={source.type} className="h-4 w-4" />
 				</span>
 			))}
-			{remaining > 0 && (
-				<span className="text-xs text-muted-foreground ml-0.5">+{remaining}</span>
-			)}
+			{remaining > 0 && <span className="text-xs text-muted-foreground ml-0.5">+{remaining}</span>}
 		</div>
 	);
 }

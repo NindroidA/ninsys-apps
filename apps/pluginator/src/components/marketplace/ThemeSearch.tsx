@@ -6,17 +6,8 @@
 
 import { Select } from "@/components/ui";
 import type { SelectOption } from "@/components/ui";
-import {
-	THEME_CATEGORY_INFO,
-	THEME_TIER_INFO,
-	THEME_TYPE_INFO,
-} from "@/types/theme";
-import type {
-	ThemeCategory,
-	ThemeFilters,
-	ThemeTier,
-	ThemeType,
-} from "@/types/theme";
+import { THEME_CATEGORY_INFO, THEME_TIER_INFO, THEME_TYPE_INFO } from "@/types/theme";
+import type { ThemeCategory, ThemeFilters, ThemeTier, ThemeType } from "@/types/theme";
 import { Button, Input } from "@ninsys/ui/components";
 import { cn } from "@ninsys/ui/lib";
 import {
@@ -60,11 +51,7 @@ const SORT_OPTIONS: SelectOption[] = [
 	{ value: "newest", label: "Newest" },
 ];
 
-export function ThemeSearch({
-	initialFilters = {},
-	onFiltersChange,
-	className,
-}: ThemeSearchProps) {
+export function ThemeSearch({ initialFilters = {}, onFiltersChange, className }: ThemeSearchProps) {
 	const [search, setSearch] = useState(initialFilters.search || "");
 	const [type, setType] = useState<string>(initialFilters.type || "");
 	const [category, setCategory] = useState<string>(initialFilters.category || "");
@@ -95,36 +82,45 @@ export function ThemeSearch({
 		setTier("");
 	};
 
-	const typeOptions: SelectOption[] = useMemo(() => [
-		{ value: "", label: "All Types" },
-		...Object.entries(THEME_TYPE_INFO).map(([id, info]) => ({
-			value: id,
-			label: info.name,
-			icon: THEME_TYPE_ICON_MAP[id as ThemeType],
-		})),
-	], []);
+	const typeOptions: SelectOption[] = useMemo(
+		() => [
+			{ value: "", label: "All Types" },
+			...Object.entries(THEME_TYPE_INFO).map(([id, info]) => ({
+				value: id,
+				label: info.name,
+				icon: THEME_TYPE_ICON_MAP[id as ThemeType],
+			})),
+		],
+		[],
+	);
 
-	const categoryOptions: SelectOption[] = useMemo(() => [
-		{ value: "", label: "All Categories" },
-		...Object.entries(THEME_CATEGORY_INFO).map(([id, info]) => ({
-			value: id,
-			label: info.name,
-			icon: THEME_CATEGORY_ICON_MAP[id as ThemeCategory],
-		})),
-	], []);
+	const categoryOptions: SelectOption[] = useMemo(
+		() => [
+			{ value: "", label: "All Categories" },
+			...Object.entries(THEME_CATEGORY_INFO).map(([id, info]) => ({
+				value: id,
+				label: info.name,
+				icon: THEME_CATEGORY_ICON_MAP[id as ThemeCategory],
+			})),
+		],
+		[],
+	);
 
-	const tierOptions: SelectOption[] = useMemo(() => [
-		{ value: "", label: "All Tiers" },
-		...Object.entries(THEME_TIER_INFO).map(([id, info]) => ({
-			value: id,
-			label: info.name,
-		})),
-	], []);
+	const tierOptions: SelectOption[] = useMemo(
+		() => [
+			{ value: "", label: "All Tiers" },
+			...Object.entries(THEME_TIER_INFO).map(([id, info]) => ({
+				value: id,
+				label: info.name,
+			})),
+		],
+		[],
+	);
 
-	const sortOptions: SelectOption[] = useMemo(() => [
-		{ value: "", label: "Sort By" },
-		...SORT_OPTIONS,
-	], []);
+	const sortOptions: SelectOption[] = useMemo(
+		() => [{ value: "", label: "Sort By" }, ...SORT_OPTIONS],
+		[],
+	);
 
 	return (
 		<div className={cn("space-y-4", className)}>
@@ -159,9 +155,7 @@ export function ThemeSearch({
 				>
 					<Filter className="h-4 w-4 mr-2" />
 					Filters
-					{hasActiveFilters && (
-						<span className="ml-2 h-2 w-2 rounded-full bg-primary" />
-					)}
+					{hasActiveFilters && <span className="ml-2 h-2 w-2 rounded-full bg-primary" />}
 				</Button>
 
 				{/* Desktop filters inline */}
@@ -218,12 +212,7 @@ export function ThemeSearch({
 					{/* Type */}
 					<div>
 						<label className="block text-sm font-medium mb-2">Type</label>
-						<Select
-							value={type}
-							onChange={setType}
-							options={typeOptions}
-							placeholder="All Types"
-						/>
+						<Select value={type} onChange={setType} options={typeOptions} placeholder="All Types" />
 					</div>
 
 					{/* Category */}
@@ -240,33 +229,18 @@ export function ThemeSearch({
 					{/* Tier */}
 					<div>
 						<label className="block text-sm font-medium mb-2">Tier</label>
-						<Select
-							value={tier}
-							onChange={setTier}
-							options={tierOptions}
-							placeholder="All Tiers"
-						/>
+						<Select value={tier} onChange={setTier} options={tierOptions} placeholder="All Tiers" />
 					</div>
 
 					{/* Sort */}
 					<div>
 						<label className="block text-sm font-medium mb-2">Sort By</label>
-						<Select
-							value={sort}
-							onChange={setSort}
-							options={sortOptions}
-							placeholder="Sort By"
-						/>
+						<Select value={sort} onChange={setSort} options={sortOptions} placeholder="Sort By" />
 					</div>
 
 					{/* Clear button */}
 					{hasActiveFilters && (
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={clearFilters}
-							className="w-full"
-						>
+						<Button variant="outline" size="sm" onClick={clearFilters} className="w-full">
 							<X className="h-4 w-4 mr-1" />
 							Clear Filters
 						</Button>

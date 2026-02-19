@@ -49,7 +49,10 @@ export function PluginCard({ plugin, className }: PluginCardProps) {
 				{/* Popular badge */}
 				{plugin.popular && (
 					<div className="absolute top-2 right-2 z-10">
-						<Badge variant="primary" className="bg-gradient-to-r from-primary to-primary/80 text-xs shadow-sm">
+						<Badge
+							variant="primary"
+							className="bg-gradient-to-r from-primary to-primary/80 text-xs shadow-sm"
+						>
 							Popular
 						</Badge>
 					</div>
@@ -79,9 +82,7 @@ export function PluginCard({ plugin, className }: PluginCardProps) {
 					</div>
 
 					{/* Description */}
-					<p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-						{description}
-					</p>
+					<p className="text-sm text-muted-foreground mb-3 line-clamp-2">{description}</p>
 
 					{/* Metadata row */}
 					<div className="flex items-center gap-2 flex-wrap mb-3">
@@ -146,10 +147,7 @@ export function PluginGrid({
 }) {
 	return (
 		<motion.div
-			className={cn(
-				"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4",
-				className,
-			)}
+			className={cn("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4", className)}
 			initial={false}
 		>
 			{plugins.map((plugin, index) => (
