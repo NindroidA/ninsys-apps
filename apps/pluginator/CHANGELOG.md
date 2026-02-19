@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.9.0
+
+### Minor Changes
+
+- c5bc7f0: Security hardening, code splitting, and error boundary
+
+### Patch Changes
+
+- Updated dependencies [c5bc7f0]
+  - @ninsys/ui@1.0.1
+
 All notable changes to Pluginator Web will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
@@ -8,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.9.0] - 2026-02-13
 
 ### Added
+
 - **Error Boundary**: Global `ErrorBoundary` component wrapping the app in `main.tsx` for graceful crash recovery with refresh button
 - **Route-Based Code Splitting**: All non-acquisition routes lazy-loaded with `React.lazy()` and `Suspense`
   - Eagerly loaded: Home, Pricing, Download, Login, Signup (acquisition funnel)
@@ -16,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Nginx Security Headers**: X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, HSTS, CSP
 
 ### Fixed
+
 - **Critical: Checkout Infinite Re-render** (C1): Added `useRef` guard in `CheckoutPage` to prevent duplicate Stripe sessions from `useEffect` re-firing
 - **Critical: Hardcoded Dev Bypass Secret** (C2): `api.ts` now reads bypass secret from `VITE_DEV_BYPASS_SECRET` env var instead of hardcoded value
 - **Critical: Dev Auth Bypass Always Active** (C3): `useAuth.ts` now requires explicit `VITE_ENABLE_AUTH_BYPASS=true` to enable dev bypass; `DEV_SESSION` changed to function for fresh `expiresAt`
@@ -32,17 +45,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Unstable onCancel Reference** (M7): `ConfirmDialog` stabilizes callback with `useRef`/`useCallback` pattern
 
 ### Removed
+
 - **`Header.full.tsx`**: Deleted orphaned file with no imports
 - **`PricingTier` type alias**: Removed redundant `export type PricingTier = Tier` from `PricingCard` and re-export from `pluginator/index.ts`
 - **`TierPricing` interface**: Removed unused interface from `types/tier.ts`
 
 ### Performance
+
 - **Bundle size**: Main chunk reduced from 1,177 KB to 425 KB with code splitting
 - Build produces optimized vendor (React/Router), query, motion, and markdown chunks
 
 ## [0.8.0] - 2026-02-11
 
 ### Added
+
 - **Account Page Rebuild**: Full profile management with 6 sections
   - **Profile**: Inline name editing with pencil icon, member since date, read-only email
   - **Password**: Change password form with current/new/confirm fields, visibility toggles, client-side validation
@@ -51,16 +67,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Account Management Hooks**: New `useAccount.ts` with `useUpdateProfile()`, `useChangePassword()`, `useConnections()`, `useDeleteAccount()`
 
 ### Changed
+
 - **Frosted Glass Subscription Badges**: Plus/Pro/Max badges now use translucent gradient effects matching the established frosted glass pattern (SubscriptionBadge and PricingCard tier labels)
 - **PricingCard Downgrade Button**: Changed from barely-visible ghost variant to outline with `text-foreground/70` for better visibility
 - **Account Page Layout**: Switched from 2-column grid to single-column `max-w-3xl` with distinct Card sections
 
 ### Fixed
+
 - **Non-JSON API Response Handling**: `api.ts` now checks Content-Type before parsing as JSON, preventing `SyntaxError` crashes when API returns HTML error pages (e.g. 404)
 
 ## [0.7.0] - 2026-02-10
 
 ### Added
+
 - **Header User Menu**: Replaced single "Dashboard" button with dropdown menu showing Dashboard, Account, and Sign Out links when authenticated
 - **Mobile Account Access**: Added Account and Sign Out buttons to mobile navigation menu
 - **Dynamic Pricing Page CTAs**: Pricing cards now show context-aware button states based on user's current subscription
@@ -74,15 +93,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Downgrade Confirmation Dialogs**: Cancel and plan-change flows on pricing page with appropriate messaging
 
 ### Changed
+
 - **PricingCard**: Added `ctaStyle` prop for visual differentiation of downgrade buttons (ghost style)
 
 ### Fixed
+
 - **Tier Badge Not Updating**: DashboardPage now uses `useSubscription()` data for tier badge instead of stale auth session data
 - **Post-Payment Cache**: PaymentSuccessPage now also invalidates `auth/session` cache so tier updates immediately
 
 ## [0.6.0] - 2026-02-10
 
 ### Added
+
 - **Stripe Checkout Integration**: Pricing page CTAs now trigger real Stripe Checkout sessions
   - Logged out users directed to login with returnTo for seamless flow
   - Logged in users on Free tier see upgrade buttons that redirect to Stripe
@@ -105,12 +127,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **PricingCard Enhancements**: Added `ctaDisabled` and `ctaLoading` props with loading spinner
 
 ### Changed
+
 - App.tsx: Removed "Coming Soon" payment route redirects, replaced with real page components
 - PricingPage: Dynamic CTA text and behavior based on auth state and current subscription tier
 
 ## [0.5.1] - 2026-02-10
 
 ### Style
+
 - **Frosted glass accent cards**: Full frosted glass effect across all accent cards
   - Cards use gradient backgrounds (`bg-gradient-to-br`) with `/25` opacity and `backdrop-blur-sm`
   - Color spans the entire card area with matching `/40` borders and glow shadows
@@ -124,6 +148,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Footer version badge**: Blue/indigo/purple gradient pill showing "v{version} beta"
 
 ### Fixed
+
 - Download page: Windows card no longer permanently highlighted over macOS/Linux
 - Route transitions no longer scroll current page to top before navigating
   - `ScrollLink` default `scrollToTop` changed to `false`
@@ -132,6 +157,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.5.0] - 2026-02-09
 
 ### Added
+
 - **Beta Launch**: Full transition from "Coming Soon" to public beta
   - Auth enabled (login, signup, dashboard, account)
   - Payment/checkout routes disabled with redirects to pricing
@@ -150,6 +176,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Auto-regeneration info added to User Files docs
 
 ### Changed
+
 - Header: switched to full auth header with BETA badge, login/signup buttons
 - Footer: fixed GitHub repo URL, added bug report link, Buy Me a Coffee URL
 - Homepage: hero badge → "Open Beta", CTA subhead → community-focused text
@@ -163,6 +190,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Account page: upgrade button shows "Coming Soon" placeholder
 
 ### Fixed
+
 - GitHub repo URL: corrected from `pluginator-public` to `pluginator` across all files
 - Documentation fetch: removed non-existent `quick-reference/` paths from DOC_PATHS
 - Documentation pages that can't fetch content now show helpful "Coming Soon" messages
@@ -176,6 +204,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.3.0] - 2025-01-23
 
 ### Added
+
 - **User Files Documentation Page**: Comprehensive guide for Pluginator CLI user files
   - New route: `/docs/user-files`
   - Six documentation sections:
@@ -190,6 +219,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Responsive card-based documentation layout
 
 ### Technical Details
+
 - Uses `react-markdown` with `rehype-highlight` for syntax highlighting
 - Accessible code blocks with copy button
 - Mobile-responsive layout
@@ -197,6 +227,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - 2025-01-22
 
 ### Added
+
 - **Tiered Subscription System**: Full Stripe integration for subscription management
   - Four tiers: Free, Plus ($14.99 one-time), Pro ($4.99/mo), Max ($9.99/mo)
   - Plus discount: permanent 40% off Pro, 20% off Max
@@ -220,6 +251,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `src/config/pricing.ts` - Pricing configuration
 
 ### Technical Details
+
 - Stripe Checkout (hosted) integration - no custom payment forms
 - JWT-based authentication with 24h expiry
 - Environment variables: `VITE_API_URL`, `VITE_STRIPE_PUBLISHABLE_KEY`
@@ -227,6 +259,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2025-01-21
 
 ### Added
+
 - Initial release of Pluginator web application
 - Homepage with feature overview
 - Pricing page (static, no payments)
