@@ -30,49 +30,10 @@ env:
 
 jobs:
   # ============================================
-  # Detect which apps changed (skip unchanged)
-  # ============================================
-  changes:
-    name: Detect Changes
-    runs-on: ubuntu-latest
-    outputs:
-      cogworks: ${{ steps.changes.outputs.cogworks }}
-      pluginator: ${{ steps.changes.outputs.pluginator }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
-
-      - name: Check changed files
-        id: changes
-        run: |
-          # Compare with previous commit on production
-          CHANGED=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || echo "all")
-
-          if [ "$CHANGED" = "all" ]; then
-            echo "cogworks=true" >> "$GITHUB_OUTPUT"
-            echo "pluginator=true" >> "$GITHUB_OUTPUT"
-          else
-            if echo "$CHANGED" | grep -qE '^(apps/cogworks/|packages/ui/)'; then
-              echo "cogworks=true" >> "$GITHUB_OUTPUT"
-            else
-              echo "cogworks=false" >> "$GITHUB_OUTPUT"
-            fi
-
-            if echo "$CHANGED" | grep -qE '^(apps/pluginator/|packages/ui/)'; then
-              echo "pluginator=true" >> "$GITHUB_OUTPUT"
-            else
-              echo "pluginator=false" >> "$GITHUB_OUTPUT"
-            fi
-          fi
-
-  # ============================================
-  # Build Cogworks (parallel)
+  # Build Cogworks
   # ============================================
   build-cogworks:
     name: Build Cogworks
-    needs: changes
-    if: needs.changes.outputs.cogworks == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -113,12 +74,10 @@ jobs:
           cache-to: type=gha,scope=cogworks,mode=max
 
   # ============================================
-  # Build Pluginator (parallel)
+  # Build Pluginator
   # ============================================
   build-pluginator:
     name: Build Pluginator
-    needs: changes
-    if: needs.changes.outputs.pluginator == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -163,35 +122,13 @@ jobs:
   # ============================================
   deploy:
     name: Deploy to Homelab
-    needs: [changes, build-cogworks, build-pluginator]
-    # Run even if builds were skipped (no changes), but not if they failed
-    if: |
-      always() &&
-      !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+    needs: [build-cogworks, build-pluginator]
     runs-on: ubuntu-latest
     env:
       IMAGE_OWNER: ${{ github.repository_owner }}
-      DEPLOY_COGWORKS: ${{ needs.changes.outputs.cogworks }}
-      DEPLOY_PLUGINATOR: ${{ needs.changes.outputs.pluginator }}
 
     steps:
-      - name: Determine services to deploy
-        id: services
-        run: |
-          SERVICES=""
-          if [ "$DEPLOY_COGWORKS" = "true" ]; then
-            SERVICES="cogworks-webapp"
-          fi
-          if [ "$DEPLOY_PLUGINATOR" = "true" ]; then
-            SERVICES="$SERVICES pluginator-webapp"
-          fi
-          SERVICES=$(echo "$SERVICES" | xargs)  # trim whitespace
-          echo "list=$SERVICES" >> "$GITHUB_OUTPUT"
-          echo "Deploying: $SERVICES"
-
       - name: Deploy to server
-        if: steps.services.outputs.list != ''
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -205,19 +142,16 @@ jobs:
 
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-            SERVICES="${{ steps.services.outputs.list }}"
-            echo "Pulling: $SERVICES"
-            docker-compose pull $SERVICES
+            docker-compose pull cogworks-webapp pluginator-webapp
+            docker-compose up -d --force-recreate --pull always cogworks-webapp pluginator-webapp
 
-            echo "Recreating: $SERVICES"
-            docker-compose up -d --force-recreate --pull always $SERVICES
-
-            # Verify containers are running
-            for SVC in $SERVICES; do
+            # Verify containers started
+            sleep 3
+            for SVC in cogworks-webapp pluginator-webapp; do
               if docker-compose ps "$SVC" | grep -q "Up"; then
-                echo "$SVC: healthy"
+                echo "$SVC: running"
               else
-                echo "$SVC: FAILED TO START"
+                echo "$SVC: FAILED"
                 docker-compose logs --tail=20 "$SVC"
                 exit 1
               fi
@@ -225,7 +159,3 @@ jobs:
 
             docker image prune -f
             echo "Deployment complete!"
-
-      - name: No changes to deploy
-        if: steps.services.outputs.list == ''
-        run: echo "No app changes detected, skipping deployment."
