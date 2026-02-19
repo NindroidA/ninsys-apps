@@ -13,7 +13,7 @@ export interface ScrollLinkProps extends ComponentProps<typeof Link> {
  * Use this for any internal navigation links where you want the page to start at the top.
  */
 export function ScrollLink({
-	scrollToTop = true,
+	scrollToTop = false,
 	scrollBehavior = "instant",
 	onClick,
 	children,

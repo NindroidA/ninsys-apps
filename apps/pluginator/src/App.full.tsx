@@ -1,12 +1,16 @@
 /**
- * Pluginator - Coming Soon Mode
+ * Pluginator - Full App
  *
- * This file replaces App.tsx on the production branch.
- * Removes auth routes and protected routes.
+ * This is the full app with all auth routes and protected routes.
+ * Used on the main branch for development.
  */
 
+import { ProtectedRoute } from "@/components/auth";
 import { Layout } from "@/components/layout";
 import { NotFoundPage } from "@/pages/NotFoundPage";
+import { AccountPage } from "@/pages/account";
+import { AuthCallbackPage, AuthErrorPage } from "@/pages/auth";
+import { DashboardPage } from "@/pages/dashboard";
 import {
 	CLICommandsPage,
 	ConfigPage,
@@ -16,7 +20,16 @@ import {
 	UserGuidePage,
 } from "@/pages/docs";
 import { PrivacyPage, TermsPage } from "@/pages/legal";
-import { ChangelogPage, ContactPage, DownloadPage, HomePage, PricingPage } from "@/pages/public";
+import { CheckoutPage, PaymentCancelPage, PaymentSuccessPage } from "@/pages/payment";
+import {
+	ChangelogPage,
+	ContactPage,
+	DownloadPage,
+	HomePage,
+	LoginPage,
+	PricingPage,
+	SignupPage,
+} from "@/pages/public";
 import { PageTransition } from "@ninsys/ui/components/animations";
 import { AnimatePresence } from "framer-motion";
 import { Route, Routes, useLocation } from "react-router-dom";
@@ -54,6 +67,22 @@ export default function App() {
 						}
 					/>
 					<Route
+						path="/login"
+						element={
+							<PageTransition>
+								<LoginPage />
+							</PageTransition>
+						}
+					/>
+					<Route
+						path="/signup"
+						element={
+							<PageTransition>
+								<SignupPage />
+							</PageTransition>
+						}
+					/>
+					<Route
 						path="/changelog"
 						element={
 							<PageTransition>
@@ -66,6 +95,24 @@ export default function App() {
 						element={
 							<PageTransition>
 								<ContactPage />
+							</PageTransition>
+						}
+					/>
+
+					{/* Auth Routes */}
+					<Route
+						path="/auth/callback"
+						element={
+							<PageTransition>
+								<AuthCallbackPage />
+							</PageTransition>
+						}
+					/>
+					<Route
+						path="/auth/error"
+						element={
+							<PageTransition>
+								<AuthErrorPage />
 							</PageTransition>
 						}
 					/>
@@ -138,7 +185,57 @@ export default function App() {
 						}
 					/>
 
-					{/* 404 - Catch all including auth routes */}
+					{/* Protected Routes */}
+					<Route
+						path="/dashboard"
+						element={
+							<ProtectedRoute>
+								<PageTransition>
+									<DashboardPage />
+								</PageTransition>
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/account"
+						element={
+							<ProtectedRoute>
+								<PageTransition>
+									<AccountPage />
+								</PageTransition>
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/checkout"
+						element={
+							<ProtectedRoute>
+								<PageTransition>
+									<CheckoutPage />
+								</PageTransition>
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/payment/success"
+						element={
+							<ProtectedRoute>
+								<PageTransition>
+									<PaymentSuccessPage />
+								</PageTransition>
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/payment/cancel"
+						element={
+							<PageTransition>
+								<PaymentCancelPage />
+							</PageTransition>
+						}
+					/>
+
+					{/* 404 */}
 					<Route
 						path="*"
 						element={

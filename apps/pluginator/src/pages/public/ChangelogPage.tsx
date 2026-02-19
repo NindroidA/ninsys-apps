@@ -43,7 +43,7 @@ export function ChangelogPage() {
 							</Button>
 							<Button variant="outline" size="sm" asChild>
 								<a
-									href={`https://github.com/NindroidA/pluginator-public/blob/main${DOC_PATHS.changelog}`}
+									href={`https://github.com/NindroidA/pluginator/blob/main${DOC_PATHS.changelog}`}
 									target="_blank"
 									rel="noopener noreferrer"
 								>

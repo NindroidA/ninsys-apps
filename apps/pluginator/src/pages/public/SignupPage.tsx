@@ -106,13 +106,13 @@ export function SignupPage() {
 						transition={{ duration: 0.5, delay: 0.2 }}
 					>
 						<Link to="/" className="inline-flex items-center gap-2 mb-6">
-							<motion.div
-								className="h-10 w-10 rounded-xl pluginator-gradient flex items-center justify-center"
+							<motion.img
+								src="/favicon.svg"
+								alt="Pluginator"
+								className="h-10 w-10"
 								whileHover={{ scale: 1.1, rotate: -5 }}
 								transition={{ type: "spring", stiffness: 300 }}
-							>
-								<span className="text-2xl">🔌</span>
-							</motion.div>
+							/>
 							<span className="font-bold text-xl">Pluginator</span>
 						</Link>
 					</motion.div>
@@ -121,10 +121,10 @@ export function SignupPage() {
 						initial={{ opacity: 0, y: 10 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.4, delay: 0.25 }}
-						className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-4"
+						className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 mb-4"
 					>
-						<Sparkles className="h-3.5 w-3.5 text-primary" />
-						<span className="text-xs font-medium text-primary">14-day Pro trial included</span>
+						<Sparkles className="h-3.5 w-3.5 text-amber-500" />
+						<span className="text-xs font-medium text-amber-500">Public Beta</span>
 					</motion.div>
 
 					<motion.h1
@@ -141,7 +141,7 @@ export function SignupPage() {
 						transition={{ duration: 0.5, delay: 0.4 }}
 						className="text-muted-foreground mt-2"
 					>
-						Get started with Pluginator Pro features
+						Get started with Pluginator for free
 					</motion.p>
 				</div>
 

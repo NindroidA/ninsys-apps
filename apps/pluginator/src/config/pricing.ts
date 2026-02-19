@@ -8,6 +8,7 @@ export interface PricingTierConfig {
 	tier: Tier;
 	name: string;
 	price: string;
+	originalPrice?: string;
 	priceSubtext?: string;
 	description: string;
 	features: string[];
@@ -54,6 +55,7 @@ export function getPricingTiers(hasPlusDiscount: boolean): PricingTierConfig[] {
 			tier: "pro",
 			name: "Pro",
 			price: hasPlusDiscount ? "$2.99" : "$4.99",
+			...(hasPlusDiscount && { originalPrice: "$4.99" }),
 			priceSubtext: "/month",
 			description: "For power users who need more.",
 			features: [
@@ -64,14 +66,14 @@ export function getPricingTiers(hasPlusDiscount: boolean): PricingTierConfig[] {
 				"25GB cloud storage",
 				"Custom servers",
 				"Priority support",
-				...(hasPlusDiscount ? ["Plus discount applied!"] : []),
-			],
+				],
 			ctaText: "Subscribe to Pro",
 		},
 		{
 			tier: "max",
 			name: "Max",
 			price: hasPlusDiscount ? "$7.99" : "$9.99",
+			...(hasPlusDiscount && { originalPrice: "$9.99" }),
 			priceSubtext: "/month",
 			description: "Unlimited access for professionals.",
 			features: [
@@ -83,8 +85,7 @@ export function getPricingTiers(hasPlusDiscount: boolean): PricingTierConfig[] {
 				"Custom servers",
 				"API access",
 				"White-glove onboarding",
-				...(hasPlusDiscount ? ["Plus discount applied!"] : []),
-			],
+				],
 			ctaText: "Subscribe to Max",
 		},
 	];

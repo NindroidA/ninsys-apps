@@ -46,5 +46,7 @@ coverage/
 
 # Claude Code (local AI context)
 .claude/
-CLAUDE.local.md
 CLAUDE.md
+
+# Planning System
+.plans/

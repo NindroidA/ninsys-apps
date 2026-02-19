@@ -1,7 +1,7 @@
 import { Card } from "@ninsys/ui/components";
 import { FadeIn, StaggerContainer } from "@ninsys/ui/components/animations";
 import { motion } from "framer-motion";
-import { BookOpen, FileText, HelpCircle, Settings, Shield, Terminal } from "lucide-react";
+import { BookOpen, FileCode, FileText, HelpCircle, Palette, Settings, Shield, Terminal } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const docsSections = [
@@ -16,6 +16,18 @@ const docsSections = [
 		description: "Learn how to configure Pluginator for your server setup",
 		href: "/docs/config",
 		icon: Settings,
+	},
+	{
+		title: "User Files",
+		description: "Customize config.json, custom-registry.json, and custom-sources.json",
+		href: "/docs/user-files",
+		icon: FileCode,
+	},
+	{
+		title: "Themes",
+		description: "Customize the look and feel of your Pluginator CLI",
+		href: "/docs/themes",
+		icon: Palette,
 	},
 	{
 		title: "User Guide",
@@ -127,7 +139,7 @@ export function DocsIndexPage() {
 						</Link>
 						<span className="text-border">|</span>
 						<a
-							href="https://github.com/NindroidA/pluginator-public/issues"
+							href="https://github.com/NindroidA/pluginator/issues"
 							target="_blank"
 							rel="noopener noreferrer"
 							className="text-primary hover:underline"

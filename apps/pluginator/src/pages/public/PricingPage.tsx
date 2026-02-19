@@ -1,284 +1,400 @@
-import { PricingCard } from "@/components/pluginator";
+import { PricingCard } from "@/components/pluginator/PricingCard";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { COMPARISON_FEATURES, getPricingTiers } from "@/config/pricing";
+import { useAuth } from "@/hooks/useAuth";
+import {
+  useCancelSubscription,
+  useChangePlan,
+  useSubscription,
+} from "@/hooks/useSubscription";
+import { type Tier, TIER_DISPLAY, getTierLevel } from "@/types/tier";
 import { FadeIn } from "@ninsys/ui/components/animations";
-import { ParallaxElement, ScrollProgress, TextReveal } from "@ninsys/ui/components/scroll";
+import { ParallaxElement, ScrollProgress } from "@ninsys/ui/components/scroll";
 import { motion } from "framer-motion";
-import { Check, Sparkles, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Check, Info, Sparkles, X } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function PricingPage() {
-	return (
-		<div className="min-h-screen py-20 relative overflow-hidden">
-			{/* Parallax Background Orbs */}
-			<div
-				className="absolute inset-0 overflow-hidden pointer-events-none"
-				style={{ zIndex: 0 }}
-				aria-hidden="true"
-			>
-				<ParallaxElement speed={0.15} className="absolute" style={{ top: "5%", right: "10%" }}>
-					<div
-						className="rounded-full blur-3xl"
-						style={{
-							width: "350px",
-							height: "350px",
-							background: "oklch(0.627 0.265 303.9 / 0.2)",
-						}}
-					/>
-				</ParallaxElement>
-				<ParallaxElement speed={-0.1} className="absolute" style={{ bottom: "20%", left: "5%" }}>
-					<div
-						className="rounded-full blur-3xl"
-						style={{
-							width: "300px",
-							height: "300px",
-							background: "oklch(0.70 0.20 290 / 0.15)",
-						}}
-					/>
-				</ParallaxElement>
-				<ParallaxElement speed={0.2} className="absolute" style={{ top: "40%", left: "50%" }}>
-					<div
-						className="rounded-full blur-2xl"
-						style={{
-							width: "200px",
-							height: "200px",
-							background: "oklch(0.627 0.265 303.9 / 0.1)",
-						}}
-					/>
-				</ParallaxElement>
-			</div>
+  const { user } = useAuth();
+  const { data: subscription } = useSubscription();
+  const cancelSubscription = useCancelSubscription();
+  const changePlan = useChangePlan();
+  const navigate = useNavigate();
 
-			<div className="container mx-auto px-4 relative z-10">
-				{/* Header with Text Reveal */}
-				<div className="text-center mb-16">
-					<motion.div
-						initial={{ opacity: 0, scale: 0.9 }}
-						animate={{ opacity: 1, scale: 1 }}
-						transition={{ duration: 0.6 }}
-						className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6"
-					>
-						<Sparkles className="h-4 w-4 text-primary" />
-						<span className="text-sm font-medium text-primary">
-							Simple pricing, powerful features
-						</span>
-					</motion.div>
+  const [loadingTier, setLoadingTier] = useState<Tier | null>(null);
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [showDowngradeDialog, setShowDowngradeDialog] = useState(false);
+  const [downgradeTier, setDowngradeTier] = useState<Tier | null>(null);
 
-					<TextReveal
-						mode="word"
-						className="text-4xl sm:text-5xl font-bold mb-4"
-						as="h1"
-						start="top 95%"
-						end="top 75%"
-					>
-						Simple, Transparent Pricing
-					</TextReveal>
-					<FadeIn delay={0.2}>
-						<p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-							Start free, upgrade when you need more. No hidden fees, cancel anytime.
-						</p>
-					</FadeIn>
-				</div>
+  const isAuthenticated = !!user;
+  const currentTier = subscription?.tier ?? "free";
+  const currentLevel = getTierLevel(currentTier);
+  const hasPlusDiscount = subscription?.hasPlusDiscount ?? false;
+  // Subscription level: treats Plus as non-subscription (level 0 for comparison)
+  // Free=0, Plus=0 (one-time, not a subscription), Pro=2, Max=3
+  const subscriptionLevel = currentTier === "plus" ? 0 : currentLevel;
 
-				{/* Pricing Cards with Scroll-Linked Stagger */}
-				<ScrollProgress start="top 90%" end="top 40%">
-					{({ progress }) => {
-						const pricingTiers = getPricingTiers(false);
-						return (
-							<div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto mb-20">
-								{pricingTiers.map((plan, index) => {
-									const cardProgress = Math.max(0, Math.min(1, (progress - index * 0.1) * 2.5));
-									const isHighlighted = plan.highlighted;
-									return (
-										<motion.div
-											key={plan.tier}
-											style={{
-												opacity: 0.2 + cardProgress * 0.8,
-												transform: `translateY(${(1 - cardProgress) * 50}px) scale(${0.95 + cardProgress * 0.05})`,
-											}}
-										>
-											<div
-												className="relative"
-												style={{
-													transform: isHighlighted
-														? `translateY(${-cardProgress * 10}px)`
-														: undefined,
-												}}
-											>
-												<PricingCard
-													tier={plan.tier}
-													name={plan.name}
-													price={plan.price}
-													period={plan.priceSubtext}
-													description={plan.description}
-													features={plan.features}
-													highlighted={plan.highlighted}
-													ctaText={plan.ctaText}
-													ctaHref={plan.tier === "free" ? "/download" : "/signup"}
-												/>
-											</div>
-										</motion.div>
-									);
-								})}
-							</div>
-						);
-					}}
-				</ScrollProgress>
+  const tiers = getPricingTiers(hasPlusDiscount);
 
-				{/* Feature Comparison Table */}
-				<div className="max-w-5xl mx-auto">
-					<TextReveal
-						mode="word"
-						className="text-2xl font-bold text-center mb-8"
-						as="h2"
-						start="top 90%"
-						end="top 70%"
-					>
-						Feature Comparison
-					</TextReveal>
+  const periodEndDate = subscription?.currentPeriodEnd
+    ? new Date(subscription.currentPeriodEnd).toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      })
+    : null;
 
-					<ScrollProgress start="top 85%" end="top 35%">
-						{({ progress }) => (
-							<motion.div
-								className="rounded-xl border border-border overflow-hidden overflow-x-auto"
-								style={{
-									opacity: Math.max(0.3, progress),
-									transform: `translateY(${(1 - progress) * 30}px)`,
-								}}
-							>
-								<table className="w-full">
-									<thead>
-										<tr className="bg-card">
-											<th className="text-left p-4 font-medium">Feature</th>
-											<th className="text-center p-4 font-medium">Free</th>
-											<th className="text-center p-4 font-medium text-primary">Plus</th>
-											<th className="text-center p-4 font-medium text-accent">Pro</th>
-											<th className="text-center p-4 font-medium text-warning">Max</th>
-										</tr>
-									</thead>
-									<tbody>
-										{COMPARISON_FEATURES.map((feature, index) => {
-											const rowProgress = Math.max(0, Math.min(1, (progress - index * 0.03) * 2));
-											return (
-												<motion.tr
-													key={feature.name}
-													className={index % 2 === 0 ? "bg-muted/30" : "bg-card"}
-													style={{
-														opacity: 0.3 + rowProgress * 0.7,
-													}}
-												>
-													<td className="p-4 text-sm">{feature.name}</td>
-													<td className="p-4 text-center">
-														<FeatureValue value={feature.free} />
-													</td>
-													<td className="p-4 text-center">
-														<FeatureValue value={feature.plus} />
-													</td>
-													<td className="p-4 text-center">
-														<FeatureValue value={feature.pro} />
-													</td>
-													<td className="p-4 text-center">
-														<FeatureValue value={feature.max} />
-													</td>
-												</motion.tr>
-											);
-										})}
-									</tbody>
-								</table>
-							</motion.div>
-						)}
-					</ScrollProgress>
-				</div>
+  const fallbackTier = hasPlusDiscount ? "Plus" : "Free";
 
-				{/* FAQ with Scroll Animations */}
-				<div className="max-w-3xl mx-auto mt-20">
-					<TextReveal
-						mode="word"
-						className="text-2xl font-bold text-center mb-8"
-						as="h2"
-						start="top 90%"
-						end="top 70%"
-					>
-						Frequently Asked Questions
-					</TextReveal>
+  function getCtaText(tier: Tier): string {
+    if (!isAuthenticated) {
+      return tier === "free"
+        ? "Get Started"
+        : tiers.find((t) => t.tier === tier)?.ctaText ?? "Subscribe";
+    }
 
-					<ScrollProgress start="top 85%" end="bottom 60%">
-						{({ progress }) => (
-							<div className="space-y-6">
-								{[
-									{
-										q: "What's the difference between Plus and Pro/Max?",
-										a: "Plus is a one-time purchase that permanently unlocks higher limits and gives you 40% off Pro and 20% off Max subscriptions. Pro and Max are monthly subscriptions for power users who need even more capacity and features like custom servers and API access.",
-									},
-									{
-										q: "Can I switch plans anytime?",
-										a: "Yes! You can upgrade or downgrade your subscription at any time. Changes take effect immediately, and we'll prorate any billing differences. Plus is a one-time purchase that never expires.",
-									},
-									{
-										q: "What payment methods do you accept?",
-										a: "We accept all major credit cards through Stripe. All transactions are secure and encrypted.",
-									},
-									{
-										q: "Can I use Pluginator without an account?",
-										a: "Absolutely! The CLI tool works completely offline and doesn't require an account. An account is only needed for cloud features, syncing across devices, and the web dashboard.",
-									},
-								].map((faq, index) => {
-									const faqProgress = Math.max(0, Math.min(1, (progress - index * 0.12) * 2.5));
-									return (
-										<motion.div
-											key={faq.q}
-											className="rounded-xl border border-border bg-card p-6 hover:border-primary/30 transition-colors"
-											style={{
-												opacity: 0.2 + faqProgress * 0.8,
-												transform: `translateX(${(1 - faqProgress) * (index % 2 === 0 ? -30 : 30)}px)`,
-											}}
-										>
-											<h3 className="font-semibold mb-2">{faq.q}</h3>
-											<p className="text-muted-foreground">{faq.a}</p>
-										</motion.div>
-									);
-								})}
-							</div>
-						)}
-					</ScrollProgress>
-				</div>
+    // Plus is independent: show "Purchased" or "Get Plus"
+    if (tier === "plus") {
+      if (hasPlusDiscount) return "Purchased";
+      return "Get Plus";
+    }
 
-				{/* CTA */}
-				<ScrollProgress start="top 90%" end="top 60%">
-					{({ progress }) => (
-						<motion.div
-							className="text-center mt-16"
-							style={{
-								opacity: progress,
-								transform: `scale(${0.95 + progress * 0.05})`,
-							}}
-						>
-							<p className="text-muted-foreground mb-4">
-								Still have questions?{" "}
-								<Link to="/contact" className="text-primary hover:underline">
-									Contact us
-								</Link>
-							</p>
-						</motion.div>
-					)}
-				</ScrollProgress>
-			</div>
-		</div>
-	);
-}
+    if (tier === currentTier) return "Current Plan";
 
-function FeatureValue({ value }: { value: boolean | string }) {
-	if (value === true) {
-		return (
-			<span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-success/10">
-				<Check className="h-4 w-4 text-success" />
-			</span>
-		);
-	}
-	if (value === false) {
-		return (
-			<span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-muted">
-				<X className="h-4 w-4 text-muted-foreground" />
-			</span>
-		);
-	}
-	return <span className="text-sm font-medium">{value}</span>;
+    if (tier === "free") {
+      if (hasPlusDiscount) return "Included with Plus";
+      if (subscriptionLevel > 0) return "Downgrade";
+      return "Current Plan";
+    }
+
+    // Subscription tiers: compare levels
+    const tierLevel = getTierLevel(tier);
+    if (tierLevel > currentLevel) {
+      return tiers.find((t) => t.tier === tier)?.ctaText ?? "Upgrade";
+    }
+    if (tierLevel < currentLevel) return "Downgrade";
+
+    return "Current Plan";
+  }
+
+  function isCtaDisabled(tier: Tier): boolean {
+    if (!isAuthenticated) return false;
+    if (tier === "plus") return hasPlusDiscount; // Disabled if already purchased
+    if (tier === currentTier) return true;
+    if (tier === "free" && hasPlusDiscount) return true; // Can't go below Plus
+    if (tier === "free" && currentLevel === 0) return true; // Already on free
+    return false;
+  }
+
+  function getCtaStyle(tier: Tier): "default" | "downgrade" | "current" {
+    if (!isAuthenticated) return "default";
+    if (tier === currentTier) return "current";
+    if (tier === "plus" && hasPlusDiscount) return "current";
+    if (tier === "free" && hasPlusDiscount) return "current";
+
+    const tierLevel = getTierLevel(tier);
+    if (tier !== "plus" && tierLevel < currentLevel) return "downgrade";
+
+    return "default";
+  }
+
+  function handleCtaClick(tier: Tier) {
+    if (!isAuthenticated) {
+      if (tier === "free") {
+        navigate("/download");
+      } else {
+        navigate("/login?returnTo=/pricing");
+      }
+      return;
+    }
+
+    if (isCtaDisabled(tier)) return;
+
+    const tierLevel = getTierLevel(tier);
+
+    // Plus purchase (always via checkout)
+    if (tier === "plus") {
+      setLoadingTier(tier);
+      navigate("/checkout?tier=plus");
+      return;
+    }
+
+    // Upgrade (via checkout)
+    if (tierLevel > currentLevel) {
+      setLoadingTier(tier);
+      navigate(`/checkout?tier=${tier}`);
+      return;
+    }
+
+    // Downgrade to Free = cancel subscription
+    if (tier === "free") {
+      setShowCancelDialog(true);
+      return;
+    }
+
+    // Downgrade to lower subscription tier (e.g. Max → Pro)
+    if (tierLevel < currentLevel) {
+      setDowngradeTier(tier);
+      setShowDowngradeDialog(true);
+      return;
+    }
+  }
+
+  async function handleCancelConfirm() {
+    try {
+      await cancelSubscription.mutateAsync();
+      setShowCancelDialog(false);
+    } catch {
+      // Error state tracked by React Query
+    }
+  }
+
+  async function handleDowngradeConfirm() {
+    if (!downgradeTier) return;
+    try {
+      await changePlan.mutateAsync(downgradeTier);
+      setShowDowngradeDialog(false);
+      setDowngradeTier(null);
+    } catch {
+      // Error state tracked by React Query
+    }
+  }
+
+  const currentTierName = TIER_DISPLAY[currentTier]?.name ?? currentTier;
+  const downgradeTierName = downgradeTier
+    ? TIER_DISPLAY[downgradeTier]?.name
+    : "";
+
+  return (
+    <div className="min-h-screen py-20 relative overflow-hidden">
+      {/* Parallax Background Orbs */}
+      <div
+        className="absolute inset-0 overflow-hidden pointer-events-none"
+        style={{ zIndex: 0 }}
+        aria-hidden="true"
+      >
+        <ParallaxElement
+          speed={0.15}
+          className="absolute"
+          style={{ top: "5%", right: "10%" }}
+        >
+          <div
+            className="rounded-full blur-3xl"
+            style={{
+              width: "350px",
+              height: "350px",
+              background: "oklch(0.627 0.265 303.9 / 0.2)",
+            }}
+          />
+        </ParallaxElement>
+        <ParallaxElement
+          speed={-0.1}
+          className="absolute"
+          style={{ bottom: "20%", left: "5%" }}
+        >
+          <div
+            className="rounded-full blur-3xl"
+            style={{
+              width: "300px",
+              height: "300px",
+              background: "oklch(0.70 0.20 290 / 0.15)",
+            }}
+          />
+        </ParallaxElement>
+      </div>
+
+      <div className="container mx-auto px-4 relative z-10">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6"
+          >
+            <Sparkles className="h-4 w-4 text-primary" />
+            <span className="text-sm font-medium text-primary">
+              Beta Pricing
+            </span>
+          </motion.div>
+
+          <FadeIn>
+            <h1 className="text-4xl sm:text-5xl font-bold mb-4">
+              Simple, Transparent Pricing
+            </h1>
+          </FadeIn>
+          <FadeIn delay={0.1}>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Choose the plan that fits your needs. Start free, upgrade when
+              you're ready.
+            </p>
+          </FadeIn>
+        </div>
+
+        {/* Beta Pricing Banner */}
+        <FadeIn delay={0.15}>
+          <div className="max-w-3xl mx-auto mb-12">
+            <div className="rounded-xl bg-gradient-to-br from-amber-500/25 via-orange-500/25 to-rose-500/25 backdrop-blur-sm border border-amber-500/40 shadow-[0_0_30px_rgba(245,158,11,0.2)]">
+              <div className="rounded-xl p-4 flex items-start gap-3">
+                <Info className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
+                <p className="text-sm text-muted-foreground">
+                  <span className="font-medium text-amber-500">
+                    Beta Pricing
+                  </span>{" "}
+                  — Pricing shown is introductory beta pricing and may change.
+                  Early adopters will be honored at their purchase price.
+                </p>
+              </div>
+            </div>
+          </div>
+        </FadeIn>
+
+        {/* Pricing Cards */}
+        <FadeIn delay={0.2}>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto mb-20">
+            {tiers.map((tier) => (
+              <PricingCard
+                key={tier.tier}
+                tier={tier.tier}
+                name={tier.name}
+                price={tier.price}
+                originalPrice={tier.originalPrice}
+                period={tier.priceSubtext || ""}
+                description={tier.description}
+                features={tier.features}
+                highlighted={tier.highlighted}
+                ctaText={getCtaText(tier.tier)}
+                ctaDisabled={isCtaDisabled(tier.tier)}
+                ctaLoading={loadingTier === tier.tier}
+                ctaStyle={getCtaStyle(tier.tier)}
+                onCtaClick={() => handleCtaClick(tier.tier)}
+                className={tier.highlighted ? "" : "opacity-90"}
+              />
+            ))}
+          </div>
+        </FadeIn>
+
+        {/* Comparison Table */}
+        <ScrollProgress start="top 90%" end="top 50%">
+          {({ progress }) => (
+            <motion.div
+              className="max-w-5xl mx-auto"
+              style={{ opacity: 0.2 + progress * 0.8 }}
+            >
+              <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8">
+                Compare Plans
+              </h2>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border">
+                      <th
+                        scope="col"
+                        className="text-left py-3 px-4 font-medium text-muted-foreground"
+                      >
+                        Feature
+                      </th>
+                      <th
+                        scope="col"
+                        className="text-center py-3 px-4 font-medium"
+                      >
+                        Free
+                      </th>
+                      <th
+                        scope="col"
+                        className="text-center py-3 px-4 font-medium text-blue-500"
+                      >
+                        Plus
+                      </th>
+                      <th
+                        scope="col"
+                        className="text-center py-3 px-4 font-medium text-primary"
+                      >
+                        Pro
+                      </th>
+                      <th
+                        scope="col"
+                        className="text-center py-3 px-4 font-medium text-amber-500"
+                      >
+                        Max
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {COMPARISON_FEATURES.map((feature) => (
+                      <tr
+                        key={feature.name}
+                        className="border-b border-border/50 hover:bg-muted/30 transition-colors"
+                      >
+                        <td className="py-3 px-4 font-medium">
+                          {feature.name}
+                        </td>
+                        {(["free", "plus", "pro", "max"] as const).map((t) => {
+                          const value = feature[t];
+                          return (
+                            <td key={t} className="text-center py-3 px-4">
+                              {value === true ? (
+                                <>
+                                  <Check
+                                    className="h-4 w-4 text-success mx-auto"
+                                    aria-hidden="true"
+                                  />
+                                  <span className="sr-only">Included</span>
+                                </>
+                              ) : value === false ? (
+                                <>
+                                  <X
+                                    className="h-4 w-4 text-muted-foreground/40 mx-auto"
+                                    aria-hidden="true"
+                                  />
+                                  <span className="sr-only">Not included</span>
+                                </>
+                              ) : (
+                                <span>{value}</span>
+                              )}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </motion.div>
+          )}
+        </ScrollProgress>
+      </div>
+
+      {/* Cancel Subscription Dialog (downgrade to Free/Plus) */}
+      <ConfirmDialog
+        open={showCancelDialog}
+        onCancel={() => setShowCancelDialog(false)}
+        onConfirm={handleCancelConfirm}
+        title="Cancel Subscription?"
+        description={`Your ${currentTierName} plan will remain active until ${
+          periodEndDate ?? "the end of your billing period"
+        }. After that, you'll be on the ${fallbackTier} plan.`}
+        confirmText="Cancel Subscription"
+        cancelText="Keep Subscription"
+        loading={cancelSubscription.isPending}
+        destructive
+      />
+
+      {/* Plan Change Dialog (e.g. Max → Pro) */}
+      <ConfirmDialog
+        open={showDowngradeDialog}
+        onCancel={() => {
+          setShowDowngradeDialog(false);
+          setDowngradeTier(null);
+        }}
+        onConfirm={handleDowngradeConfirm}
+        title={`Switch to ${downgradeTierName}?`}
+        description={`Your plan will be changed from ${currentTierName} to ${downgradeTierName}. Billing will be prorated — you'll receive credit for the remaining time on your current plan.`}
+        confirmText={`Switch to ${downgradeTierName}`}
+        cancelText="Keep Current Plan"
+        loading={changePlan.isPending}
+      />
+    </div>
+  );
 }

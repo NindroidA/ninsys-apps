@@ -22,7 +22,7 @@ const variants = {
 	primary: "bg-primary text-primary-foreground hover:bg-primary-hover shadow-md hover:shadow-lg",
 	secondary: "bg-secondary text-secondary-foreground hover:bg-muted",
 	outline:
-		"border-[3px] border-primary text-primary hover:bg-primary hover:text-primary-foreground shadow-sm hover:shadow-md",
+		"border border-primary/60 text-primary hover:bg-primary hover:text-primary-foreground hover:border-primary",
 	ghost: "text-foreground hover:bg-muted",
 	destructive: "bg-error text-error-foreground hover:opacity-90",
 };
@@ -46,10 +46,10 @@ export function Button({
 	...props
 }: ButtonProps) {
 	const buttonClassName = cn(
-		"inline-flex items-center justify-center font-medium",
+		"inline-flex items-center justify-center font-medium cursor-pointer",
 		"rounded-lg transition-all duration-200",
 		"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-		"disabled:opacity-50 disabled:pointer-events-none",
+		"disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed",
 		variants[variant],
 		sizes[size],
 		className,
