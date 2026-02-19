@@ -172,13 +172,7 @@ interface CheckboxProps {
 	disabled?: boolean;
 }
 
-export function Checkbox({
-	checked,
-	onChange,
-	label,
-	className,
-	disabled = false,
-}: CheckboxProps) {
+export function Checkbox({ checked, onChange, label, className, disabled = false }: CheckboxProps) {
 	return (
 		<label
 			className={cn(

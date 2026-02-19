@@ -56,10 +56,7 @@ export function ThemeCard({ theme, className }: ThemeCardProps) {
 				{/* Badges row */}
 				<div className="flex items-center gap-2 flex-wrap">
 					{/* Tier badge */}
-					<Badge
-						variant="secondary"
-						className={cn("text-xs", tierInfo.bgColor, tierInfo.color)}
-					>
+					<Badge variant="secondary" className={cn("text-xs", tierInfo.bgColor, tierInfo.color)}>
 						{theme.minTier === "max" && <Crown className="h-3 w-3 mr-1" />}
 						{tierInfo.name}
 					</Badge>
@@ -78,9 +75,7 @@ export function ThemeCard({ theme, className }: ThemeCardProps) {
 				{/* Stats (if available) */}
 				{(theme.downloads || theme.rating) && (
 					<div className="flex items-center gap-3 text-xs text-muted-foreground pt-1">
-						{theme.downloads && (
-							<span>{theme.downloads.toLocaleString()} downloads</span>
-						)}
+						{theme.downloads && <span>{theme.downloads.toLocaleString()} downloads</span>}
 						{theme.rating && <span>★ {theme.rating.toFixed(1)}</span>}
 					</div>
 				)}
@@ -101,10 +96,7 @@ export function ThemeGrid({
 }) {
 	return (
 		<motion.div
-			className={cn(
-				"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6",
-				className,
-			)}
+			className={cn("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6", className)}
 			initial={false}
 		>
 			{themes.map((theme, index) => (
@@ -132,12 +124,7 @@ export function ThemeGrid({
  */
 export function ThemeCardSkeleton({ className }: { className?: string }) {
 	return (
-		<div
-			className={cn(
-				"rounded-xl border border-border bg-card p-4 animate-pulse",
-				className,
-			)}
-		>
+		<div className={cn("rounded-xl border border-border bg-card p-4 animate-pulse", className)}>
 			{/* Preview skeleton */}
 			<div className="flex justify-center mb-4">
 				<ThemePreviewSkeleton size="sm" />
@@ -167,12 +154,7 @@ export function ThemeGridSkeleton({
 	className?: string;
 }) {
 	return (
-		<div
-			className={cn(
-				"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6",
-				className,
-			)}
-		>
+		<div className={cn("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6", className)}>
 			{Array.from({ length: count }).map((_, i) => (
 				<ThemeCardSkeleton key={i} />
 			))}

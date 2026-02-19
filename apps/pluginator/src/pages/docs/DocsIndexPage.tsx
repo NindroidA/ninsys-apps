@@ -1,7 +1,16 @@
 import { Card } from "@ninsys/ui/components";
 import { FadeIn, StaggerContainer } from "@ninsys/ui/components/animations";
 import { motion } from "framer-motion";
-import { BookOpen, FileCode, FileText, HelpCircle, Palette, Settings, Shield, Terminal } from "lucide-react";
+import {
+	BookOpen,
+	FileCode,
+	FileText,
+	HelpCircle,
+	Palette,
+	Settings,
+	Shield,
+	Terminal,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 
 const docsSections = [

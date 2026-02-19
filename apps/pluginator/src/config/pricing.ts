@@ -66,7 +66,7 @@ export function getPricingTiers(hasPlusDiscount: boolean): PricingTierConfig[] {
 				"25GB cloud storage",
 				"Custom servers",
 				"Priority support",
-				],
+			],
 			ctaText: "Subscribe to Pro",
 		},
 		{
@@ -85,7 +85,7 @@ export function getPricingTiers(hasPlusDiscount: boolean): PricingTierConfig[] {
 				"Custom servers",
 				"API access",
 				"White-glove onboarding",
-				],
+			],
 			ctaText: "Subscribe to Max",
 		},
 	];

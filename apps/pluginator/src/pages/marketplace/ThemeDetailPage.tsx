@@ -4,17 +4,9 @@
  * Full details for a single theme with preview and color palette.
  */
 
-import {
-	ThemeCategoryIcon,
-	ThemeColorSwatch,
-	ThemePreview,
-} from "@/components/marketplace";
+import { ThemeCategoryIcon, ThemeColorSwatch, ThemePreview } from "@/components/marketplace";
 import { useRegistryTheme } from "@/hooks/useThemes";
-import {
-	THEME_CATEGORY_INFO,
-	THEME_TIER_INFO,
-	THEME_TYPE_INFO,
-} from "@/types/theme";
+import { THEME_CATEGORY_INFO, THEME_TIER_INFO, THEME_TYPE_INFO } from "@/types/theme";
 import { Badge, Button } from "@ninsys/ui/components";
 import { FadeIn } from "@ninsys/ui/components/animations";
 import {
@@ -117,10 +109,7 @@ export function ThemeDetailPage() {
 							{/* Badges row */}
 							<div className="flex items-center gap-2 flex-wrap">
 								{/* Tier */}
-								<Badge
-									variant="secondary"
-									className={`${tierInfo.bgColor} ${tierInfo.color}`}
-								>
+								<Badge variant="secondary" className={`${tierInfo.bgColor} ${tierInfo.color}`}>
 									{theme.minTier === "max" && <Crown className="h-3 w-3 mr-1" />}
 									{tierInfo.name} Tier
 								</Badge>
@@ -179,9 +168,7 @@ export function ThemeDetailPage() {
 
 										<div className="flex items-center gap-3">
 											<div className="flex-1 sm:flex-none bg-background rounded-lg px-4 py-3 font-mono text-sm flex items-center gap-3 min-w-0 overflow-x-auto">
-												<code className="whitespace-nowrap">
-													pluginator theme set {theme.id}
-												</code>
+												<code className="whitespace-nowrap">pluginator theme set {theme.id}</code>
 												<button
 													type="button"
 													onClick={handleCopy}
@@ -214,9 +201,7 @@ export function ThemeDetailPage() {
 							<FadeIn delay={0.3}>
 								<section className="rounded-xl border border-border bg-card p-6">
 									<h2 className="text-lg font-semibold mb-3">About</h2>
-									<p className="text-muted-foreground leading-relaxed">
-										{theme.description}
-									</p>
+									<p className="text-muted-foreground leading-relaxed">{theme.description}</p>
 								</section>
 							</FadeIn>
 						)}
@@ -278,9 +263,7 @@ export function ThemeDetailPage() {
 									{theme.downloads && (
 										<div className="flex justify-between">
 											<dt className="text-muted-foreground">Downloads</dt>
-											<dd className="font-medium">
-												{theme.downloads.toLocaleString()}
-											</dd>
+											<dd className="font-medium">{theme.downloads.toLocaleString()}</dd>
 										</div>
 									)}
 									{theme.rating && (

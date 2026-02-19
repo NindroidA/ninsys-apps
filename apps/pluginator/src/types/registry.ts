@@ -173,15 +173,16 @@ export const CATEGORY_INFO: Record<PluginCategory, { name: string; iconKey: Cate
 /**
  * Source display configuration
  */
-export const SOURCE_INFO: Record<PluginSourceType, { name: string; color: string; icon: string }> = {
-	modrinth: { name: "Modrinth", color: "#1bd96a", icon: "modrinth" },
-	hangar: { name: "Hangar", color: "#1e88e5", icon: "hangar" },
-	spigot: { name: "SpigotMC", color: "#f69823", icon: "spigot" },
-	curseforge: { name: "CurseForge", color: "#f16436", icon: "curseforge" },
-	github: { name: "GitHub", color: "#6e5494", icon: "github" },
-	jenkins: { name: "Jenkins", color: "#d33833", icon: "jenkins" },
-	"web-manifest": { name: "Direct Download", color: "#6b7280", icon: "download" },
-};
+export const SOURCE_INFO: Record<PluginSourceType, { name: string; color: string; icon: string }> =
+	{
+		modrinth: { name: "Modrinth", color: "#1bd96a", icon: "modrinth" },
+		hangar: { name: "Hangar", color: "#1e88e5", icon: "hangar" },
+		spigot: { name: "SpigotMC", color: "#f69823", icon: "spigot" },
+		curseforge: { name: "CurseForge", color: "#f16436", icon: "curseforge" },
+		github: { name: "GitHub", color: "#6e5494", icon: "github" },
+		jenkins: { name: "Jenkins", color: "#d33833", icon: "jenkins" },
+		"web-manifest": { name: "Direct Download", color: "#6b7280", icon: "download" },
+	};
 
 /**
  * Get URL for a plugin source

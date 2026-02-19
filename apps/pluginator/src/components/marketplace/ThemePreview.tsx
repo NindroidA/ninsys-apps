@@ -14,11 +14,7 @@ interface ThemePreviewProps {
 	className?: string;
 }
 
-export function ThemePreview({
-	theme,
-	size = "md",
-	className,
-}: ThemePreviewProps) {
+export function ThemePreview({ theme, size = "md", className }: ThemePreviewProps) {
 	const { colors } = theme;
 
 	// Size configurations
@@ -53,11 +49,7 @@ export function ThemePreview({
 
 	return (
 		<div
-			className={cn(
-				"rounded-lg overflow-hidden shadow-lg",
-				config.container,
-				className,
-			)}
+			className={cn("rounded-lg overflow-hidden shadow-lg", config.container, className)}
 			style={{
 				backgroundColor: colors.bg.primary,
 				border: `1px solid ${colors.border.default}`,
@@ -84,10 +76,7 @@ export function ThemePreview({
 					/>
 				</div>
 				{/* Title */}
-				<span
-					className="text-[10px] font-medium"
-					style={{ color: colors.fg.secondary }}
-				>
+				<span className="text-[10px] font-medium" style={{ color: colors.fg.secondary }}>
 					Pluginator
 				</span>
 				{/* Spacer to balance */}
@@ -114,8 +103,7 @@ export function ThemePreview({
 
 				{/* Status message */}
 				<div style={{ color: colors.fg.secondary }}>
-					<span style={{ color: colors.status.success }}>✓</span> Checking 5
-					plugins...
+					<span style={{ color: colors.status.success }}>✓</span> Checking 5 plugins...
 				</div>
 
 				{/* Empty line */}
@@ -185,13 +173,5 @@ export function ThemePreviewSkeleton({
 		lg: "w-full max-w-[500px] h-[240px]",
 	};
 
-	return (
-		<div
-			className={cn(
-				"rounded-lg bg-muted animate-pulse",
-				sizeConfig[size],
-				className,
-			)}
-		/>
-	);
+	return <div className={cn("rounded-lg bg-muted animate-pulse", sizeConfig[size], className)} />;
 }

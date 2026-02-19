@@ -97,24 +97,30 @@ export function PluginSearch({
 		setVerified(false);
 	};
 
-	const categoryOptions: SelectOption[] = useMemo(() => [
-		{ value: "", label: "All Categories" },
-		...Object.entries(CATEGORY_INFO).map(([id, info]) => ({
-			value: id,
-			label: info.name,
-			icon: CATEGORY_ICON_MAP[id as PluginCategory],
-		})),
-	], []);
+	const categoryOptions: SelectOption[] = useMemo(
+		() => [
+			{ value: "", label: "All Categories" },
+			...Object.entries(CATEGORY_INFO).map(([id, info]) => ({
+				value: id,
+				label: info.name,
+				icon: CATEGORY_ICON_MAP[id as PluginCategory],
+			})),
+		],
+		[],
+	);
 
-	const versionOptions: SelectOption[] = useMemo(() => [
-		{ value: "", label: "All Versions" },
-		...mcVersions.map((v) => ({ value: v, label: v })),
-	], [mcVersions]);
+	const versionOptions: SelectOption[] = useMemo(
+		() => [
+			{ value: "", label: "All Versions" },
+			...mcVersions.map((v) => ({ value: v, label: v })),
+		],
+		[mcVersions],
+	);
 
-	const sortOptions: SelectOption[] = useMemo(() => [
-		{ value: "", label: "Sort By" },
-		...SORT_OPTIONS,
-	], []);
+	const sortOptions: SelectOption[] = useMemo(
+		() => [{ value: "", label: "Sort By" }, ...SORT_OPTIONS],
+		[],
+	);
 
 	return (
 		<div className={cn("space-y-4", className)}>
@@ -149,9 +155,7 @@ export function PluginSearch({
 				>
 					<Filter className="h-4 w-4 mr-2" />
 					Filters
-					{hasActiveFilters && (
-						<span className="ml-2 h-2 w-2 rounded-full bg-primary" />
-					)}
+					{hasActiveFilters && <span className="ml-2 h-2 w-2 rounded-full bg-primary" />}
 				</Button>
 
 				{/* Desktop filters inline */}
@@ -184,11 +188,7 @@ export function PluginSearch({
 					/>
 
 					{/* Verified toggle */}
-					<Checkbox
-						checked={verified}
-						onChange={setVerified}
-						label="Verified only"
-					/>
+					<Checkbox checked={verified} onChange={setVerified} label="Verified only" />
 
 					{/* Clear filters */}
 					{hasActiveFilters && (
@@ -228,20 +228,11 @@ export function PluginSearch({
 					{/* Sort */}
 					<div>
 						<label className="block text-sm font-medium mb-2">Sort By</label>
-						<Select
-							value={sort}
-							onChange={setSort}
-							options={sortOptions}
-							placeholder="Sort By"
-						/>
+						<Select value={sort} onChange={setSort} options={sortOptions} placeholder="Sort By" />
 					</div>
 
 					{/* Verified toggle */}
-					<Checkbox
-						checked={verified}
-						onChange={setVerified}
-						label="Verified plugins only"
-					/>
+					<Checkbox checked={verified} onChange={setVerified} label="Verified plugins only" />
 
 					{/* Clear button */}
 					{hasActiveFilters && (
@@ -285,11 +276,7 @@ export function SimpleSearch({
 				onChange={(e) => setValue(e.target.value)}
 				className="pl-12 h-12 text-base rounded-xl"
 			/>
-			<Button
-				type="submit"
-				size="sm"
-				className="absolute right-2 top-1/2 -translate-y-1/2"
-			>
+			<Button type="submit" size="sm" className="absolute right-2 top-1/2 -translate-y-1/2">
 				Search
 			</Button>
 		</form>

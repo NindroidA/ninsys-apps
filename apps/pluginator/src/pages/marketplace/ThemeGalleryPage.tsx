@@ -4,11 +4,7 @@
  * Browse all themes with search, filters, and pagination.
  */
 
-import {
-	ThemeGrid,
-	ThemeGridSkeleton,
-	ThemeSearch,
-} from "@/components/marketplace";
+import { ThemeGrid, ThemeGridSkeleton, ThemeSearch } from "@/components/marketplace";
 import { useRegistryThemes } from "@/hooks/useThemes";
 import type { ThemeFilters } from "@/types/theme";
 import { Button } from "@ninsys/ui/components";
@@ -25,8 +21,7 @@ export function ThemeGalleryPage() {
 	const initialFilters: ThemeFilters = {
 		search: searchParams.get("search") || undefined,
 		type: (searchParams.get("type") as ThemeFilters["type"]) || undefined,
-		category:
-			(searchParams.get("category") as ThemeFilters["category"]) || undefined,
+		category: (searchParams.get("category") as ThemeFilters["category"]) || undefined,
 		tier: (searchParams.get("tier") as ThemeFilters["tier"]) || undefined,
 		sort: (searchParams.get("sort") as ThemeFilters["sort"]) || "name",
 	};
@@ -52,8 +47,7 @@ export function ThemeGalleryPage() {
 			if (newFilters.type) params.set("type", newFilters.type);
 			if (newFilters.category) params.set("category", newFilters.category);
 			if (newFilters.tier) params.set("tier", newFilters.tier);
-			if (newFilters.sort && newFilters.sort !== "name")
-				params.set("sort", newFilters.sort);
+			if (newFilters.sort && newFilters.sort !== "name") params.set("sort", newFilters.sort);
 
 			setSearchParams(params, { replace: true });
 		},
@@ -79,10 +73,7 @@ export function ThemeGalleryPage() {
 				{/* Breadcrumb */}
 				<FadeIn>
 					<nav className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
-						<Link
-							to="/marketplace"
-							className="hover:text-foreground transition-colors"
-						>
+						<Link to="/marketplace" className="hover:text-foreground transition-colors">
 							Marketplace
 						</Link>
 						<span>/</span>
@@ -97,8 +88,7 @@ export function ThemeGalleryPage() {
 						<h1 className="text-2xl sm:text-3xl font-bold">{pageTitle}</h1>
 						{data && (
 							<span className="text-muted-foreground">
-								({data.pagination.total}{" "}
-								{data.pagination.total === 1 ? "theme" : "themes"})
+								({data.pagination.total} {data.pagination.total === 1 ? "theme" : "themes"})
 							</span>
 						)}
 					</div>
@@ -136,9 +126,7 @@ export function ThemeGalleryPage() {
 						<div className="text-center py-16">
 							<Palette className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
 							<h3 className="text-lg font-medium mb-2">No themes found</h3>
-							<p className="text-muted-foreground mb-4">
-								Try adjusting your search or filters
-							</p>
+							<p className="text-muted-foreground mb-4">Try adjusting your search or filters</p>
 							<Button variant="outline" onClick={() => handleFiltersChange({})}>
 								Clear Filters
 							</Button>
@@ -152,7 +140,7 @@ export function ThemeGalleryPage() {
 						{/* Results count with animation */}
 						<AnimatePresence mode="wait">
 							<motion.p
-								key={`count-${data.pagination.total}-${filters.search || ''}-${filters.type || ''}`}
+								key={`count-${data.pagination.total}-${filters.search || ""}-${filters.type || ""}`}
 								initial={{ opacity: 0, y: -10 }}
 								animate={{ opacity: 1, y: 0 }}
 								exit={{ opacity: 0, y: 10 }}
@@ -163,7 +151,7 @@ export function ThemeGalleryPage() {
 						</AnimatePresence>
 						<AnimatePresence mode="wait">
 							<motion.div
-								key={`grid-${data.themes.map(t => t.id).join('-')}`}
+								key={`grid-${data.themes.map((t) => t.id).join("-")}`}
 								initial={{ opacity: 0 }}
 								animate={{ opacity: 1 }}
 								exit={{ opacity: 0 }}
@@ -187,16 +175,9 @@ export function ThemeGalleryPage() {
 								</Button>
 
 								<div className="flex items-center gap-1.5">
-									{Array.from(
-										{ length: data.pagination.totalPages },
-										(_, i) => i + 1,
-									)
+									{Array.from({ length: data.pagination.totalPages }, (_, i) => i + 1)
 										.filter((p) => {
-											return (
-												p === 1 ||
-												p === data.pagination.totalPages ||
-												Math.abs(p - page) <= 1
-											);
+											return p === 1 || p === data.pagination.totalPages || Math.abs(p - page) <= 1;
 										})
 										.map((p, idx, arr) => {
 											const prevPage = arr[idx - 1];
@@ -206,9 +187,7 @@ export function ThemeGalleryPage() {
 											return (
 												<span key={p} className="flex items-center gap-1.5">
 													{showEllipsisBefore && (
-														<span className="px-1.5 text-muted-foreground">
-															...
-														</span>
+														<span className="px-1.5 text-muted-foreground">...</span>
 													)}
 													<Button
 														variant={p === page ? "primary" : "outline"}

@@ -4,7 +4,7 @@
 # ============================================
 #
 # Triggers on push to production branch
-# Builds Docker images and deploys to server
+# Builds Docker images in parallel and deploys to server
 #
 # Required Secrets:
 #   - SERVER_HOST
@@ -21,12 +21,58 @@ on:
     branches: [production]
   workflow_dispatch:
 
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
 env:
   REGISTRY: ghcr.io
 
 jobs:
-  build-and-push:
-    name: Build and Push Docker Images
+  # ============================================
+  # Detect which apps changed (skip unchanged)
+  # ============================================
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      cogworks: ${{ steps.changes.outputs.cogworks }}
+      pluginator: ${{ steps.changes.outputs.pluginator }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check changed files
+        id: changes
+        run: |
+          # Compare with previous commit on production
+          CHANGED=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || echo "all")
+
+          if [ "$CHANGED" = "all" ]; then
+            echo "cogworks=true" >> "$GITHUB_OUTPUT"
+            echo "pluginator=true" >> "$GITHUB_OUTPUT"
+          else
+            if echo "$CHANGED" | grep -qE '^(apps/cogworks/|packages/ui/)'; then
+              echo "cogworks=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "cogworks=false" >> "$GITHUB_OUTPUT"
+            fi
+
+            if echo "$CHANGED" | grep -qE '^(apps/pluginator/|packages/ui/)'; then
+              echo "pluginator=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "pluginator=false" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+
+  # ============================================
+  # Build Cogworks (parallel)
+  # ============================================
+  build-cogworks:
+    name: Build Cogworks
+    needs: changes
+    if: needs.changes.outputs.cogworks == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -46,11 +92,8 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # ============================================
-      # Build Cogworks
-      # ============================================
-      - name: Extract metadata for Cogworks
-        id: meta-cogworks
+      - name: Extract metadata
+        id: meta
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/cogworks-webapp
@@ -58,22 +101,45 @@ jobs:
             type=sha,prefix=
             type=raw,value=latest
 
-      - name: Build and push Cogworks
+      - name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: .
           file: apps/cogworks/Dockerfile
           push: true
-          tags: ${{ steps.meta-cogworks.outputs.tags }}
-          labels: ${{ steps.meta-cogworks.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=cogworks
+          cache-to: type=gha,scope=cogworks,mode=max
 
-      # ============================================
-      # Build Pluginator
-      # ============================================
-      - name: Extract metadata for Pluginator
-        id: meta-pluginator
+  # ============================================
+  # Build Pluginator (parallel)
+  # ============================================
+  build-pluginator:
+    name: Build Pluginator
+    needs: changes
+    if: needs.changes.outputs.pluginator == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Extract metadata
+        id: meta
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/pluginator-webapp
@@ -81,26 +147,51 @@ jobs:
             type=sha,prefix=
             type=raw,value=latest
 
-      - name: Build and push Pluginator
+      - name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: .
           file: apps/pluginator/Dockerfile
           push: true
-          tags: ${{ steps.meta-pluginator.outputs.tags }}
-          labels: ${{ steps.meta-pluginator.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=pluginator
+          cache-to: type=gha,scope=pluginator,mode=max
 
+  # ============================================
+  # Deploy to Homelab
+  # ============================================
   deploy:
     name: Deploy to Homelab
-    needs: build-and-push
+    needs: [changes, build-cogworks, build-pluginator]
+    # Run even if builds were skipped (no changes), but not if they failed
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
     env:
       IMAGE_OWNER: ${{ github.repository_owner }}
+      DEPLOY_COGWORKS: ${{ needs.changes.outputs.cogworks }}
+      DEPLOY_PLUGINATOR: ${{ needs.changes.outputs.pluginator }}
 
     steps:
+      - name: Determine services to deploy
+        id: services
+        run: |
+          SERVICES=""
+          if [ "$DEPLOY_COGWORKS" = "true" ]; then
+            SERVICES="cogworks-webapp"
+          fi
+          if [ "$DEPLOY_PLUGINATOR" = "true" ]; then
+            SERVICES="$SERVICES pluginator-webapp"
+          fi
+          SERVICES=$(echo "$SERVICES" | xargs)  # trim whitespace
+          echo "list=$SERVICES" >> "$GITHUB_OUTPUT"
+          echo "Deploying: $SERVICES"
+
       - name: Deploy to server
+        if: steps.services.outputs.list != ''
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -109,14 +200,32 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           envs: IMAGE_OWNER
           script: |
+            set -e
             cd /opt/docker
 
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-            # --pull always ensures fresh images even if Docker thinks it has latest
-            docker-compose pull cogworks-webapp pluginator-webapp
-            docker-compose up -d --force-recreate --pull always cogworks-webapp pluginator-webapp
+            SERVICES="${{ steps.services.outputs.list }}"
+            echo "Pulling: $SERVICES"
+            docker-compose pull $SERVICES
+
+            echo "Recreating: $SERVICES"
+            docker-compose up -d --force-recreate --pull always $SERVICES
+
+            # Verify containers are running
+            for SVC in $SERVICES; do
+              if docker-compose ps "$SVC" | grep -q "Up"; then
+                echo "$SVC: healthy"
+              else
+                echo "$SVC: FAILED TO START"
+                docker-compose logs --tail=20 "$SVC"
+                exit 1
+              fi
+            done
 
             docker image prune -f
-
             echo "Deployment complete!"
+
+      - name: No changes to deploy
+        if: steps.services.outputs.list == ''
+        run: echo "No app changes detected, skipping deployment."

@@ -4,11 +4,7 @@
  * Browse all plugins with search, filters, and pagination
  */
 
-import {
-	PluginGrid,
-	PluginGridSkeleton,
-	PluginSearch,
-} from "@/components/marketplace";
+import { PluginGrid, PluginGridSkeleton, PluginSearch } from "@/components/marketplace";
 import { useMinecraftVersions, useRegistryPlugins } from "@/hooks/useRegistry";
 import type { RegistryFilters } from "@/types/registry";
 import { Button } from "@ninsys/ui/components";
@@ -155,13 +151,8 @@ export function PluginListPage() {
 						<div className="text-center py-16">
 							<Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
 							<h3 className="text-lg font-medium mb-2">No plugins found</h3>
-							<p className="text-muted-foreground mb-4">
-								Try adjusting your search or filters
-							</p>
-							<Button
-								variant="outline"
-								onClick={() => handleFiltersChange({})}
-							>
+							<p className="text-muted-foreground mb-4">Try adjusting your search or filters</p>
+							<Button variant="outline" onClick={() => handleFiltersChange({})}>
 								Clear Filters
 							</Button>
 						</div>
@@ -174,7 +165,7 @@ export function PluginListPage() {
 						{/* Results count with animation */}
 						<AnimatePresence mode="wait">
 							<motion.p
-								key={`count-${data.pagination.total}-${filters.search || ''}-${filters.category || ''}-${filters.sort || ''}-${filters.verified || ''}`}
+								key={`count-${data.pagination.total}-${filters.search || ""}-${filters.category || ""}-${filters.sort || ""}-${filters.verified || ""}`}
 								initial={{ opacity: 0, y: -10 }}
 								animate={{ opacity: 1, y: 0 }}
 								exit={{ opacity: 0, y: 10 }}
@@ -185,7 +176,7 @@ export function PluginListPage() {
 						</AnimatePresence>
 						<AnimatePresence mode="wait">
 							<motion.div
-								key={`grid-${data.plugins.map(p => p.id).join('-')}`}
+								key={`grid-${data.plugins.map((p) => p.id).join("-")}`}
 								initial={{ opacity: 0 }}
 								animate={{ opacity: 1 }}
 								exit={{ opacity: 0 }}
@@ -212,16 +203,13 @@ export function PluginListPage() {
 									{Array.from({ length: data.pagination.totalPages }, (_, i) => i + 1)
 										.filter((p) => {
 											// Show first, last, current, and adjacent pages
-											return (
-												p === 1 ||
-												p === data.pagination.totalPages ||
-												Math.abs(p - page) <= 1
-											);
+											return p === 1 || p === data.pagination.totalPages || Math.abs(p - page) <= 1;
 										})
 										.map((p, idx, arr) => {
 											// Add ellipsis if there's a gap
 											const prevPage = arr[idx - 1];
-											const showEllipsisBefore = idx > 0 && prevPage !== undefined && p - prevPage > 1;
+											const showEllipsisBefore =
+												idx > 0 && prevPage !== undefined && p - prevPage > 1;
 
 											return (
 												<span key={p} className="flex items-center gap-1.5">

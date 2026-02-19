@@ -11,12 +11,7 @@
 
 export type ThemeType = "dark" | "light";
 
-export type ThemeCategory =
-	| "default"
-	| "designer"
-	| "accessibility"
-	| "seasonal"
-	| "community";
+export type ThemeCategory = "default" | "designer" | "accessibility" | "seasonal" | "community";
 
 export type ThemeTier = "free" | "plus" | "pro" | "max";
 
@@ -243,31 +238,29 @@ export const THEME_CATEGORY_INFO: Record<
 	},
 };
 
-export const THEME_TIER_INFO: Record<
-	ThemeTier,
-	{ name: string; color: string; bgColor: string }
-> = {
-	free: {
-		name: "Free",
-		color: "text-muted-foreground",
-		bgColor: "bg-muted",
-	},
-	plus: {
-		name: "Plus",
-		color: "text-blue-500",
-		bgColor: "bg-blue-500/10",
-	},
-	pro: {
-		name: "Pro",
-		color: "text-purple-500",
-		bgColor: "bg-purple-500/10",
-	},
-	max: {
-		name: "Max",
-		color: "text-amber-500",
-		bgColor: "bg-amber-500/10",
-	},
-};
+export const THEME_TIER_INFO: Record<ThemeTier, { name: string; color: string; bgColor: string }> =
+	{
+		free: {
+			name: "Free",
+			color: "text-muted-foreground",
+			bgColor: "bg-muted",
+		},
+		plus: {
+			name: "Plus",
+			color: "text-blue-500",
+			bgColor: "bg-blue-500/10",
+		},
+		pro: {
+			name: "Pro",
+			color: "text-purple-500",
+			bgColor: "bg-purple-500/10",
+		},
+		max: {
+			name: "Max",
+			color: "text-amber-500",
+			bgColor: "bg-amber-500/10",
+		},
+	};
 
 /**
  * Theme type icon keys

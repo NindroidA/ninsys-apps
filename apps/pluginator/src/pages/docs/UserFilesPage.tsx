@@ -417,9 +417,9 @@ export function UserFilesPage() {
 								bundled default.
 							</p>
 							<p className="text-sm text-muted-foreground">
-								On startup, Pluginator automatically regenerates any missing user files from
-								bundled defaults. This means you can safely delete files to reset them — they'll
-								be recreated the next time Pluginator runs.
+								On startup, Pluginator automatically regenerates any missing user files from bundled
+								defaults. This means you can safely delete files to reset them — they'll be
+								recreated the next time Pluginator runs.
 							</p>
 						</div>
 					</section>

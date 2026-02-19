@@ -7,17 +7,7 @@
 import { CodeBlock, DocsLayout } from "@/components/docs";
 import { THEME_TIER_INFO, THEME_TYPE_INFO } from "@/types/theme";
 import { Badge, Card } from "@ninsys/ui/components";
-import {
-	Check,
-	Command,
-	Palette,
-	Sparkles,
-	Sun,
-	Moon,
-	Crown,
-	Terminal,
-	Brush,
-} from "lucide-react";
+import { Brush, Check, Command, Crown, Moon, Palette, Sparkles, Sun, Terminal } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const tierFeatures = [
@@ -84,10 +74,7 @@ Colors:
 
 export function ThemesPage() {
 	return (
-		<DocsLayout
-			title="Themes"
-			description="Customize the look and feel of your Pluginator CLI"
-		>
+		<DocsLayout title="Themes" description="Customize the look and feel of your Pluginator CLI">
 			<div className="prose prose-invert max-w-none">
 				{/* Introduction */}
 				<section className="mb-12">
@@ -96,9 +83,9 @@ export function ThemesPage() {
 						Introduction
 					</h2>
 					<p className="text-muted-foreground mb-4">
-						Pluginator's theme system lets you customize the visual appearance of the CLI
-						to match your preferences. From dark developer themes to accessibility-focused
-						high contrast options, there's a theme for everyone.
+						Pluginator's theme system lets you customize the visual appearance of the CLI to match
+						your preferences. From dark developer themes to accessibility-focused high contrast
+						options, there's a theme for everyone.
 					</p>
 					<div className="flex flex-wrap gap-4">
 						<Link
@@ -193,8 +180,8 @@ export function ThemesPage() {
 						Theme Tiers
 					</h2>
 					<p className="text-muted-foreground mb-4">
-						Different themes are available at different subscription tiers. Browse all
-						themes in the gallery, but access depends on your plan:
+						Different themes are available at different subscription tiers. Browse all themes in the
+						gallery, but access depends on your plan:
 					</p>
 					<div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
 						{tierFeatures.map((tier) => {
@@ -202,15 +189,10 @@ export function ThemesPage() {
 							return (
 								<Card key={tier.tier} className="p-4">
 									<div className="flex items-center gap-2 mb-3">
-										<Badge
-											variant="outline"
-											className={`text-xs ${info.color} border-current`}
-										>
+										<Badge variant="outline" className={`text-xs ${info.color} border-current`}>
 											{info.name}
 										</Badge>
-										<span className="text-sm text-muted-foreground">
-											{tier.themes} themes
-										</span>
+										<span className="text-sm text-muted-foreground">{tier.themes} themes</span>
 									</div>
 									<ul className="text-sm space-y-1">
 										{tier.features.map((feature) => (
@@ -242,36 +224,35 @@ export function ThemesPage() {
 						<Card className="p-4">
 							<h3 className="font-semibold mb-2">Default</h3>
 							<p className="text-sm text-muted-foreground">
-								Built-in themes that ship with Pluginator. Clean, functional, and
-								suitable for everyday use.
+								Built-in themes that ship with Pluginator. Clean, functional, and suitable for
+								everyday use.
 							</p>
 						</Card>
 						<Card className="p-4">
 							<h3 className="font-semibold mb-2">Designer</h3>
 							<p className="text-sm text-muted-foreground">
-								Professionally crafted themes with carefully curated color palettes
-								and visual polish.
+								Professionally crafted themes with carefully curated color palettes and visual
+								polish.
 							</p>
 						</Card>
 						<Card className="p-4">
 							<h3 className="font-semibold mb-2">Accessibility</h3>
 							<p className="text-sm text-muted-foreground">
-								High contrast themes designed for users with visual impairments.
-								WCAG compliant color ratios.
+								High contrast themes designed for users with visual impairments. WCAG compliant
+								color ratios.
 							</p>
 						</Card>
 						<Card className="p-4">
 							<h3 className="font-semibold mb-2">Seasonal</h3>
 							<p className="text-sm text-muted-foreground">
-								Holiday and seasonal themes for festive occasions. Available during
-								their respective seasons.
+								Holiday and seasonal themes for festive occasions. Available during their respective
+								seasons.
 							</p>
 						</Card>
 						<Card className="p-4">
 							<h3 className="font-semibold mb-2">Community</h3>
 							<p className="text-sm text-muted-foreground">
-								Themes created by the Pluginator community. Submit your own via
-								GitHub!
+								Themes created by the Pluginator community. Submit your own via GitHub!
 							</p>
 						</Card>
 					</div>
@@ -338,9 +319,7 @@ export function ThemesPage() {
 											pluginator theme reset
 										</code>
 									</td>
-									<td className="py-3 px-4 text-muted-foreground">
-										Reset to the default theme
-									</td>
+									<td className="py-3 px-4 text-muted-foreground">Reset to the default theme</td>
 								</tr>
 							</tbody>
 						</table>
@@ -363,8 +342,8 @@ export function ThemesPage() {
 								Gradient Effects
 							</h3>
 							<p className="text-sm text-muted-foreground">
-								Smooth color transitions in headers, progress bars, and UI accents.
-								Create a more dynamic and modern look.
+								Smooth color transitions in headers, progress bars, and UI accents. Create a more
+								dynamic and modern look.
 							</p>
 						</Card>
 						<Card className="p-4 border-yellow-500/30">
@@ -373,8 +352,8 @@ export function ThemesPage() {
 								Animated Elements
 							</h3>
 							<p className="text-sm text-muted-foreground">
-								Subtle animations on spinners, progress bars, and status indicators.
-								Configurable animation speed or can be disabled.
+								Subtle animations on spinners, progress bars, and status indicators. Configurable
+								animation speed or can be disabled.
 							</p>
 						</Card>
 					</div>
@@ -387,15 +366,13 @@ export function ThemesPage() {
 						<li className="flex items-start gap-2">
 							<Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
 							<span>
-								Use <code className="text-xs bg-muted px-1 rounded">theme preview</code>{" "}
-								to try themes before committing
+								Use <code className="text-xs bg-muted px-1 rounded">theme preview</code> to try
+								themes before committing
 							</span>
 						</li>
 						<li className="flex items-start gap-2">
 							<Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
-							<span>
-								Accessibility themes are great for outdoor use or bright environments
-							</span>
+							<span>Accessibility themes are great for outdoor use or bright environments</span>
 						</li>
 						<li className="flex items-start gap-2">
 							<Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
