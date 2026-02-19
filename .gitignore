@@ -48,5 +48,8 @@ coverage/
 .claude/
 CLAUDE.md
 
+# Private
+scripts/
+
 # Planning System
 .plans/
