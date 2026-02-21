@@ -7,6 +7,8 @@ const GITHUB_RAW_BASE = "https://raw.githubusercontent.com/NindroidA/pluginator/
 // Only paths that actually exist in NindroidA/pluginator are included
 export const DOC_PATHS: Record<string, string> = {
 	"user-guide": "/docs/USER_GUIDE.md",
+	"cli-commands": "/docs/COMMANDS.md",
+	troubleshooting: "/docs/TROUBLESHOOTING.md",
 	changelog: "/docs/CHANGELOG.md",
 	security: "/docs/SECURITY.md",
 	readme: "/README.md",
