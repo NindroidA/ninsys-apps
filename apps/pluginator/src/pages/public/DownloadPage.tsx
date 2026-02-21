@@ -1,40 +1,50 @@
+import { type ReleaseAsset, useLatestRelease } from "@/hooks/useLatestRelease";
 import { Button } from "@ninsys/ui/components";
 import { FadeIn } from "@ninsys/ui/components/animations";
 import { ParallaxElement, ScrollProgress, TextReveal } from "@ninsys/ui/components/scroll";
 import { motion } from "framer-motion";
-import { Archive, Clock, Download, Zap } from "lucide-react";
+import { AlertCircle, Archive, Clock, Download, ExternalLink, Loader2, Zap } from "lucide-react";
 import type { ComponentType, SVGAttributes } from "react";
 import { FaApple, FaLinux, FaWindows } from "react-icons/fa";
 
-const downloads: {
+interface OsCard {
 	os: string;
 	icon: ComponentType<SVGAttributes<SVGElement>>;
 	description: string;
-	fileName: string;
-	primary: boolean;
-}[] = [
+	filenamePattern: RegExp;
+}
+
+const osCards: OsCard[] = [
 	{
 		os: "Windows",
 		icon: FaWindows,
 		description: "Windows 10/11 (64-bit)",
-		fileName: "pluginator-windows-x64.exe",
-		primary: false,
+		filenamePattern: /setup\.exe$/i,
 	},
 	{
 		os: "macOS",
 		icon: FaApple,
-		description: "macOS 12+ (Apple Silicon & Intel)",
-		fileName: "pluginator-macos-universal.tar.gz",
-		primary: false,
+		description: "macOS 12+ (Apple Silicon)",
+		filenamePattern: /darwin-arm64\.pkg$/i,
 	},
 	{
 		os: "Linux",
 		icon: FaLinux,
 		description: "Linux (64-bit)",
-		fileName: "pluginator-linux-x64.tar.gz",
-		primary: false,
+		filenamePattern: /linux-x64\.tar\.gz$/i,
 	},
 ];
+
+function formatFileSize(bytes: number): string {
+	if (bytes < 1024 * 1024) {
+		return `${(bytes / 1024).toFixed(0)} KB`;
+	}
+	return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function matchAsset(assets: ReleaseAsset[], pattern: RegExp): ReleaseAsset | undefined {
+	return assets.find((a) => pattern.test(a.name));
+}
 
 const features = [
 	{ icon: Zap, title: "Lightning Fast", description: "Built with TypeScript and powered by Bun" },
@@ -43,6 +53,8 @@ const features = [
 ];
 
 export function DownloadPage() {
+	const { data: release, isLoading, error } = useLatestRelease();
+
 	return (
 		<div className="min-h-screen py-20 relative overflow-hidden">
 			{/* Parallax Background Orbs */}
@@ -112,59 +124,109 @@ export function DownloadPage() {
 							Get the CLI tool for your operating system. Manage all your Minecraft plugins with
 							ease.
 						</p>
+						{release && (
+							<p className="text-sm text-muted-foreground mt-2">
+								Latest release:{" "}
+								<span className="font-semibold text-foreground">v{release.version}</span>
+							</p>
+						)}
 					</FadeIn>
 				</div>
 
+				{/* Loading State */}
+				{isLoading && (
+					<div className="flex justify-center items-center py-16">
+						<Loader2 className="h-8 w-8 animate-spin text-primary" />
+					</div>
+				)}
+
+				{/* Error State */}
+				{error && !isLoading && (
+					<FadeIn>
+						<div className="max-w-md mx-auto mb-16 rounded-xl border border-destructive/30 bg-destructive/5 p-6 text-center">
+							<AlertCircle className="h-8 w-8 text-destructive mx-auto mb-3" />
+							<p className="text-sm text-muted-foreground mb-4">
+								Could not load release information. You can download directly from GitHub.
+							</p>
+							<a
+								href="https://github.com/NindroidA/pluginator/releases/latest"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<Button variant="outline" size="sm">
+									<ExternalLink className="mr-2 h-4 w-4" />
+									View on GitHub
+								</Button>
+							</a>
+						</div>
+					</FadeIn>
+				)}
+
 				{/* Download Cards with Staggered Scroll Animation */}
-				<ScrollProgress start="top 90%" end="top 50%">
-					{({ progress }) => (
-						<div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-16">
-							{downloads.map((dl, index) => {
-								const cardProgress = Math.max(0, Math.min(1, (progress - index * 0.12) * 2.5));
-								return (
-									<motion.div
-										key={dl.os}
-										style={{
-											opacity: 0.2 + cardProgress * 0.8,
-											transform: `translateY(${(1 - cardProgress) * 60}px) rotateX(${(1 - cardProgress) * 10}deg)`,
-										}}
-									>
-										<div
-											className={`rounded-2xl border-2 ${
-												dl.primary ? "border-primary" : "border-border"
-											} bg-card p-8 text-center hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 h-full flex flex-col`}
+				{!isLoading && (
+					<ScrollProgress start="top 90%" end="top 50%">
+						{({ progress }) => (
+							<div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-16">
+								{osCards.map((card, index) => {
+									const asset = release
+										? matchAsset(release.assets, card.filenamePattern)
+										: undefined;
+									const cardProgress = Math.max(0, Math.min(1, (progress - index * 0.12) * 2.5));
+									return (
+										<motion.div
+											key={card.os}
 											style={{
-												transform: dl.primary ? `scale(${1 + cardProgress * 0.03})` : undefined,
+												opacity: 0.2 + cardProgress * 0.8,
+												transform: `translateY(${(1 - cardProgress) * 60}px) rotateX(${(1 - cardProgress) * 10}deg)`,
 											}}
 										>
-											<motion.div
-												className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-4 mx-auto"
-												style={{
-													transform: `rotate(${(1 - cardProgress) * -10}deg)`,
-												}}
-											>
-												<dl.icon
-													className="text-primary"
-													style={{ width: "2rem", height: "2rem" }}
-												/>
-											</motion.div>
-											<h2 className="text-xl font-bold mb-2">{dl.os}</h2>
-											<p className="text-sm text-muted-foreground mb-6 flex-1">{dl.description}</p>
-											<Button
-												variant="outline"
-												className="w-full opacity-50 cursor-not-allowed mt-auto"
-												disabled
-											>
-												<Download className="mr-2 h-4 w-4" />
-												Coming Soon
-											</Button>
-										</div>
-									</motion.div>
-								);
-							})}
-						</div>
-					)}
-				</ScrollProgress>
+											<div className="rounded-2xl border-2 border-border bg-card p-8 text-center hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 h-full flex flex-col">
+												<motion.div
+													className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-4 mx-auto"
+													style={{
+														transform: `rotate(${(1 - cardProgress) * -10}deg)`,
+													}}
+												>
+													<card.icon
+														className="text-primary"
+														style={{ width: "2rem", height: "2rem" }}
+													/>
+												</motion.div>
+												<h2 className="text-xl font-bold mb-2">{card.os}</h2>
+												<p className="text-sm text-muted-foreground mb-1 flex-1">
+													{card.description}
+												</p>
+												{asset && (
+													<p className="text-xs text-muted-foreground mb-4">
+														{formatFileSize(asset.size)}
+													</p>
+												)}
+												{!asset && <div className="mb-4" />}
+												{asset ? (
+													<a href={asset.browserDownloadUrl} download>
+														<Button variant="primary" className="w-full mt-auto">
+															<Download className="mr-2 h-4 w-4" />
+															Download
+														</Button>
+													</a>
+												) : (
+													<Button
+														variant="outline"
+														className="w-full opacity-50 cursor-not-allowed mt-auto"
+														disabled
+													>
+														<Download className="mr-2 h-4 w-4" />
+														{error ? "Unavailable" : "Coming Soon"}
+													</Button>
+												)}
+											</div>
+										</motion.div>
+									);
+								})}
+							</div>
+						)}
+					</ScrollProgress>
+				)}
 
 				{/* Features Strip */}
 				<ScrollProgress start="top 85%" end="top 50%">
@@ -200,20 +262,19 @@ export function DownloadPage() {
 					)}
 				</ScrollProgress>
 
-				{/* Alternative Installation & Quick Start - Coming Soon */}
+				{/* All Downloads Link */}
 				<FadeIn delay={0.3}>
 					<div className="max-w-2xl mx-auto mt-8">
 						<div className="rounded-xl border border-border bg-card/50 p-8 text-center">
-							<p className="text-muted-foreground mb-3">
-								Installation guides coming soon. Pluginator is currently in public beta.
-							</p>
+							<p className="text-muted-foreground mb-3">Looking for other versions or platforms?</p>
 							<a
 								href="https://github.com/NindroidA/pluginator/releases"
 								target="_blank"
 								rel="noopener noreferrer"
-								className="text-sm text-primary hover:underline"
+								className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
 							>
-								View releases on GitHub
+								<ExternalLink className="h-4 w-4" />
+								View all releases on GitHub
 							</a>
 						</div>
 					</div>
