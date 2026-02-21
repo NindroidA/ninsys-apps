@@ -13,7 +13,6 @@ import { AuthCallbackPage, AuthErrorPage } from "@/pages/auth";
 import { DashboardPage } from "@/pages/dashboard";
 import {
 	CLICommandsPage,
-	ConfigPage,
 	DocsIndexPage,
 	SecurityPage,
 	TroubleshootingPage,
@@ -131,14 +130,6 @@ export default function App() {
 						element={
 							<PageTransition>
 								<CLICommandsPage />
-							</PageTransition>
-						}
-					/>
-					<Route
-						path="/docs/config"
-						element={
-							<PageTransition>
-								<ConfigPage />
 							</PageTransition>
 						}
 					/>
