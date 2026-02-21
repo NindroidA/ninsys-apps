@@ -1,16 +1,7 @@
 import { Card } from "@ninsys/ui/components";
 import { FadeIn, StaggerContainer } from "@ninsys/ui/components/animations";
 import { motion } from "framer-motion";
-import {
-	BookOpen,
-	FileCode,
-	FileText,
-	HelpCircle,
-	Palette,
-	Settings,
-	Shield,
-	Terminal,
-} from "lucide-react";
+import { BookOpen, FileCode, FileText, HelpCircle, Palette, Shield, Terminal } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const docsSections = [
@@ -19,12 +10,6 @@ const docsSections = [
 		description: "Complete reference for all Pluginator command-line commands",
 		href: "/docs/cli",
 		icon: Terminal,
-	},
-	{
-		title: "Configuration",
-		description: "Learn how to configure Pluginator for your server setup",
-		href: "/docs/config",
-		icon: Settings,
 	},
 	{
 		title: "User Files",

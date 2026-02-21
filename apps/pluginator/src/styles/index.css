@@ -243,3 +243,64 @@
 		transform: translateY(-10px);
 	}
 }
+
+/* ============================================
+   Highlight.js Theme for Markdown Code Blocks
+   Scoped to .markdown-content
+   ============================================ */
+.markdown-content .hljs {
+	color: oklch(0.85 0.02 280);
+}
+
+.markdown-content .hljs-keyword,
+.markdown-content .hljs-selector-tag,
+.markdown-content .hljs-built_in,
+.markdown-content .hljs-name,
+.markdown-content .hljs-tag {
+	color: oklch(0.72 0.2 300);
+}
+
+.markdown-content .hljs-string,
+.markdown-content .hljs-title,
+.markdown-content .hljs-section,
+.markdown-content .hljs-attribute,
+.markdown-content .hljs-literal,
+.markdown-content .hljs-template-tag,
+.markdown-content .hljs-template-variable,
+.markdown-content .hljs-type,
+.markdown-content .hljs-addition {
+	color: oklch(0.78 0.15 160);
+}
+
+.markdown-content .hljs-number,
+.markdown-content .hljs-symbol,
+.markdown-content .hljs-bullet,
+.markdown-content .hljs-link,
+.markdown-content .hljs-meta,
+.markdown-content .hljs-selector-id,
+.markdown-content .hljs-title.function_ {
+	color: oklch(0.78 0.17 60);
+}
+
+.markdown-content .hljs-comment,
+.markdown-content .hljs-formula {
+	color: oklch(0.5 0.02 280);
+	font-style: italic;
+}
+
+.markdown-content .hljs-variable,
+.markdown-content .hljs-template-variable {
+	color: oklch(0.75 0.15 250);
+}
+
+.markdown-content .hljs-deletion {
+	color: oklch(0.65 0.2 25);
+}
+
+.markdown-content .hljs-emphasis {
+	font-style: italic;
+}
+
+.markdown-content .hljs-strong {
+	font-weight: 700;
+}

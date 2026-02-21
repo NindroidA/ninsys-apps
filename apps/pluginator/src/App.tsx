@@ -37,7 +37,6 @@ const DashboardPage = lazy(() =>
 const CLICommandsPage = lazy(() =>
 	import("@/pages/docs").then((m) => ({ default: m.CLICommandsPage })),
 );
-const ConfigPage = lazy(() => import("@/pages/docs").then((m) => ({ default: m.ConfigPage })));
 const DocsIndexPage = lazy(() =>
 	import("@/pages/docs").then((m) => ({ default: m.DocsIndexPage })),
 );
@@ -76,16 +75,24 @@ const ThemeGalleryPage = lazy(() =>
 	import("@/pages/marketplace").then((m) => ({ default: m.ThemeGalleryPage })),
 );
 const CheckoutPage = lazy(() =>
-	import("@/pages/payment/CheckoutPage").then((m) => ({ default: m.CheckoutPage })),
+	import("@/pages/payment/CheckoutPage").then((m) => ({
+		default: m.CheckoutPage,
+	})),
 );
 const PaymentCancelPage = lazy(() =>
-	import("@/pages/payment/PaymentCancelPage").then((m) => ({ default: m.PaymentCancelPage })),
+	import("@/pages/payment/PaymentCancelPage").then((m) => ({
+		default: m.PaymentCancelPage,
+	})),
 );
 const PaymentSuccessPage = lazy(() =>
-	import("@/pages/payment/PaymentSuccessPage").then((m) => ({ default: m.PaymentSuccessPage })),
+	import("@/pages/payment/PaymentSuccessPage").then((m) => ({
+		default: m.PaymentSuccessPage,
+	})),
 );
 const ChangelogPage = lazy(() =>
-	import("@/pages/public/ChangelogPage").then((m) => ({ default: m.ChangelogPage })),
+	import("@/pages/public/ChangelogPage").then((m) => ({
+		default: m.ChangelogPage,
+	})),
 );
 const ContactPage = lazy(() =>
 	import("@/pages/public/ContactPage").then((m) => ({ default: m.ContactPage })),
@@ -289,14 +296,6 @@ export default function App() {
 							element={
 								<PageTransition>
 									<CLICommandsPage />
-								</PageTransition>
-							}
-						/>
-						<Route
-							path="/docs/config"
-							element={
-								<PageTransition>
-									<ConfigPage />
 								</PageTransition>
 							}
 						/>

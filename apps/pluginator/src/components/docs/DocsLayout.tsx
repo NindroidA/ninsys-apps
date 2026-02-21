@@ -17,7 +17,6 @@ interface DocsLayoutProps {
 
 const docsNavigation = [
 	{ name: "CLI Commands", href: "/docs/cli" },
-	{ name: "Configuration", href: "/docs/config" },
 	{ name: "User Files", href: "/docs/user-files" },
 	{ name: "Themes", href: "/docs/themes" },
 	{ name: "User Guide", href: "/docs/user-guide" },
@@ -141,7 +140,11 @@ export function DocsLayout({
 							<div className="flex items-center justify-center py-20">
 								<motion.div
 									animate={{ rotate: 360 }}
-									transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+									transition={{
+										duration: 1,
+										repeat: Number.POSITIVE_INFINITY,
+										ease: "linear",
+									}}
 								>
 									<RefreshCw className="h-8 w-8 text-primary" />
 								</motion.div>
