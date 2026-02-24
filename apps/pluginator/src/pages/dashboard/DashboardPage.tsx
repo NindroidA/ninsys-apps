@@ -8,7 +8,6 @@ import { ParallaxElement, ScrollProgress } from "@ninsys/ui/components/scroll";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
 import {
-  Activity,
   AlertTriangle,
   CloudUpload,
   Download,
@@ -340,53 +339,6 @@ export function DashboardPage() {
             </motion.div>
           ))}
         </div>
-
-        {/* Quick Actions */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-        >
-          <div className="rounded-xl border border-border bg-card p-6 mb-8">
-            <div className="flex items-center gap-2 mb-4">
-              <Activity className="h-5 w-5 text-primary" />
-              <h2 className="text-lg font-semibold">Quick Actions</h2>
-            </div>
-            <div className="flex flex-wrap gap-4">
-              {[
-                {
-                  icon: RefreshCw,
-                  label: "Check All Updates",
-                  variant: "primary" as const,
-                },
-                {
-                  icon: HardDrive,
-                  label: "Create Backup",
-                  variant: "outline" as const,
-                },
-                {
-                  icon: Server,
-                  label: "Add Server",
-                  variant: "outline" as const,
-                },
-              ].map((action, index) => (
-                <motion.div
-                  key={action.label}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.4, delay: 0.6 + index * 0.1 }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Button variant={action.variant}>
-                    <action.icon className="mr-2 h-4 w-4" />
-                    {action.label}
-                  </Button>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
 
         {/* Getting Started Section */}
         <ScrollProgress start="top 90%" end="top 50%">
