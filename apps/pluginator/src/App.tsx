@@ -5,7 +5,7 @@
  * Non-critical routes are lazy-loaded for smaller initial bundle.
  */
 
-import { ProtectedRoute } from "@/components/auth";
+import { AdminRoute, ProtectedRoute } from "@/components/auth";
 import { Layout } from "@/components/layout";
 import { PageTransition } from "@ninsys/ui/components/animations";
 import { AnimatePresence } from "framer-motion";
@@ -96,6 +96,29 @@ const ChangelogPage = lazy(() =>
 );
 const ContactPage = lazy(() =>
 	import("@/pages/public/ContactPage").then((m) => ({ default: m.ContactPage })),
+);
+
+// Admin pages (lazy-loaded)
+const AdminLayout = lazy(() =>
+	import("@/components/admin/AdminLayout").then((m) => ({ default: m.AdminLayout })),
+);
+const AdminDashboardPage = lazy(() =>
+	import("@/pages/admin").then((m) => ({ default: m.AdminDashboardPage })),
+);
+const AdminUsersPage = lazy(() =>
+	import("@/pages/admin").then((m) => ({ default: m.AdminUsersPage })),
+);
+const AdminUserDetailPage = lazy(() =>
+	import("@/pages/admin").then((m) => ({ default: m.AdminUserDetailPage })),
+);
+const AdminSessionsPage = lazy(() =>
+	import("@/pages/admin").then((m) => ({ default: m.AdminSessionsPage })),
+);
+const AdminTierHistoryPage = lazy(() =>
+	import("@/pages/admin").then((m) => ({ default: m.AdminTierHistoryPage })),
+);
+const AdminAuditLogPage = lazy(() =>
+	import("@/pages/admin").then((m) => ({ default: m.AdminAuditLogPage })),
 );
 
 function LoadingFallback() {
@@ -379,6 +402,23 @@ export default function App() {
 								</ProtectedRoute>
 							}
 						/>
+
+						{/* Admin Routes */}
+						<Route
+							path="/admin"
+							element={
+								<AdminRoute>
+									<AdminLayout />
+								</AdminRoute>
+							}
+						>
+							<Route index element={<AdminDashboardPage />} />
+							<Route path="users" element={<AdminUsersPage />} />
+							<Route path="users/:id" element={<AdminUserDetailPage />} />
+							<Route path="sessions" element={<AdminSessionsPage />} />
+							<Route path="tier-history" element={<AdminTierHistoryPage />} />
+							<Route path="audit-log" element={<AdminAuditLogPage />} />
+						</Route>
 
 						{/* 404 */}
 						<Route

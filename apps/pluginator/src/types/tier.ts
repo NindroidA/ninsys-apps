@@ -37,6 +37,8 @@ export interface SubscriptionInfo {
   cancelAtPeriodEnd: boolean;
   currentPeriodEnd: string | null;
   priceFormatted: string | null;
+  tierExpiresAt: string | null;
+  downgradeToTier: Tier | null;
 }
 
 export interface LimitCheckResult {

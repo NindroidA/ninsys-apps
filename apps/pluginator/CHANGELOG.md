@@ -16,6 +16,70 @@ All notable changes to Pluginator Web will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-02-24
+
+### Added
+
+- **Super Admin Dashboard**: Full admin panel with role-based access control (`/admin`)
+  - **Overview Page**: Platform stats (total users, active sessions, revenue), recent tier changes, and audit log
+  - **Users Page**: Searchable user list with pagination, click-through to user detail
+  - **User Detail Page**: Full user profile with admin actions (change tier, change role, deactivate, revoke sessions)
+  - **Sessions Page**: All active sessions across the platform
+  - **Tier History Page**: Tier change history with user filtering and pagination
+  - **Audit Log Page**: Read-only audit trail with pagination
+  - **AdminRoute**: Role-based route guard for admin/super_admin roles
+  - **AdminLayout**: Sidebar navigation with mobile bottom tabs
+  - **TwoFAVerifyDialog**: Reusable 2FA verification for sensitive admin actions
+- **Two-Factor Authentication (TOTP)**: Full 2FA lifecycle
+  - **Account Setup**: 3-step flow (QR code, verify code, recovery codes) via TwoFactorSetupDialog
+  - **Account Disable**: TOTP code verification to disable 2FA
+  - **Login Challenge**: 6-digit code input with auto-advance, auto-submit, paste support, and recovery code fallback
+  - **TwoFactorSection**: Account page section showing 2FA status with enable/disable
+- **API Token Management (PATs)**: Personal Access Token CRUD
+  - **TokensSection**: List tokens with name, prefix, created/last used dates
+  - **TokenCreateDialog**: Create tokens with copy-once plaintext display and safety warning
+  - Max 2 tokens enforced in UI
+- **Session Management**: Active session visibility and control
+  - **SessionsSection**: List sessions with device name, auth method, last activity
+  - Revoke non-current sessions with tier-based session limits display
+- **User Profile Enhancements**:
+  - Avatar display (image or initials fallback) on Account page
+  - Bio field with 160 character limit
+  - Role badge display (developer, admin, super_admin) on Account page header
+- **Subscription Expiry Banner**: Dashboard warnings for expiring/expired subscriptions
+  - Warning banner when subscription is set to cancel with end date
+  - Info banner after downgrade with link to resubscribe
+- **Admin Link in Header**: Shield icon link to admin panel in desktop dropdown and mobile menu (admin/super_admin only)
+
+### New Hooks
+
+- `useTokens()`, `useCreateToken()`, `useDeleteToken()` — PAT management
+- `useSessions()`, `useRevokeSession()` — Session management
+- `useSetup2FA()`, `useConfirm2FA()`, `useDisable2FA()` — 2FA lifecycle
+- `useAdminUsers()`, `useAdminUserDetail()`, `useAdminOverview()` — Admin data
+- `useAdminChangeTier()`, `useAdminChangeRole()`, `useAdminDeactivateUser()`, `useAdminRevokeSessions()` — Admin actions
+- `useAdminSessions()`, `useAdminTierHistory()`, `useAdminAuditLog()` — Admin views
+
+### New Routes
+
+| Path | Page | Auth | Role |
+|------|------|------|------|
+| `/admin` | AdminDashboardPage | Yes | admin/super_admin |
+| `/admin/users` | AdminUsersPage | Yes | admin/super_admin |
+| `/admin/users/:id` | AdminUserDetailPage | Yes | admin/super_admin |
+| `/admin/sessions` | AdminSessionsPage | Yes | admin/super_admin |
+| `/admin/tier-history` | AdminTierHistoryPage | Yes | admin/super_admin |
+| `/admin/audit-log` | AdminAuditLogPage | Yes | admin/super_admin |
+
+### Changed
+
+- **Auth Library**: Extended `User` type with `bio`, `totpEnabled`, `role` fields; `login()` now returns `LoginResult` supporting 2FA challenge flow
+- **Account Page**: Added 3 new sections (Tokens, Sessions, 2FA) between Connections and Usage; enhanced Profile section with avatar and bio
+- **Dashboard Page**: Added subscription expiry/downgrade banners with tier display names
+- **Header**: Added admin link for admin/super_admin users
+- **SubscriptionInfo Type**: Added `tierExpiresAt` and `downgradeToTier` fields
+- **useUpdateProfile**: Now accepts `avatarUrl` and `bio` in addition to `name`
+
 ## [0.9.0] - 2026-02-13
 
 ### Added
