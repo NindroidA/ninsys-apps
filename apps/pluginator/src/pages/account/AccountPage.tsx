@@ -570,9 +570,7 @@ function ConnectionsSection() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() =>
-                  loginWithGoogle(`${window.location.origin}/account`)
-                }
+                onClick={() => loginWithGoogle(window.location.origin)}
               >
                 Connect
               </Button>
@@ -608,9 +606,7 @@ function ConnectionsSection() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() =>
-                  loginWithGithub(`${window.location.origin}/account`)
-                }
+                onClick={() => loginWithGithub(window.location.origin)}
               >
                 Connect
               </Button>
