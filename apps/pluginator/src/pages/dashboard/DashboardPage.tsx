@@ -2,11 +2,14 @@ import { SubscriptionBadge } from "@/components/pluginator";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useUsage } from "@/hooks/useUsage";
+import { TIER_DISPLAY } from "@/types/tier";
 import { Button } from "@ninsys/ui/components";
 import { ParallaxElement, ScrollProgress } from "@ninsys/ui/components/scroll";
+import { format } from "date-fns";
 import { motion } from "framer-motion";
 import {
   Activity,
+  AlertTriangle,
   CloudUpload,
   Download,
   Gauge,
@@ -17,6 +20,7 @@ import {
   Server,
   TrendingUp,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export function DashboardPage() {
   const { user, logout } = useAuth();
@@ -157,6 +161,50 @@ export function DashboardPage() {
             </motion.div>
           </div>
         </motion.div>
+
+        {/* Subscription Expiry Banner */}
+        {subscription?.cancelAtPeriodEnd && subscription.currentPeriodEnd && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="mb-8"
+          >
+            <div
+              className="rounded-xl border border-warning/30 bg-warning/5 p-4 flex items-start gap-3"
+              role="alert"
+            >
+              <AlertTriangle className="h-5 w-5 text-warning shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="text-sm font-medium">
+                  Your{" "}
+                  {TIER_DISPLAY[subscription.tier]?.name ?? subscription.tier}{" "}
+                  subscription ends on{" "}
+                  {format(
+                    new Date(subscription.currentPeriodEnd),
+                    "MMMM d, yyyy"
+                  )}
+                  .
+                </p>
+                {subscription.downgradeToTier && (
+                  <p className="text-sm text-muted-foreground mt-1">
+                    After that, your account will revert to{" "}
+                    {TIER_DISPLAY[subscription.downgradeToTier]?.name ??
+                      subscription.downgradeToTier}{" "}
+                    tier. Features may be limited, but your data will be
+                    preserved.
+                  </p>
+                )}
+                <Link
+                  to="/account"
+                  className="text-sm text-primary hover:underline mt-2 inline-block font-medium"
+                >
+                  Reactivate Subscription
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        )}
 
         {/* Daily Usage Quota */}
         {!usageLoading && usage && (
