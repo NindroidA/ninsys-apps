@@ -17,10 +17,11 @@ export function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const queryClient = useQueryClient();
-  const { loginAsync, isLoggingIn, loginError } = useAuth();
+  const { loginAsync, isLoggingIn } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [formError, setFormError] = useState("");
 
   // 2FA state
   const [show2FA, setShow2FA] = useState(false);
@@ -65,6 +66,7 @@ export function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError("");
     const result = await loginAsync({ email, password });
     if (result.requires2FA && result.challengeToken) {
       setChallengeToken(result.challengeToken);
@@ -74,7 +76,11 @@ export function LoginPage() {
     }
     if (result.success) {
       navigate(from, { replace: true });
+      return;
     }
+    setFormError(
+      result.error?.message || "Login failed. Please check your credentials."
+    );
   };
 
   const handleDigitChange = (index: number, value: string) => {
@@ -445,7 +451,10 @@ export function LoginPage() {
                 label="Email"
                 placeholder="you@example.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setFormError("");
+                }}
                 required
               />
             </motion.div>
@@ -459,18 +468,22 @@ export function LoginPage() {
                 label="Password"
                 placeholder="••••••••"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setFormError("");
+                }}
                 required
               />
             </motion.div>
 
-            {loginError && (
+            {formError && (
               <motion.p
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="text-sm text-error"
+                role="alert"
               >
-                {loginError.message}
+                {formError}
               </motion.p>
             )}
 
