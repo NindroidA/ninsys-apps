@@ -22,416 +22,439 @@ import { SignupPage } from "@/pages/public/SignupPage";
 
 // Lazy-loaded: everything else
 const NotFoundPage = lazy(() =>
-	import("@/pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage })),
+  import("@/pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage }))
 );
-const AccountPage = lazy(() => import("@/pages/account").then((m) => ({ default: m.AccountPage })));
+const AccountPage = lazy(() =>
+  import("@/pages/account").then((m) => ({ default: m.AccountPage }))
+);
 const AuthCallbackPage = lazy(() =>
-	import("@/pages/auth").then((m) => ({ default: m.AuthCallbackPage })),
+  import("@/pages/auth").then((m) => ({ default: m.AuthCallbackPage }))
 );
 const AuthErrorPage = lazy(() =>
-	import("@/pages/auth").then((m) => ({ default: m.AuthErrorPage })),
+  import("@/pages/auth").then((m) => ({ default: m.AuthErrorPage }))
+);
+const AuthTwoFactorPage = lazy(() =>
+  import("@/pages/auth").then((m) => ({ default: m.AuthTwoFactorPage }))
 );
 const DashboardPage = lazy(() =>
-	import("@/pages/dashboard").then((m) => ({ default: m.DashboardPage })),
+  import("@/pages/dashboard").then((m) => ({ default: m.DashboardPage }))
 );
 const CLICommandsPage = lazy(() =>
-	import("@/pages/docs").then((m) => ({ default: m.CLICommandsPage })),
+  import("@/pages/docs").then((m) => ({ default: m.CLICommandsPage }))
 );
 const DocsIndexPage = lazy(() =>
-	import("@/pages/docs").then((m) => ({ default: m.DocsIndexPage })),
+  import("@/pages/docs").then((m) => ({ default: m.DocsIndexPage }))
 );
-const SecurityPage = lazy(() => import("@/pages/docs").then((m) => ({ default: m.SecurityPage })));
-const ThemesPage = lazy(() => import("@/pages/docs").then((m) => ({ default: m.ThemesPage })));
+const SecurityPage = lazy(() =>
+  import("@/pages/docs").then((m) => ({ default: m.SecurityPage }))
+);
+const ThemesPage = lazy(() =>
+  import("@/pages/docs").then((m) => ({ default: m.ThemesPage }))
+);
 const TroubleshootingPage = lazy(() =>
-	import("@/pages/docs").then((m) => ({ default: m.TroubleshootingPage })),
+  import("@/pages/docs").then((m) => ({ default: m.TroubleshootingPage }))
 );
 const UserFilesPage = lazy(() =>
-	import("@/pages/docs").then((m) => ({ default: m.UserFilesPage })),
+  import("@/pages/docs").then((m) => ({ default: m.UserFilesPage }))
 );
 const UserGuidePage = lazy(() =>
-	import("@/pages/docs").then((m) => ({ default: m.UserGuidePage })),
+  import("@/pages/docs").then((m) => ({ default: m.UserGuidePage }))
 );
-const PrivacyPage = lazy(() => import("@/pages/legal").then((m) => ({ default: m.PrivacyPage })));
-const TermsPage = lazy(() => import("@/pages/legal").then((m) => ({ default: m.TermsPage })));
+const PrivacyPage = lazy(() =>
+  import("@/pages/legal").then((m) => ({ default: m.PrivacyPage }))
+);
+const TermsPage = lazy(() =>
+  import("@/pages/legal").then((m) => ({ default: m.TermsPage }))
+);
 const MarketplacePage = lazy(() =>
-	import("@/pages/marketplace").then((m) => ({ default: m.MarketplacePage })),
+  import("@/pages/marketplace").then((m) => ({ default: m.MarketplacePage }))
 );
 const PluginCategoryPage = lazy(() =>
-	import("@/pages/marketplace").then((m) => ({ default: m.PluginCategoryPage })),
+  import("@/pages/marketplace").then((m) => ({ default: m.PluginCategoryPage }))
 );
 const PluginDetailPage = lazy(() =>
-	import("@/pages/marketplace").then((m) => ({ default: m.PluginDetailPage })),
+  import("@/pages/marketplace").then((m) => ({ default: m.PluginDetailPage }))
 );
 const PluginListPage = lazy(() =>
-	import("@/pages/marketplace").then((m) => ({ default: m.PluginListPage })),
+  import("@/pages/marketplace").then((m) => ({ default: m.PluginListPage }))
 );
 const ThemeCategoryPage = lazy(() =>
-	import("@/pages/marketplace").then((m) => ({ default: m.ThemeCategoryPage })),
+  import("@/pages/marketplace").then((m) => ({ default: m.ThemeCategoryPage }))
 );
 const ThemeDetailPage = lazy(() =>
-	import("@/pages/marketplace").then((m) => ({ default: m.ThemeDetailPage })),
+  import("@/pages/marketplace").then((m) => ({ default: m.ThemeDetailPage }))
 );
 const ThemeGalleryPage = lazy(() =>
-	import("@/pages/marketplace").then((m) => ({ default: m.ThemeGalleryPage })),
+  import("@/pages/marketplace").then((m) => ({ default: m.ThemeGalleryPage }))
 );
 const CheckoutPage = lazy(() =>
-	import("@/pages/payment/CheckoutPage").then((m) => ({
-		default: m.CheckoutPage,
-	})),
+  import("@/pages/payment/CheckoutPage").then((m) => ({
+    default: m.CheckoutPage,
+  }))
 );
 const PaymentCancelPage = lazy(() =>
-	import("@/pages/payment/PaymentCancelPage").then((m) => ({
-		default: m.PaymentCancelPage,
-	})),
+  import("@/pages/payment/PaymentCancelPage").then((m) => ({
+    default: m.PaymentCancelPage,
+  }))
 );
 const PaymentSuccessPage = lazy(() =>
-	import("@/pages/payment/PaymentSuccessPage").then((m) => ({
-		default: m.PaymentSuccessPage,
-	})),
+  import("@/pages/payment/PaymentSuccessPage").then((m) => ({
+    default: m.PaymentSuccessPage,
+  }))
 );
 const ChangelogPage = lazy(() =>
-	import("@/pages/public/ChangelogPage").then((m) => ({
-		default: m.ChangelogPage,
-	})),
+  import("@/pages/public/ChangelogPage").then((m) => ({
+    default: m.ChangelogPage,
+  }))
 );
 const ContactPage = lazy(() =>
-	import("@/pages/public/ContactPage").then((m) => ({ default: m.ContactPage })),
+  import("@/pages/public/ContactPage").then((m) => ({ default: m.ContactPage }))
 );
 
 // Admin pages (lazy-loaded)
 const AdminLayout = lazy(() =>
-	import("@/components/admin/AdminLayout").then((m) => ({ default: m.AdminLayout })),
+  import("@/components/admin/AdminLayout").then((m) => ({
+    default: m.AdminLayout,
+  }))
 );
 const AdminDashboardPage = lazy(() =>
-	import("@/pages/admin").then((m) => ({ default: m.AdminDashboardPage })),
+  import("@/pages/admin").then((m) => ({ default: m.AdminDashboardPage }))
 );
 const AdminUsersPage = lazy(() =>
-	import("@/pages/admin").then((m) => ({ default: m.AdminUsersPage })),
+  import("@/pages/admin").then((m) => ({ default: m.AdminUsersPage }))
 );
 const AdminUserDetailPage = lazy(() =>
-	import("@/pages/admin").then((m) => ({ default: m.AdminUserDetailPage })),
+  import("@/pages/admin").then((m) => ({ default: m.AdminUserDetailPage }))
 );
 const AdminSessionsPage = lazy(() =>
-	import("@/pages/admin").then((m) => ({ default: m.AdminSessionsPage })),
+  import("@/pages/admin").then((m) => ({ default: m.AdminSessionsPage }))
 );
 const AdminTierHistoryPage = lazy(() =>
-	import("@/pages/admin").then((m) => ({ default: m.AdminTierHistoryPage })),
+  import("@/pages/admin").then((m) => ({ default: m.AdminTierHistoryPage }))
 );
 const AdminAuditLogPage = lazy(() =>
-	import("@/pages/admin").then((m) => ({ default: m.AdminAuditLogPage })),
+  import("@/pages/admin").then((m) => ({ default: m.AdminAuditLogPage }))
 );
 
 function LoadingFallback() {
-	return (
-		<div className="min-h-screen flex items-center justify-center">
-			<Loader2 className="h-8 w-8 animate-spin text-primary" />
-		</div>
-	);
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+    </div>
+  );
 }
 
 export default function App() {
-	const location = useLocation();
+  const location = useLocation();
 
-	return (
-		<Layout>
-			<Suspense fallback={<LoadingFallback />}>
-				<AnimatePresence mode="wait">
-					<Routes location={location} key={location.pathname}>
-						{/* Public Routes (eagerly loaded) */}
-						<Route
-							path="/"
-							element={
-								<PageTransition>
-									<HomePage />
-								</PageTransition>
-							}
-						/>
-						<Route
-							path="/pricing"
-							element={
-								<PageTransition>
-									<PricingPage />
-								</PageTransition>
-							}
-						/>
-						<Route
-							path="/download"
-							element={
-								<PageTransition>
-									<DownloadPage />
-								</PageTransition>
-							}
-						/>
-						<Route
-							path="/login"
-							element={
-								<PageTransition>
-									<LoginPage />
-								</PageTransition>
-							}
-						/>
-						<Route
-							path="/signup"
-							element={
-								<PageTransition>
-									<SignupPage />
-								</PageTransition>
-							}
-						/>
+  return (
+    <Layout>
+      <Suspense fallback={<LoadingFallback />}>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            {/* Public Routes (eagerly loaded) */}
+            <Route
+              path="/"
+              element={
+                <PageTransition>
+                  <HomePage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/pricing"
+              element={
+                <PageTransition>
+                  <PricingPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/download"
+              element={
+                <PageTransition>
+                  <DownloadPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <PageTransition>
+                  <LoginPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                <PageTransition>
+                  <SignupPage />
+                </PageTransition>
+              }
+            />
 
-						{/* Public Routes (lazy-loaded) */}
-						<Route
-							path="/changelog"
-							element={
-								<PageTransition>
-									<ChangelogPage />
-								</PageTransition>
-							}
-						/>
-						<Route
-							path="/contact"
-							element={
-								<PageTransition>
-									<ContactPage />
-								</PageTransition>
-							}
-						/>
+            {/* Public Routes (lazy-loaded) */}
+            <Route
+              path="/changelog"
+              element={
+                <PageTransition>
+                  <ChangelogPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/contact"
+              element={
+                <PageTransition>
+                  <ContactPage />
+                </PageTransition>
+              }
+            />
 
-						{/* Auth Routes */}
-						<Route
-							path="/auth/callback"
-							element={
-								<PageTransition>
-									<AuthCallbackPage />
-								</PageTransition>
-							}
-						/>
-						<Route
-							path="/auth/error"
-							element={
-								<PageTransition>
-									<AuthErrorPage />
-								</PageTransition>
-							}
-						/>
+            {/* Auth Routes */}
+            <Route
+              path="/auth/callback"
+              element={
+                <PageTransition>
+                  <AuthCallbackPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/auth/error"
+              element={
+                <PageTransition>
+                  <AuthErrorPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/auth/2fa"
+              element={
+                <PageTransition>
+                  <AuthTwoFactorPage />
+                </PageTransition>
+              }
+            />
 
-						{/* Payment Routes */}
-						<Route
-							path="/checkout"
-							element={
-								<ProtectedRoute>
-									<PageTransition>
-										<CheckoutPage />
-									</PageTransition>
-								</ProtectedRoute>
-							}
-						/>
-						<Route
-							path="/payment/success"
-							element={
-								<ProtectedRoute>
-									<PageTransition>
-										<PaymentSuccessPage />
-									</PageTransition>
-								</ProtectedRoute>
-							}
-						/>
-						<Route
-							path="/payment/cancel"
-							element={
-								<PageTransition>
-									<PaymentCancelPage />
-								</PageTransition>
-							}
-						/>
+            {/* Payment Routes */}
+            <Route
+              path="/checkout"
+              element={
+                <ProtectedRoute>
+                  <PageTransition>
+                    <CheckoutPage />
+                  </PageTransition>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/payment/success"
+              element={
+                <ProtectedRoute>
+                  <PageTransition>
+                    <PaymentSuccessPage />
+                  </PageTransition>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/payment/cancel"
+              element={
+                <PageTransition>
+                  <PaymentCancelPage />
+                </PageTransition>
+              }
+            />
 
-						{/* Marketplace Routes */}
-						<Route
-							path="/marketplace"
-							element={
-								<PageTransition>
-									<MarketplacePage />
-								</PageTransition>
-							}
-						/>
-						<Route
-							path="/marketplace/themes"
-							element={
-								<PageTransition>
-									<ThemeGalleryPage />
-								</PageTransition>
-							}
-						/>
-						<Route
-							path="/marketplace/themes/category/:category"
-							element={
-								<PageTransition>
-									<ThemeCategoryPage />
-								</PageTransition>
-							}
-						/>
-						<Route
-							path="/marketplace/themes/:id"
-							element={
-								<PageTransition>
-									<ThemeDetailPage />
-								</PageTransition>
-							}
-						/>
+            {/* Marketplace Routes */}
+            <Route
+              path="/marketplace"
+              element={
+                <PageTransition>
+                  <MarketplacePage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/marketplace/themes"
+              element={
+                <PageTransition>
+                  <ThemeGalleryPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/marketplace/themes/category/:category"
+              element={
+                <PageTransition>
+                  <ThemeCategoryPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/marketplace/themes/:id"
+              element={
+                <PageTransition>
+                  <ThemeDetailPage />
+                </PageTransition>
+              }
+            />
 
-						{/* Plugin Registry Routes */}
-						<Route
-							path="/plugins"
-							element={
-								<PageTransition>
-									<PluginListPage />
-								</PageTransition>
-							}
-						/>
-						<Route
-							path="/plugins/category/:category"
-							element={
-								<PageTransition>
-									<PluginCategoryPage />
-								</PageTransition>
-							}
-						/>
-						<Route
-							path="/plugins/:id"
-							element={
-								<PageTransition>
-									<PluginDetailPage />
-								</PageTransition>
-							}
-						/>
+            {/* Plugin Registry Routes */}
+            <Route
+              path="/plugins"
+              element={
+                <PageTransition>
+                  <PluginListPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/plugins/category/:category"
+              element={
+                <PageTransition>
+                  <PluginCategoryPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/plugins/:id"
+              element={
+                <PageTransition>
+                  <PluginDetailPage />
+                </PageTransition>
+              }
+            />
 
-						{/* Documentation Routes */}
-						<Route
-							path="/docs"
-							element={
-								<PageTransition>
-									<DocsIndexPage />
-								</PageTransition>
-							}
-						/>
-						<Route
-							path="/docs/cli"
-							element={
-								<PageTransition>
-									<CLICommandsPage />
-								</PageTransition>
-							}
-						/>
-						<Route
-							path="/docs/user-guide"
-							element={
-								<PageTransition>
-									<UserGuidePage />
-								</PageTransition>
-							}
-						/>
-						<Route
-							path="/docs/troubleshooting"
-							element={
-								<PageTransition>
-									<TroubleshootingPage />
-								</PageTransition>
-							}
-						/>
-						<Route
-							path="/docs/security"
-							element={
-								<PageTransition>
-									<SecurityPage />
-								</PageTransition>
-							}
-						/>
-						<Route
-							path="/docs/user-files"
-							element={
-								<PageTransition>
-									<UserFilesPage />
-								</PageTransition>
-							}
-						/>
-						<Route
-							path="/docs/themes"
-							element={
-								<PageTransition>
-									<ThemesPage />
-								</PageTransition>
-							}
-						/>
+            {/* Documentation Routes */}
+            <Route
+              path="/docs"
+              element={
+                <PageTransition>
+                  <DocsIndexPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/docs/cli"
+              element={
+                <PageTransition>
+                  <CLICommandsPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/docs/user-guide"
+              element={
+                <PageTransition>
+                  <UserGuidePage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/docs/troubleshooting"
+              element={
+                <PageTransition>
+                  <TroubleshootingPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/docs/security"
+              element={
+                <PageTransition>
+                  <SecurityPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/docs/user-files"
+              element={
+                <PageTransition>
+                  <UserFilesPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/docs/themes"
+              element={
+                <PageTransition>
+                  <ThemesPage />
+                </PageTransition>
+              }
+            />
 
-						{/* Legal Routes */}
-						<Route
-							path="/privacy"
-							element={
-								<PageTransition>
-									<PrivacyPage />
-								</PageTransition>
-							}
-						/>
-						<Route
-							path="/terms"
-							element={
-								<PageTransition>
-									<TermsPage />
-								</PageTransition>
-							}
-						/>
+            {/* Legal Routes */}
+            <Route
+              path="/privacy"
+              element={
+                <PageTransition>
+                  <PrivacyPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/terms"
+              element={
+                <PageTransition>
+                  <TermsPage />
+                </PageTransition>
+              }
+            />
 
-						{/* Protected Routes */}
-						<Route
-							path="/dashboard"
-							element={
-								<ProtectedRoute>
-									<PageTransition>
-										<DashboardPage />
-									</PageTransition>
-								</ProtectedRoute>
-							}
-						/>
-						<Route
-							path="/account"
-							element={
-								<ProtectedRoute>
-									<PageTransition>
-										<AccountPage />
-									</PageTransition>
-								</ProtectedRoute>
-							}
-						/>
+            {/* Protected Routes */}
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <PageTransition>
+                    <DashboardPage />
+                  </PageTransition>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/account"
+              element={
+                <ProtectedRoute>
+                  <PageTransition>
+                    <AccountPage />
+                  </PageTransition>
+                </ProtectedRoute>
+              }
+            />
 
-						{/* Admin Routes */}
-						<Route
-							path="/admin"
-							element={
-								<AdminRoute>
-									<AdminLayout />
-								</AdminRoute>
-							}
-						>
-							<Route index element={<AdminDashboardPage />} />
-							<Route path="users" element={<AdminUsersPage />} />
-							<Route path="users/:id" element={<AdminUserDetailPage />} />
-							<Route path="sessions" element={<AdminSessionsPage />} />
-							<Route path="tier-history" element={<AdminTierHistoryPage />} />
-							<Route path="audit-log" element={<AdminAuditLogPage />} />
-						</Route>
+            {/* Admin Routes */}
+            <Route
+              path="/admin"
+              element={
+                <AdminRoute>
+                  <AdminLayout />
+                </AdminRoute>
+              }
+            >
+              <Route index element={<AdminDashboardPage />} />
+              <Route path="users" element={<AdminUsersPage />} />
+              <Route path="users/:id" element={<AdminUserDetailPage />} />
+              <Route path="sessions" element={<AdminSessionsPage />} />
+              <Route path="tier-history" element={<AdminTierHistoryPage />} />
+              <Route path="audit-log" element={<AdminAuditLogPage />} />
+            </Route>
 
-						{/* 404 */}
-						<Route
-							path="*"
-							element={
-								<PageTransition>
-									<NotFoundPage />
-								</PageTransition>
-							}
-						/>
-					</Routes>
-				</AnimatePresence>
-			</Suspense>
-		</Layout>
-	);
+            {/* 404 */}
+            <Route
+              path="*"
+              element={
+                <PageTransition>
+                  <NotFoundPage />
+                </PageTransition>
+              }
+            />
+          </Routes>
+        </AnimatePresence>
+      </Suspense>
+    </Layout>
+  );
 }
