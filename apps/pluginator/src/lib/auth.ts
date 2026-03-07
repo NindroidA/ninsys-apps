@@ -29,14 +29,8 @@ export interface AuthError {
 
 export async function getSession(): Promise<Session | null> {
   try {
-    const token = api.getToken();
-    if (!token) return null;
-
     const res = await api.get<Session>("/v2/pluginator/auth/session");
-    if (!res.success) {
-      api.clearToken();
-      return null;
-    }
+    if (!res.success) return null;
     return res.data ?? null;
   } catch {
     return null;
@@ -81,9 +75,7 @@ export async function login(
         error: data.error || { code: "AUTH_ERROR", message: "Login failed" },
       };
     }
-    if (data.data?.token) {
-      api.setToken(data.data.token);
-    }
+    // Session cookie is set by the API via Set-Cookie header
     return { success: true, user: data.data?.user };
   } catch (err) {
     const message = err instanceof Error ? err.message : "Login failed";
@@ -117,9 +109,7 @@ export async function verify2FA(
         },
       };
     }
-    if (data.data?.token) {
-      api.setToken(data.data.token);
-    }
+    // Session cookie is set by the API via Set-Cookie header
     return { success: true, user: data.data?.user };
   } catch (err) {
     const message = err instanceof Error ? err.message : "Invalid code";
@@ -136,18 +126,15 @@ export async function register(
   name?: string
 ): Promise<{ success: boolean; error?: AuthError }> {
   try {
-    const data = await fetchJson<{
+    await fetchJson<{
       success: boolean;
-      data?: { token: string };
       error?: AuthError;
     }>("/v2/pluginator/auth/register", {
       method: "POST",
       body: JSON.stringify({ email, password, name }),
     });
 
-    if (data.data?.token) {
-      api.setToken(data.data.token);
-    }
+    // Session cookie is set by the API via Set-Cookie header
     return { success: true };
   } catch (err) {
     const message = err instanceof Error ? err.message : "Registration failed";
@@ -159,14 +146,13 @@ export async function register(
 }
 
 export async function logout(): Promise<void> {
-  // Post to server while token is still available for the auth header
   try {
     await api.post("/v2/pluginator/auth/logout");
   } catch {
     // Best-effort server-side logout
   }
-  // Clear token so user is logged out regardless of server response
-  api.clearToken();
+  // Clear CSRF token — session cookie is cleared by the API's Set-Cookie response
+  api.clearCsrfToken();
 }
 
 /**

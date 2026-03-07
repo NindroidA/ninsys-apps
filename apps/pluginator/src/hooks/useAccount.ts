@@ -3,7 +3,7 @@
  * Profile updates, password changes, OAuth connections, account deletion
  */
 
-import { api, clearAuthToken } from "@/lib/api";
+import { api } from "@/lib/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface OAuthConnections {
@@ -71,7 +71,7 @@ export function useDeleteAccount() {
       if (!res.success) {
         throw new Error(res.error || "Failed to delete account");
       }
-      clearAuthToken();
+      api.clearCsrfToken();
       return res.data;
     },
   });

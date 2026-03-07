@@ -16,6 +16,47 @@ All notable changes to Pluginator Web will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-03-06
+
+### Added
+
+- **Admin Analytics Dashboard** (`/admin/analytics`): Comprehensive stats page for super admins
+  - **Period Selector**: Toggle between Today, 7 Days, 30 Days, All Time — stored in URL params
+  - **KPI Cards**: 6 stat cards (total users, new signups, downloads, active subscriptions, revenue/MRR, 2FA adoption) with period-over-period comparison badges
+  - **Trend Charts**: User growth area chart + download volume bar chart via Recharts, with hourly/daily/monthly bucket granularity
+  - **Distribution Donuts**: Tier, auth method, and user role distribution with donut charts and legend tables
+  - **Leaderboards**: Top 10 users by downloads + top 10 by overall activity, clickable rows linking to user detail
+  - **System Health**: Active sessions overview with auth method breakdown, 2FA adoption rates (all users + admins), API token adoption
+- **User Usage Stats**: Enhanced `AdminUserDetailPage` with 30-day usage breakdown (downloads, update checks, syncs, migrations) and daily activity bar chart
+- **Analytics Nav Item**: "Analytics" with chart icon added to admin sidebar navigation
+
+### New Hooks
+
+- `useAdminKPIs()` — KPI values with period comparison
+- `useAdminTrends()` — Time-bucketed chart data
+- `useAdminDistributions()` — Tier/auth/role distribution counts
+- `useAdminLeaderboards()` — Top users by downloads and activity
+- `useAdminSystemHealth()` — Session and security metrics
+- `useAdminUserUsageStats()` — Per-user usage with daily activity
+
+### New Dependencies
+
+- `recharts` — React charting library (separate `charts` build chunk)
+
+## [1.2.1] - 2026-03-06
+
+### Added
+
+- **OAuth 2FA Challenge Page** (`/auth/2fa`): Dedicated page for handling 2FA verification during OAuth login flows
+- **Admin 2FA Setup Prompt**: AdminRoute now shows a setup prompt for admins who haven't enabled TOTP, linking to account settings
+
+### Fixed
+
+- **Login/Signup Error Display**: Errors now use local component state instead of URL parameters, preventing stale error messages
+- **Logout**: Fixed logout flow to properly clear session and redirect
+- **OAuth Return URL**: Fixed `returnUrl` parameter for OAuth connect buttons
+- **Stale Auth Cache**: Auth cache now properly cleared after OAuth token storage to prevent stale session state
+
 ## [1.2.0] - 2026-02-24
 
 ### Added

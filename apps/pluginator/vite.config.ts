@@ -26,6 +26,7 @@ export default defineConfig({
           query: ["@tanstack/react-query"],
           motion: ["framer-motion"],
           markdown: ["react-markdown", "rehype-highlight", "remark-gfm"],
+          charts: ["recharts"],
         },
       },
     },
