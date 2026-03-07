@@ -1,3 +1,4 @@
+import { getSession } from "@/lib/auth";
 import { useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { CheckCircle, Loader2 } from "lucide-react";
@@ -14,10 +15,9 @@ export function AuthCallbackPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const token = searchParams.get("token");
     const errorParam = searchParams.get("error");
 
-    // Clear sensitive data from URL immediately
+    // Clear any query params from URL immediately
     window.history.replaceState({}, "", "/auth/callback");
 
     if (errorParam) {
@@ -33,31 +33,21 @@ export function AuthCallbackPage() {
       return;
     }
 
-    if (!token) {
-      setStatus("error");
-      setError("No authentication token received");
-      setTimeout(() => navigate("/login?error=no_token"), 2000);
-      return;
-    }
-
-    // Basic JWT structure validation (header.payload.signature)
-    const parts = token.split(".");
-    if (parts.length !== 3 || parts.some((p) => p.length === 0)) {
-      setStatus("error");
-      setError("Invalid authentication token");
-      setTimeout(() => navigate("/login?error=invalid_token"), 2000);
-      return;
-    }
-
-    // Store the token and clear stale auth cache so it refetches with the new token
-    localStorage.setItem("pluginator_token", token);
-    queryClient.removeQueries({ queryKey: ["auth"] });
-
-    // Show success briefly, then redirect
-    setStatus("success");
-    setTimeout(() => {
-      navigate("/dashboard", { replace: true });
-    }, 1500);
+    // Session cookie was set by the API during the OAuth redirect.
+    // Verify the session is valid, then redirect to dashboard.
+    getSession().then((session) => {
+      if (session) {
+        queryClient.removeQueries({ queryKey: ["auth"] });
+        setStatus("success");
+        setTimeout(() => {
+          navigate("/dashboard", { replace: true });
+        }, 1500);
+      } else {
+        setStatus("error");
+        setError("Authentication session not found");
+        setTimeout(() => navigate("/login?error=no_session"), 2000);
+      }
+    });
   }, [searchParams, navigate, queryClient]);
 
   return (

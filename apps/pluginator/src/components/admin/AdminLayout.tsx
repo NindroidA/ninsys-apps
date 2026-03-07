@@ -5,6 +5,7 @@
 import { cn } from "@ninsys/ui/lib";
 import {
   ArrowLeft,
+  BarChart3,
   ClipboardList,
   History,
   LayoutDashboard,
@@ -15,6 +16,7 @@ import { NavLink, Outlet } from "react-router-dom";
 
 const sidebarItems = [
   { to: "/admin", label: "Overview", icon: LayoutDashboard, end: true },
+  { to: "/admin/analytics", label: "Analytics", icon: BarChart3 },
   { to: "/admin/users", label: "Users", icon: Users },
   { to: "/admin/sessions", label: "Sessions", icon: Monitor },
   { to: "/admin/tier-history", label: "Tier History", icon: History },

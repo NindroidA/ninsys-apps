@@ -135,6 +135,9 @@ const AdminTierHistoryPage = lazy(() =>
 const AdminAuditLogPage = lazy(() =>
   import("@/pages/admin").then((m) => ({ default: m.AdminAuditLogPage }))
 );
+const AdminAnalyticsPage = lazy(() =>
+  import("@/pages/admin").then((m) => ({ default: m.AdminAnalyticsPage }))
+);
 
 function LoadingFallback() {
   return (
@@ -436,6 +439,7 @@ export default function App() {
               }
             >
               <Route index element={<AdminDashboardPage />} />
+              <Route path="analytics" element={<AdminAnalyticsPage />} />
               <Route path="users" element={<AdminUsersPage />} />
               <Route path="users/:id" element={<AdminUserDetailPage />} />
               <Route path="sessions" element={<AdminSessionsPage />} />

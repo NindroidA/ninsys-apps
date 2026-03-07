@@ -3,6 +3,7 @@
  */
 
 import { TwoFAVerifyDialog } from "@/components/admin/TwoFAVerifyDialog";
+import { UserUsageStats } from "@/components/admin/UserUsageStats";
 import { ROLE_COLORS } from "@/lib/constants";
 import {
   useAdminChangeTier,
@@ -421,6 +422,11 @@ export function AdminUserDetailPage() {
             ))}
           </div>
         </Card>
+      </FadeIn>
+
+      {/* Usage Stats (30-day with chart) */}
+      <FadeIn delay={0.35}>
+        <UserUsageStats userId={id} />
       </FadeIn>
 
       {/* 2FA Verification Dialogs */}
