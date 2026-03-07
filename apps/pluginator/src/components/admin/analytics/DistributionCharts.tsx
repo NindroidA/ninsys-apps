@@ -33,7 +33,8 @@ interface DonutCardProps {
 }
 
 function DonutCard({ title, data, colors }: DonutCardProps) {
-	const total = data.reduce((sum, d) => sum + d.value, 0);
+	const safeData = data.filter((d) => d.name != null);
+	const total = safeData.reduce((sum, d) => sum + d.value, 0);
 
 	return (
 		<div className="rounded-xl border border-border bg-card p-6">
@@ -54,7 +55,7 @@ function DonutCard({ title, data, colors }: DonutCardProps) {
 								strokeWidth={2}
 								className="stroke-card"
 							>
-								{data.map((entry) => (
+								{safeData.map((entry) => (
 									<Cell
 										key={entry.name}
 										fill={colors[entry.name] ?? "#6b7280"}
