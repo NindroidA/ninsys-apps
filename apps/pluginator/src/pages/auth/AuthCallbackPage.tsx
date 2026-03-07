@@ -1,3 +1,4 @@
+import { setToken } from "@/lib/api";
 import { getSession } from "@/lib/auth";
 import { useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
@@ -16,9 +17,15 @@ export function AuthCallbackPage() {
 
   useEffect(() => {
     const errorParam = searchParams.get("error");
+    const tokenParam = searchParams.get("token");
 
     // Clear any query params from URL immediately
     window.history.replaceState({}, "", "/auth/callback");
+
+    // Store JWT token from OAuth redirect
+    if (tokenParam) {
+      setToken(tokenParam);
+    }
 
     if (errorParam) {
       const errorMessages: Record<string, string> = {
@@ -33,7 +40,7 @@ export function AuthCallbackPage() {
       return;
     }
 
-    // Session cookie was set by the API during the OAuth redirect.
+    // Token was stored above from the OAuth redirect query param.
     // Verify the session is valid, then redirect to dashboard.
     getSession().then((session) => {
       if (session) {
