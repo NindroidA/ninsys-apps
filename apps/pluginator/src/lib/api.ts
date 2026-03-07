@@ -3,9 +3,8 @@
  * Wraps fetch with auth headers and error handling
  *
  * Auth strategy:
- * - Session auth uses httpOnly cookies (set by the API, sent automatically via credentials: "include")
+ * - JWT token stored in localStorage, sent via Authorization: Bearer header
  * - Mutating requests include a CSRF token to prevent cross-origin attacks
- * - No tokens are stored in localStorage/sessionStorage
  */
 
 export const API_URL =
@@ -17,10 +16,20 @@ interface ApiResponse<T> {
   error?: string;
 }
 
-// --- Legacy token cleanup ---
-// Remove any tokens left in storage from previous versions
-localStorage.removeItem("pluginator_token");
-sessionStorage.removeItem("pluginator_token");
+// --- JWT token management ---
+const TOKEN_KEY = "pluginator_token";
+
+export function getToken(): string | null {
+  return localStorage.getItem(TOKEN_KEY);
+}
+
+export function setToken(token: string): void {
+  localStorage.setItem(TOKEN_KEY, token);
+}
+
+export function clearToken(): void {
+  localStorage.removeItem(TOKEN_KEY);
+}
 
 // --- CSRF token management ---
 let csrfToken: string | null = null;
@@ -57,6 +66,11 @@ function buildHeaders(): HeadersInit {
   const headers: HeadersInit = {
     "Content-Type": "application/json",
   };
+
+  const token = getToken();
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
 
   if (csrfToken) {
     headers["X-CSRF-Token"] = csrfToken;
@@ -99,7 +113,7 @@ async function handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
 export async function apiGet<T>(endpoint: string): Promise<ApiResponse<T>> {
   const response = await fetch(`${API_URL}${endpoint}`, {
     method: "GET",
-    headers: { "Content-Type": "application/json" },
+    headers: buildHeaders(),
     credentials: "include",
   });
 
@@ -142,6 +156,11 @@ export async function fetchJson<T = unknown>(
     "Content-Type": "application/json",
     ...options?.headers,
   };
+
+  const token = getToken();
+  if (token) {
+    (headers as Record<string, string>)["Authorization"] = `Bearer ${token}`;
+  }
 
   if (csrfToken && method !== "GET" && method !== "HEAD") {
     (headers as Record<string, string>)["X-CSRF-Token"] = csrfToken;
@@ -196,4 +215,7 @@ export const api = {
   fetchJson,
   ensureCsrfToken,
   clearCsrfToken,
+  getToken,
+  setToken,
+  clearToken,
 };

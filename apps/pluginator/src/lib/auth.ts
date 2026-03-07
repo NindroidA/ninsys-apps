@@ -2,7 +2,7 @@
 // Connects to NinSys-API for unified auth across nindroidsystems.com
 
 import type { Tier } from "@/types/tier";
-import { API_URL, api, fetchJson } from "./api";
+import { API_URL, api, clearToken, fetchJson, setToken } from "./api";
 
 export interface User {
   id: string;
@@ -75,7 +75,9 @@ export async function login(
         error: data.error || { code: "AUTH_ERROR", message: "Login failed" },
       };
     }
-    // Session cookie is set by the API via Set-Cookie header
+    if (data.data?.token) {
+      setToken(data.data.token);
+    }
     return { success: true, user: data.data?.user };
   } catch (err) {
     const message = err instanceof Error ? err.message : "Login failed";
@@ -109,7 +111,9 @@ export async function verify2FA(
         },
       };
     }
-    // Session cookie is set by the API via Set-Cookie header
+    if (data.data?.token) {
+      setToken(data.data.token);
+    }
     return { success: true, user: data.data?.user };
   } catch (err) {
     const message = err instanceof Error ? err.message : "Invalid code";
@@ -126,15 +130,18 @@ export async function register(
   name?: string
 ): Promise<{ success: boolean; error?: AuthError }> {
   try {
-    await fetchJson<{
+    const data = await fetchJson<{
       success: boolean;
+      data?: { token: string };
       error?: AuthError;
     }>("/v2/pluginator/auth/register", {
       method: "POST",
       body: JSON.stringify({ email, password, name }),
     });
 
-    // Session cookie is set by the API via Set-Cookie header
+    if (data.data?.token) {
+      setToken(data.data.token);
+    }
     return { success: true };
   } catch (err) {
     const message = err instanceof Error ? err.message : "Registration failed";
@@ -151,7 +158,7 @@ export async function logout(): Promise<void> {
   } catch {
     // Best-effort server-side logout
   }
-  // Clear CSRF token — session cookie is cleared by the API's Set-Cookie response
+  clearToken();
   api.clearCsrfToken();
 }
 

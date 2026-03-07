@@ -16,6 +16,15 @@ All notable changes to Pluginator Web will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1] - 2026-03-06
+
+### Fixed
+
+- **JWT Auth**: Store token from login/register/OAuth responses in localStorage and send `Authorization: Bearer` header on all API requests
+- **OAuth Callback**: Extract and store JWT token from OAuth redirect query params
+- **Logout/Delete Account**: Clear stored JWT token on logout and account deletion
+- **API Client**: `apiGet` now uses `buildHeaders()` for consistent auth header inclusion
+
 ## [1.3.0] - 2026-03-06
 
 ### Added
