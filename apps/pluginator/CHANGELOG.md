@@ -16,6 +16,12 @@ All notable changes to Pluginator Web will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.2] - 2026-03-06
+
+### Fixed
+
+- **Distribution Charts**: Fix crash when API returns distribution entries with null/undefined name field
+
 ## [1.3.1] - 2026-03-06
 
 ### Fixed
