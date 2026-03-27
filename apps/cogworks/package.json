@@ -1,6 +1,6 @@
 {
 	"name": "@ninsys/cogworks",
-	"version": "0.1.2",
+	"version": "1.3.0",
 	"private": true,
 	"type": "module",
 	"scripts": {
@@ -15,7 +15,8 @@
 		"@tanstack/react-query": "^5.62.0",
 		"date-fns": "^4.1.0",
 		"react": "^19.0.0",
-		"react-dom": "^19.0.0"
+		"react-dom": "^19.0.0",
+		"recharts": "^3.8.0"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",

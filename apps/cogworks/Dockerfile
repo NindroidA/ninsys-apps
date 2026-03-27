@@ -21,6 +21,10 @@ RUN bun install
 FROM oven/bun:1-alpine AS builder
 WORKDIR /app
 
+# Build args for Vite env vars
+ARG VITE_BOT_CLIENT_ID
+ENV VITE_BOT_CLIENT_ID=$VITE_BOT_CLIENT_ID
+
 # Copy dependencies from deps stage (only root node_modules)
 COPY --from=deps /app/node_modules ./node_modules
 
@@ -40,6 +44,14 @@ COPY --from=builder /app/apps/cogworks/dist /usr/share/nginx/html
 
 # Copy nginx configuration
 COPY apps/cogworks/nginx.conf /etc/nginx/conf.d/default.conf
+
+# Run as non-root user
+RUN chown -R nginx:nginx /usr/share/nginx/html && \
+    chown -R nginx:nginx /var/cache/nginx && \
+    chown -R nginx:nginx /var/log/nginx && \
+    touch /var/run/nginx.pid && chown nginx:nginx /var/run/nginx.pid
+
+USER nginx
 
 EXPOSE 80
 

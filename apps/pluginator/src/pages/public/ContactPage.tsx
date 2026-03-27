@@ -1,16 +1,9 @@
 import { Button, Card, Input } from "@ninsys/ui/components";
 import { FadeIn } from "@ninsys/ui/components/animations";
 import { motion } from "framer-motion";
-import {
-	ArrowLeft,
-	CheckCircle,
-	Github,
-	Loader2,
-	MessageCircle,
-	MessageSquare,
-	Send,
-} from "lucide-react";
+import { ArrowLeft, CheckCircle, Github, Loader2, MessageSquare, Send } from "lucide-react";
 import { useState } from "react";
+import { SiDiscord } from "react-icons/si";
 import { Link } from "react-router-dom";
 
 const DISCORD_INVITE = "https://discord.gg/nkwMUaVSYH";
@@ -235,7 +228,7 @@ export function ContactPage() {
 						<Card className="p-6">
 							<div className="flex items-start gap-4">
 								<div className="h-10 w-10 rounded-lg bg-indigo-500/10 flex items-center justify-center flex-shrink-0">
-									<MessageCircle className="h-5 w-5 text-indigo-500" />
+									<SiDiscord className="h-5 w-5 text-indigo-500" />
 								</div>
 								<div>
 									<h3 className="font-semibold mb-1">Discord Community</h3>

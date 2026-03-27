@@ -96,12 +96,16 @@ jobs:
 
       - name: Build and push
         uses: docker/build-push-action@v5
+        env:
+          BOT_CLIENT_ID: ${{ vars.VITE_BOT_CLIENT_ID }}
         with:
           context: .
           file: apps/cogworks/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            VITE_BOT_CLIENT_ID=${{ vars.VITE_BOT_CLIENT_ID }}
           cache-from: type=gha,scope=cogworks
           cache-to: type=gha,scope=cogworks,mode=max
 

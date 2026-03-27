@@ -19,11 +19,15 @@ export function FeatureCard({ title, description, icon: Icon, href, className }:
 			</div>
 			<h3 className="mb-2 text-xl font-semibold">{title}</h3>
 			<p className="text-muted-foreground">{description}</p>
-			{href && (
+			{href ? (
 				<div className="mt-4 flex items-center gap-1 text-sm font-medium text-primary">
 					Learn more
 					<ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
 				</div>
+			) : (
+				<p className="mt-4 text-xs font-medium text-muted-foreground/60 uppercase tracking-wider">
+					Coming soon
+				</p>
 			)}
 		</>
 	);

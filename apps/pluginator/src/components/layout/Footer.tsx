@@ -1,5 +1,6 @@
 import { ScrollLink } from "@ninsys/ui/components/navigation";
-import { Bug, Coffee, Github, MessageCircle } from "lucide-react";
+import { Bug, Coffee, Github } from "lucide-react";
+import { SiDiscord } from "react-icons/si";
 import { version } from "../../../package.json";
 
 const GITHUB_REPO = "https://github.com/NindroidA/pluginator";
@@ -74,7 +75,7 @@ export function Footer() {
 								className="text-muted-foreground hover:text-foreground transition-colors"
 								aria-label="Discord"
 							>
-								<MessageCircle className="h-5 w-5" />
+								<SiDiscord className="h-5 w-5" />
 							</a>
 							<a
 								href={BUY_ME_A_COFFEE_URL}

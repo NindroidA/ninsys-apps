@@ -41,7 +41,15 @@
 			},
 			"a11y": {
 				"useKeyWithClickEvents": "warn",
-				"useButtonType": "warn"
+				"useButtonType": "warn",
+			"noLabelWithoutControl": {
+				"level": "warn",
+				"options": {
+					"inputComponents": ["Input"]
+				}
+			},
+			"useSemanticElements": "warn",
+			"noAutofocus": "warn"
 			}
 		}
 	},
