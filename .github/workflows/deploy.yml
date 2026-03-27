@@ -99,6 +99,8 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker
 
       - name: Extract metadata
         id: meta
@@ -121,8 +123,6 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             VITE_BOT_CLIENT_ID=${{ vars.VITE_BOT_CLIENT_ID }}
-          cache-from: type=gha,scope=cogworks
-          cache-to: type=gha,scope=cogworks,mode=max
 
   # ============================================
   # Build Pluginator
@@ -149,6 +149,8 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker
 
       - name: Extract metadata
         id: meta
@@ -167,8 +169,6 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=pluginator
-          cache-to: type=gha,scope=pluginator,mode=max
 
   # ============================================
   # Deploy to Homelab
