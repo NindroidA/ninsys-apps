@@ -130,8 +130,8 @@ export function StatusPage() {
             }}
           >
             <StatCard
-              label="Tickets Created"
-              value={stats?.ticketsCreated?.toLocaleString() ?? "—"}
+              label="Channels"
+              value={stats?.channelCount?.toLocaleString() ?? "—"}
               icon={Ticket}
             />
           </motion.div>
@@ -142,8 +142,8 @@ export function StatusPage() {
             }}
           >
             <StatCard
-              label="Commands Run"
-              value={stats?.commandsRun?.toLocaleString() ?? "—"}
+              label="Memory"
+              value={stats?.memoryMB ? `${stats.memoryMB} MB` : "—"}
               icon={Activity}
             />
           </motion.div>

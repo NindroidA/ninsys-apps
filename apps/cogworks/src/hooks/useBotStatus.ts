@@ -1,34 +1,70 @@
 import { apiGet } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 
-interface BotStatus {
-	status: "online" | "idle" | "dnd" | "offline" | null;
+interface BotStatusResponse {
+	online: boolean;
+	ready: boolean;
+	guilds: number;
+	users: number;
+	uptime: number;
+	memoryUsageMB: number;
+	version: string;
+	lastUpdate: string;
+	healthStatus: {
+		ready: boolean;
+		alive: boolean;
+		lastCheck: string;
+	};
+}
+
+interface BotStatsResponse {
+	guilds: number;
+	users: number;
+	channels: number;
+	uptime: number;
+	ping: number;
+	version: string;
+	memoryUsage: {
+		rss: number;
+		heapTotal: number;
+		heapUsed: number;
+		external: number;
+		arrayBuffers: number;
+	};
+}
+
+export interface BotStatus {
+	status: "online" | "offline" | null;
 	latency: number | null;
 	uptime: number | null;
 	lastRestart: string | null;
+	version: string | null;
 }
 
-interface BotStats {
+export interface BotStats {
 	serverCount: number;
 	userCount: number;
-	ticketsCreated: number;
-	ticketsClosed: number;
-	commandsRun: number;
+	channelCount: number;
+	uptime: number;
+	memoryMB: number;
+	version: string;
 }
 
 export function usePublicBotStatus() {
 	return useQuery<BotStatus>({
 		queryKey: ["cogworks", "status"],
 		queryFn: async () => {
-			const result = await apiGet<BotStatus>("/status");
+			const result = await apiGet<BotStatusResponse>("/status");
 			if (!result.success || !result.data) {
-				return { status: null, latency: null, uptime: null, lastRestart: null };
+				return { status: null, latency: null, uptime: null, lastRestart: null, version: null };
 			}
+			const d = result.data;
 			return {
-				status: result.data.status ?? null,
-				latency: result.data.latency ?? null,
-				uptime: result.data.uptime ?? null,
-				lastRestart: result.data.lastRestart ?? null,
+				status: d.online ? "online" : "offline",
+				latency: null,
+				uptime: d.uptime ?? null,
+				lastRestart: d.lastUpdate ?? null,
+				version: d.version ?? null,
 			};
 		},
 		refetchInterval: 30000,
@@ -41,11 +77,19 @@ export function useBotStats() {
 	return useQuery<BotStats>({
 		queryKey: ["cogworks", "stats"],
 		queryFn: async () => {
-			const result = await apiGet<BotStats>("/stats");
+			const result = await apiGet<BotStatsResponse>("/stats");
 			if (!result.success || !result.data) {
-				throw new Error("Failed to fetch bot stats");
+				return { serverCount: 0, userCount: 0, channelCount: 0, uptime: 0, memoryMB: 0, version: "" };
 			}
-			return result.data;
+			const d = result.data;
+			return {
+				serverCount: d.guilds ?? 0,
+				userCount: d.users ?? 0,
+				channelCount: d.channels ?? 0,
+				uptime: d.uptime ?? 0,
+				memoryMB: d.memoryUsage ? Math.round(d.memoryUsage.rss / 1024 / 1024) : 0,
+				version: d.version ?? "",
+			};
 		},
 		refetchInterval: 60000,
 		staleTime: 30000,
