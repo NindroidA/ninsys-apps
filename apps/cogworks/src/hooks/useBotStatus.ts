@@ -78,7 +78,14 @@ export function useBotStats() {
 		queryFn: async () => {
 			const res = await fetch("/v2/cogworks/stats");
 			if (!res.ok) {
-				return { serverCount: 0, userCount: 0, channelCount: 0, uptime: 0, memoryMB: 0, version: "" };
+				return {
+					serverCount: 0,
+					userCount: 0,
+					channelCount: 0,
+					uptime: 0,
+					memoryMB: 0,
+					version: "",
+				};
 			}
 			const d: BotStatsResponse = await res.json();
 			return {
