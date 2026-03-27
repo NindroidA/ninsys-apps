@@ -18,7 +18,9 @@
 name: Build and Deploy to Homelab
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
     branches: [main]
   workflow_dispatch:
     inputs:
@@ -37,10 +39,23 @@ env:
 
 jobs:
   # ============================================
+  # Gate: Only deploy if CI passed (skip for manual triggers)
+  # ============================================
+  gate:
+    name: Check CI Status
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+    steps:
+      - run: echo "CI passed or manual trigger — proceeding with deploy"
+
+  # ============================================
   # Detect which apps changed
   # ============================================
   changes:
     name: Detect Changes
+    needs: [gate]
     runs-on: ubuntu-latest
     outputs:
       cogworks: ${{ steps.filter.outputs.cogworks }}
