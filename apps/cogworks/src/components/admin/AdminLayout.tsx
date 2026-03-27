@@ -4,6 +4,7 @@ import {
   BarChart3,
   ChevronLeft,
   LayoutDashboard,
+  Radio,
   Server,
   Settings,
 } from "lucide-react";
@@ -22,6 +23,7 @@ const ADMIN_NAV: NavItem[] = [
   { to: "servers", label: "Servers", icon: Server },
   { to: "analytics", label: "Analytics", icon: BarChart3 },
   { to: "health", label: "System Health", icon: Activity },
+  { to: "bot-status", label: "Bot Status", icon: Radio },
   { to: "tools", label: "Admin Tools", icon: Settings },
 ];
 

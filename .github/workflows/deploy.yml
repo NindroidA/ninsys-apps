@@ -19,7 +19,7 @@ name: Build and Deploy to Homelab
 
 on:
   push:
-    branches: [production]
+    branches: [main]
   workflow_dispatch:
     inputs:
       force_all:

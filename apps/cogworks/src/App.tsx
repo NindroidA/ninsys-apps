@@ -191,7 +191,6 @@ const AdminToolsPage = lazy(() =>
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { SuperAdminRoute } from "@/components/admin/SuperAdminRoute";
 import { GuildRoute } from "@/components/auth/GuildRoute";
-import { OwnerRoute } from "@/components/auth/OwnerRoute";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 
@@ -298,14 +297,6 @@ export default function App() {
               <Route path="bait-channel" element={<BaitChannelPage />} />
               <Route path="roles" element={<RolesPage />} />
               <Route path="systems" element={<SystemSettingsPage />} />
-              <Route
-                path="status"
-                element={
-                  <OwnerRoute>
-                    <DashboardStatusPage />
-                  </OwnerRoute>
-                }
-              />
               <Route path="data" element={<DataExportPage />} />
               <Route path="xp" element={<XpPage />} />
               <Route path="starboard" element={<StarboardPage />} />
@@ -338,6 +329,7 @@ export default function App() {
             <Route path="servers" element={<AdminServersPage />} />
             <Route path="analytics" element={<AdminAnalyticsPage />} />
             <Route path="health" element={<AdminHealthPage />} />
+            <Route path="bot-status" element={<DashboardStatusPage />} />
             <Route path="tools" element={<AdminToolsPage />} />
             <Route path="*" element={<Navigate to="/admin" replace />} />
           </Route>

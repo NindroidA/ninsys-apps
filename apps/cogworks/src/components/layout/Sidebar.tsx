@@ -5,7 +5,6 @@ import { getInitials } from "@/lib/utils";
 import { useSidebarStore } from "@/stores/sidebarStore";
 import { cn } from "@ninsys/ui/lib";
 import {
-  Activity,
   BarChart3,
   BookOpen,
   Brain,
@@ -72,7 +71,6 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
   { to: "bait-channel", label: "Bait Channel", icon: ShieldAlert },
   { section: "Analytics" },
   { to: "server-analytics", label: "Server Stats", icon: BarChart3 },
-  { to: "status", label: "Bot Status", icon: Activity, ownerOnly: true },
   { section: "Data" },
   { to: "data", label: "Data Export", icon: Download },
 ];
