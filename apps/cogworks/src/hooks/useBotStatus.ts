@@ -1,4 +1,3 @@
-import { apiGet } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 
 interface BotStatusResponse {
@@ -54,11 +53,11 @@ export function usePublicBotStatus() {
 	return useQuery<BotStatus>({
 		queryKey: ["cogworks", "status"],
 		queryFn: async () => {
-			const result = await apiGet<BotStatusResponse>("/status");
-			if (!result.success || !result.data) {
+			const res = await fetch("/v2/cogworks/status");
+			if (!res.ok) {
 				return { status: null, latency: null, uptime: null, lastRestart: null, version: null };
 			}
-			const d = result.data;
+			const d: BotStatusResponse = await res.json();
 			return {
 				status: d.online ? "online" : "offline",
 				latency: null,
@@ -77,18 +76,11 @@ export function useBotStats() {
 	return useQuery<BotStats>({
 		queryKey: ["cogworks", "stats"],
 		queryFn: async () => {
-			const result = await apiGet<BotStatsResponse>("/stats");
-			if (!result.success || !result.data) {
-				return {
-					serverCount: 0,
-					userCount: 0,
-					channelCount: 0,
-					uptime: 0,
-					memoryMB: 0,
-					version: "",
-				};
+			const res = await fetch("/v2/cogworks/stats");
+			if (!res.ok) {
+				return { serverCount: 0, userCount: 0, channelCount: 0, uptime: 0, memoryMB: 0, version: "" };
 			}
-			const d = result.data;
+			const d: BotStatsResponse = await res.json();
 			return {
 				serverCount: d.guilds ?? 0,
 				userCount: d.users ?? 0,
