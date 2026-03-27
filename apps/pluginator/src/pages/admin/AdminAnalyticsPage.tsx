@@ -5,10 +5,7 @@
 import { DistributionCharts } from "@/components/admin/analytics/DistributionCharts";
 import { KpiCards } from "@/components/admin/analytics/KpiCards";
 import { Leaderboards } from "@/components/admin/analytics/Leaderboards";
-import {
-	PeriodSelector,
-	usePeriod,
-} from "@/components/admin/analytics/PeriodSelector";
+import { PeriodSelector, usePeriod } from "@/components/admin/analytics/PeriodSelector";
 import { SystemHealth } from "@/components/admin/analytics/SystemHealth";
 import { TrendCharts } from "@/components/admin/analytics/TrendCharts";
 import { FadeIn } from "@ninsys/ui/components/animations";

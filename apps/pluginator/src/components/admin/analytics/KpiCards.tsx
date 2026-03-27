@@ -4,14 +4,7 @@
 
 import type { AnalyticsPeriod } from "@/hooks/useAdminAnalytics";
 import { useAdminKPIs } from "@/hooks/useAdminAnalytics";
-import {
-	CreditCard,
-	DollarSign,
-	Download,
-	ShieldCheck,
-	UserPlus,
-	Users,
-} from "lucide-react";
+import { CreditCard, DollarSign, Download, ShieldCheck, UserPlus, Users } from "lucide-react";
 import { ComparisonBadge } from "./ComparisonBadge";
 
 interface KpiCardsProps {
@@ -35,11 +28,7 @@ export function KpiCards({ period }: KpiCardsProps) {
 	}
 
 	if (error || !data) {
-		return (
-			<div className="text-center py-8 text-muted-foreground">
-				Failed to load KPIs.
-			</div>
-		);
+		return <div className="text-center py-8 text-muted-foreground">Failed to load KPIs.</div>;
 	}
 
 	const showComparison = period !== "all";
@@ -99,18 +88,13 @@ export function KpiCards({ period }: KpiCardsProps) {
 	return (
 		<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
 			{cards.map((card) => (
-				<div
-					key={card.label}
-					className="rounded-xl border border-border bg-card p-6"
-				>
+				<div key={card.label} className="rounded-xl border border-border bg-card p-6">
 					<div className="flex items-start justify-between">
 						<div>
 							<p className="text-sm text-muted-foreground">{card.label}</p>
 							<p className="text-3xl font-bold mt-1">{card.value}</p>
 							{"sublabel" in card && card.sublabel && (
-								<p className="text-xs text-muted-foreground mt-1">
-									{card.sublabel}
-								</p>
+								<p className="text-xs text-muted-foreground mt-1">{card.sublabel}</p>
 							)}
 							{card.comparison && (
 								<div className="mt-2">

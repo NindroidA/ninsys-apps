@@ -9,10 +9,7 @@ export function AdminToolsPage() {
 
 	return (
 		<FadeIn>
-			<PageHeader
-				title="Admin Tools"
-				description="Bot-wide management and admin actions"
-			/>
+			<PageHeader title="Admin Tools" description="Bot-wide management and admin actions" />
 
 			<Card className="p-8 text-center">
 				<div className="flex justify-center mb-4">
@@ -23,8 +20,8 @@ export function AdminToolsPage() {
 				</div>
 				<h3 className="text-lg font-semibold mb-2">Coming Soon</h3>
 				<p className="text-sm text-muted-foreground max-w-md mx-auto">
-					Broadcast announcements, force config refresh, global audit log, user lookup,
-					and bot-wide settings will be available here.
+					Broadcast announcements, force config refresh, global audit log, user lookup, and bot-wide
+					settings will be available here.
 				</p>
 			</Card>
 		</FadeIn>

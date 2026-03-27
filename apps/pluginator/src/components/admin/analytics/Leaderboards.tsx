@@ -2,10 +2,7 @@
  * Top 10 users by downloads and by overall activity
  */
 
-import type {
-	AnalyticsPeriod,
-	LeaderboardEntry,
-} from "@/hooks/useAdminAnalytics";
+import type { AnalyticsPeriod, LeaderboardEntry } from "@/hooks/useAdminAnalytics";
 import { useAdminLeaderboards } from "@/hooks/useAdminAnalytics";
 import { TIER_BADGE_CLASSES } from "@/lib/constants";
 import { cn } from "@ninsys/ui/lib";
@@ -17,20 +14,12 @@ interface LeaderboardTableProps {
 	countLabel: string;
 }
 
-function LeaderboardTable({
-	title,
-	entries,
-	countLabel,
-}: LeaderboardTableProps) {
+function LeaderboardTable({ title, entries, countLabel }: LeaderboardTableProps) {
 	return (
 		<div className="rounded-xl border border-border bg-card p-6">
-			<h3 className="text-sm font-semibold text-muted-foreground mb-4">
-				{title}
-			</h3>
+			<h3 className="text-sm font-semibold text-muted-foreground mb-4">{title}</h3>
 			{entries.length === 0 ? (
-				<p className="text-sm text-muted-foreground py-4">
-					No data for this period.
-				</p>
+				<p className="text-sm text-muted-foreground py-4">No data for this period.</p>
 			) : (
 				<div className="space-y-1">
 					{/* Header */}
@@ -46,22 +35,16 @@ function LeaderboardTable({
 							to={`/admin/users/${entry.userId}`}
 							className="grid grid-cols-[2rem_1fr_4rem_3.5rem] gap-2 px-2 py-2 rounded-lg hover:bg-muted transition-colors items-center"
 						>
-							<span className="text-sm font-medium text-muted-foreground">
-								{i + 1}
-							</span>
+							<span className="text-sm font-medium text-muted-foreground">{i + 1}</span>
 							<div className="min-w-0">
 								<div className="flex items-center gap-2">
 									<div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary shrink-0">
 										{(entry.name ?? entry.email)[0]?.toUpperCase()}
 									</div>
 									<div className="min-w-0">
-										<p className="text-sm font-medium truncate">
-											{entry.name ?? entry.email}
-										</p>
+										<p className="text-sm font-medium truncate">{entry.name ?? entry.email}</p>
 										{entry.name && (
-											<p className="text-xs text-muted-foreground truncate">
-												{entry.email}
-											</p>
+											<p className="text-xs text-muted-foreground truncate">{entry.email}</p>
 										)}
 									</div>
 								</div>
@@ -107,9 +90,7 @@ export function Leaderboards({ period }: LeaderboardsProps) {
 
 	if (error || !data) {
 		return (
-			<div className="text-center py-8 text-muted-foreground">
-				Failed to load leaderboards.
-			</div>
+			<div className="text-center py-8 text-muted-foreground">Failed to load leaderboards.</div>
 		);
 	}
 

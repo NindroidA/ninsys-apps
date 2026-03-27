@@ -31,9 +31,9 @@ export function useAdminServers(page = 1, limit = 25, search = "") {
 				limit: String(limit),
 			});
 			if (search) params.set("search", search);
-			const result = await apiGet<
-				PaginatedResponse<AdminServer> | { servers: AdminServer[] }
-			>(`/admin/servers?${params}`);
+			const result = await apiGet<PaginatedResponse<AdminServer> | { servers: AdminServer[] }>(
+				`/admin/servers?${params}`,
+			);
 			if (!result.success || !result.data) {
 				return { servers: [] as AdminServer[], pagination: null };
 			}
@@ -54,9 +54,7 @@ export function useAdminServerDetail(guildId: string | null) {
 	return useQuery({
 		queryKey: ["admin", "servers", guildId],
 		queryFn: async () => {
-			const result = await apiGet<AdminServerDetail>(
-				`/admin/servers/${guildId}`,
-			);
+			const result = await apiGet<AdminServerDetail>(`/admin/servers/${guildId}`);
 			if (!result.success || !result.data) return null;
 			return result.data;
 		},
@@ -69,9 +67,7 @@ export function useAdminAnalytics(days = 30) {
 	return useQuery({
 		queryKey: ["admin", "analytics", days],
 		queryFn: async () => {
-			const result = await apiGet<AdminAnalytics>(
-				`/admin/analytics?days=${days}`,
-			);
+			const result = await apiGet<AdminAnalytics>(`/admin/analytics?days=${days}`);
 			if (!result.success || !result.data) return null;
 			return result.data;
 		},

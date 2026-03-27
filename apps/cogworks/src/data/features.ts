@@ -147,8 +147,7 @@ export const features = [
 	{
 		id: "events",
 		title: "Scheduled Events",
-		description:
-			"Create event templates with automatic reminders and post-event summaries.",
+		description: "Create event templates with automatic reminders and post-event summaries.",
 		icon: CalendarDays,
 		highlights: [
 			"Event templates",
@@ -176,11 +175,6 @@ export const features = [
 		description:
 			"Role management with staff/admin roles, aliases, and a comprehensive audit log of all dashboard actions.",
 		icon: Shield,
-		highlights: [
-			"Staff & admin roles",
-			"Role aliases",
-			"Audit trail",
-			"Permission management",
-		],
+		highlights: ["Staff & admin roles", "Role aliases", "Audit trail", "Permission management"],
 	},
 ];

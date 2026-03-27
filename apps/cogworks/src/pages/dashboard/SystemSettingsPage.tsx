@@ -145,10 +145,7 @@ function SystemCard({
 			<div className="flex items-start gap-4">
 				{/* Icon */}
 				<div
-					className={cn(
-						"rounded-lg p-2.5 flex-shrink-0",
-						enabled ? "bg-primary/10" : "bg-muted",
-					)}
+					className={cn("rounded-lg p-2.5 flex-shrink-0", enabled ? "bg-primary/10" : "bg-muted")}
 				>
 					<Icon className={cn("h-5 w-5", enabled ? "text-primary" : "text-muted-foreground")} />
 				</div>
@@ -165,9 +162,7 @@ function SystemCard({
 						{/* Status dot */}
 						<div className="flex items-center gap-1.5">
 							<span className={cn("h-1.5 w-1.5 rounded-full", stateDotColor(state))} />
-							<span className={cn("text-[11px]", stateColor(state))}>
-								{stateLabel(state)}
-							</span>
+							<span className={cn("text-[11px]", stateColor(state))}>{stateLabel(state)}</span>
 						</div>
 					</div>
 					<p className="text-xs text-muted-foreground">{system.description}</p>
@@ -240,12 +235,10 @@ export function SystemSettingsPage() {
 					<SkeletonSystems />
 				) : !setupState ? (
 					<div className="text-center py-12 border border-dashed border-border rounded-lg">
-						<p className="text-muted-foreground">
-							System settings are not available yet.
-						</p>
+						<p className="text-muted-foreground">System settings are not available yet.</p>
 						<p className="text-xs text-muted-foreground mt-1">
-							Run <code className="font-mono bg-muted px-1 py-0.5 rounded">/setup</code> in
-							Discord to initialize your server.
+							Run <code className="font-mono bg-muted px-1 py-0.5 rounded">/setup</code> in Discord
+							to initialize your server.
 						</p>
 					</div>
 				) : (
@@ -255,20 +248,21 @@ export function SystemSettingsPage() {
 							<div className="flex items-center gap-1.5">
 								<CheckCircle2 className="h-3.5 w-3.5 text-green-500" />
 								<span className="text-muted-foreground">
-									{Object.values(setupState.systemStates).filter((s) => s === "complete").length} configured
+									{Object.values(setupState.systemStates).filter((s) => s === "complete").length}{" "}
+									configured
 								</span>
 							</div>
 							<div className="flex items-center gap-1.5">
 								<Circle className="h-3.5 w-3.5 text-yellow-500" />
 								<span className="text-muted-foreground">
-									{Object.values(setupState.systemStates).filter((s) => s === "partial").length} in progress
+									{Object.values(setupState.systemStates).filter((s) => s === "partial").length} in
+									progress
 								</span>
 							</div>
 							<div className="flex items-center gap-1.5 text-muted-foreground">
 								<span>
-									{SYSTEMS.filter((s) =>
-										isSystemEnabled(setupState.selectedSystems, s.id),
-									).length}/{SYSTEMS.length} enabled
+									{SYSTEMS.filter((s) => isSystemEnabled(setupState.selectedSystems, s.id)).length}/
+									{SYSTEMS.length} enabled
 								</span>
 							</div>
 						</div>

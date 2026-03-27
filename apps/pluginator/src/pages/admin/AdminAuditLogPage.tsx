@@ -2,8 +2,8 @@
  * Admin Audit Log page - read-only trail of admin actions
  */
 
-import { ADMIN_PAGE_SIZE } from "@/lib/constants";
 import { useAdminAuditLog } from "@/hooks/useAdmin";
+import { ADMIN_PAGE_SIZE } from "@/lib/constants";
 import { Button } from "@ninsys/ui/components";
 import { FadeIn } from "@ninsys/ui/components/animations";
 import { format } from "date-fns";
@@ -38,11 +38,21 @@ export function AdminAuditLogPage() {
 								<table className="w-full text-sm">
 									<thead>
 										<tr className="bg-muted/50">
-											<th className="text-left px-4 py-3 font-medium text-muted-foreground">Admin</th>
-											<th className="text-left px-4 py-3 font-medium text-muted-foreground">Action</th>
-											<th className="text-left px-4 py-3 font-medium text-muted-foreground">Target User</th>
-											<th className="text-left px-4 py-3 font-medium text-muted-foreground">Details</th>
-											<th className="text-left px-4 py-3 font-medium text-muted-foreground">Date</th>
+											<th className="text-left px-4 py-3 font-medium text-muted-foreground">
+												Admin
+											</th>
+											<th className="text-left px-4 py-3 font-medium text-muted-foreground">
+												Action
+											</th>
+											<th className="text-left px-4 py-3 font-medium text-muted-foreground">
+												Target User
+											</th>
+											<th className="text-left px-4 py-3 font-medium text-muted-foreground">
+												Details
+											</th>
+											<th className="text-left px-4 py-3 font-medium text-muted-foreground">
+												Date
+											</th>
 										</tr>
 									</thead>
 									<tbody>

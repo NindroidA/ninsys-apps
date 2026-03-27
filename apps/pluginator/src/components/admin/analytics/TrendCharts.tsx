@@ -33,9 +33,7 @@ function ChartTooltip({
 			{payload.map((entry: any) => (
 				<p key={entry.name} className="text-xs text-muted-foreground">
 					{entry.name}:{" "}
-					<span className="font-medium text-foreground">
-						{entry.value.toLocaleString()}
-					</span>
+					<span className="font-medium text-foreground">{entry.value.toLocaleString()}</span>
 				</p>
 			))}
 		</div>
@@ -59,11 +57,7 @@ export function TrendCharts({ period }: TrendChartsProps) {
 	}
 
 	if (error || !data) {
-		return (
-			<div className="text-center py-8 text-muted-foreground">
-				Failed to load trend data.
-			</div>
-		);
+		return <div className="text-center py-8 text-muted-foreground">Failed to load trend data.</div>;
 	}
 
 	const signupData = data.buckets.map((label, i) => ({
@@ -82,21 +76,12 @@ export function TrendCharts({ period }: TrendChartsProps) {
 		<div className="grid lg:grid-cols-2 gap-6">
 			{/* User Growth */}
 			<div className="rounded-xl border border-border bg-card p-6">
-				<h3 className="text-sm font-semibold text-muted-foreground mb-4">
-					User Growth
-				</h3>
+				<h3 className="text-sm font-semibold text-muted-foreground mb-4">User Growth</h3>
 				<ResponsiveContainer width="100%" height={240}>
 					<AreaChart data={signupData}>
 						<CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-						<XAxis
-							dataKey="label"
-							tick={{ fontSize: 11 }}
-							className="text-muted-foreground"
-						/>
-						<YAxis
-							tick={{ fontSize: 11 }}
-							className="text-muted-foreground"
-						/>
+						<XAxis dataKey="label" tick={{ fontSize: 11 }} className="text-muted-foreground" />
+						<YAxis tick={{ fontSize: 11 }} className="text-muted-foreground" />
 						<Tooltip content={<ChartTooltip />} />
 						<Area
 							type="monotone"
@@ -121,21 +106,12 @@ export function TrendCharts({ period }: TrendChartsProps) {
 
 			{/* Download Volume */}
 			<div className="rounded-xl border border-border bg-card p-6">
-				<h3 className="text-sm font-semibold text-muted-foreground mb-4">
-					Download Volume
-				</h3>
+				<h3 className="text-sm font-semibold text-muted-foreground mb-4">Download Volume</h3>
 				<ResponsiveContainer width="100%" height={240}>
 					<ComposedChart data={downloadData}>
 						<CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-						<XAxis
-							dataKey="label"
-							tick={{ fontSize: 11 }}
-							className="text-muted-foreground"
-						/>
-						<YAxis
-							tick={{ fontSize: 11 }}
-							className="text-muted-foreground"
-						/>
+						<XAxis dataKey="label" tick={{ fontSize: 11 }} className="text-muted-foreground" />
+						<YAxis tick={{ fontSize: 11 }} className="text-muted-foreground" />
 						<Tooltip content={<ChartTooltip />} />
 						<Bar
 							dataKey="downloads"

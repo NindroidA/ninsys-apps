@@ -1,22 +1,12 @@
+import { PageHeader } from "@/components/dashboard/PageHeader";
 import { ConfigSection } from "@/components/forms/ConfigSection";
 import { StatusToggle } from "@/components/forms/StatusToggle";
-import { PageHeader } from "@/components/dashboard/PageHeader";
+import { useApplicationConfig, useUpdateApplicationConfig } from "@/hooks/useApplications";
 import { useCurrentGuild } from "@/hooks/useCurrentGuild";
 import { usePageTitle } from "@/hooks/usePageTitle";
-import {
-	useApplicationConfig,
-	useUpdateApplicationConfig,
-} from "@/hooks/useApplications";
-import { FadeIn } from "@ninsys/ui/components/animations";
 import { Badge, Card } from "@ninsys/ui/components";
-import {
-	ArrowRight,
-	CheckCircle,
-	FileText,
-	Info,
-	XCircle,
-	Archive,
-} from "lucide-react";
+import { FadeIn } from "@ninsys/ui/components/animations";
+import { Archive, ArrowRight, CheckCircle, FileText, Info, XCircle } from "lucide-react";
 
 function TabFallback() {
 	return (
@@ -105,9 +95,7 @@ export function ApplicationWorkflowPage() {
 											<h3 className="font-medium">{status.label}</h3>
 											<Badge variant="secondary">{status.id}</Badge>
 										</div>
-										<p className="text-sm text-muted-foreground mt-0.5">
-											{status.description}
-										</p>
+										<p className="text-sm text-muted-foreground mt-0.5">{status.description}</p>
 									</div>
 								</div>
 								{i < WORKFLOW_STATUSES.length - 1 && (
@@ -127,8 +115,8 @@ export function ApplicationWorkflowPage() {
 						<div>
 							<h3 className="font-medium text-sm">Discord Commands</h3>
 							<p className="text-sm text-muted-foreground mt-1">
-								Staff members can manage applications directly in Discord using
-								the following commands:
+								Staff members can manage applications directly in Discord using the following
+								commands:
 							</p>
 							<ul className="text-sm text-muted-foreground mt-2 space-y-1">
 								<li>
@@ -144,9 +132,7 @@ export function ApplicationWorkflowPage() {
 									- Approve an application with optional note
 								</li>
 								<li>
-									<code className="text-xs bg-muted px-1.5 py-0.5 rounded">
-										/application deny
-									</code>{" "}
+									<code className="text-xs bg-muted px-1.5 py-0.5 rounded">/application deny</code>{" "}
 									- Deny an application with reason
 								</li>
 								<li>

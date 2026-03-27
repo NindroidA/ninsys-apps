@@ -79,7 +79,14 @@ export function useBotStats() {
 		queryFn: async () => {
 			const result = await apiGet<BotStatsResponse>("/stats");
 			if (!result.success || !result.data) {
-				return { serverCount: 0, userCount: 0, channelCount: 0, uptime: 0, memoryMB: 0, version: "" };
+				return {
+					serverCount: 0,
+					userCount: 0,
+					channelCount: 0,
+					uptime: 0,
+					memoryMB: 0,
+					version: "",
+				};
 			}
 			const d = result.data;
 			return {

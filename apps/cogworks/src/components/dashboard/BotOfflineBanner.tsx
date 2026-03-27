@@ -41,8 +41,7 @@ export function BotOfflineBanner() {
 			<div className="flex items-center gap-3 max-w-5xl mx-auto">
 				<AlertTriangle className="h-4 w-4 text-amber-500 flex-shrink-0" />
 				<p className="text-sm text-amber-200 flex-1">
-					We're having trouble connecting to Cogworks. Make sure the bot is online and
-					try again.
+					We're having trouble connecting to Cogworks. Make sure the bot is online and try again.
 				</p>
 				<button
 					type="button"

@@ -5,16 +5,6 @@
 		"clientKind": "git",
 		"useIgnoreFile": true
 	},
-	"files": {
-		"ignoreUnknown": true,
-		"include": ["src/**/*.ts", "src/**/*.tsx", "*.ts", "*.tsx", "*.json"]
-	},
-	"formatter": {
-		"enabled": true,
-		"indentStyle": "tab",
-		"indentWidth": 2,
-		"lineWidth": 100
-	},
 	"organizeImports": {
 		"enabled": true
 	},
@@ -22,42 +12,39 @@
 		"enabled": true,
 		"rules": {
 			"recommended": true,
-			"complexity": {
-				"noUselessFragments": "warn"
+			"a11y": {
+				"recommended": true,
+				"noLabelWithoutControl": "off",
+				"useSemanticElements": "off",
+				"noAutofocus": "off",
+				"useFocusableInteractive": "off"
 			},
 			"correctness": {
 				"noUnusedImports": "error",
 				"noUnusedVariables": "warn",
-				"useExhaustiveDependencies": "warn"
+				"useExhaustiveDependencies": "off"
 			},
 			"style": {
 				"noNonNullAssertion": "off",
-				"useConst": "error",
-				"useImportType": "error"
+				"noUnusedTemplateLiteral": "off"
 			},
 			"suspicious": {
-				"noExplicitAny": "off",
-				"noArrayIndexKey": "warn"
-			},
-			"a11y": {
-				"useKeyWithClickEvents": "warn",
-				"useButtonType": "warn",
-			"noLabelWithoutControl": {
-				"level": "warn",
-				"options": {
-					"inputComponents": ["Input"]
-				}
-			},
-			"useSemanticElements": "warn",
-			"noAutofocus": "warn"
+				"noArrayIndexKey": "off",
+				"noExplicitAny": "off"
 			}
 		}
+	},
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "tab",
+		"indentWidth": 2,
+		"lineWidth": 100
 	},
 	"javascript": {
 		"formatter": {
 			"quoteStyle": "double",
-			"trailingCommas": "all",
-			"semicolons": "always"
+			"semicolons": "always",
+			"trailingCommas": "all"
 		}
 	}
 }

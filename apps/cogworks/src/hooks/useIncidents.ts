@@ -21,9 +21,7 @@ export function useIncidentHistory(level?: string, page = 1) {
 		queryFn: async () => {
 			const params = new URLSearchParams({ page: String(page), limit: "20" });
 			if (level) params.set("level", level);
-			const result = await apiGet<{ incidents: Incident[] }>(
-				`/status/incidents/history?${params}`,
-			);
+			const result = await apiGet<{ incidents: Incident[] }>(`/status/incidents/history?${params}`);
 			if (!result.success || !result.data) return [];
 			return result.data.incidents ?? [];
 		},

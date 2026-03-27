@@ -153,7 +153,9 @@ export function TwoFactorSetupDialog({ open, onClose }: TwoFactorSetupDialogProp
 							<>
 								<div className="flex items-center gap-2 mb-4">
 									<Lock className="h-5 w-5 text-primary" />
-									<h3 id={titleId} className="text-lg font-semibold">Set Up Two-Factor Authentication</h3>
+									<h3 id={titleId} className="text-lg font-semibold">
+										Set Up Two-Factor Authentication
+									</h3>
 								</div>
 								{setup2FA.isPending ? (
 									<div className="flex items-center justify-center py-8">
@@ -163,14 +165,20 @@ export function TwoFactorSetupDialog({ open, onClose }: TwoFactorSetupDialogProp
 								) : setup2FA.isError ? (
 									<div className="text-sm text-red-500 mb-4" role="alert">
 										{setup2FA.error.message}
-										<Button variant="outline" size="sm" className="ml-2" onClick={() => setup2FA.mutate()}>
+										<Button
+											variant="outline"
+											size="sm"
+											className="ml-2"
+											onClick={() => setup2FA.mutate()}
+										>
 											Retry
 										</Button>
 									</div>
 								) : (
 									<>
 										<p className="text-sm text-muted-foreground mb-4">
-											Scan this QR code with your authenticator app (Google Authenticator, Authy, etc.)
+											Scan this QR code with your authenticator app (Google Authenticator, Authy,
+											etc.)
 										</p>
 										{qrUrl && (
 											<div className="flex justify-center mb-4">
@@ -200,7 +208,9 @@ export function TwoFactorSetupDialog({ open, onClose }: TwoFactorSetupDialogProp
 							<>
 								<div className="flex items-center gap-2 mb-4">
 									<Lock className="h-5 w-5 text-primary" />
-									<h3 id={titleId} className="text-lg font-semibold">Verify Setup</h3>
+									<h3 id={titleId} className="text-lg font-semibold">
+										Verify Setup
+									</h3>
 								</div>
 								<p className="text-sm text-muted-foreground mb-4">
 									Enter the 6-digit code from your authenticator app to confirm setup.
@@ -219,13 +229,22 @@ export function TwoFactorSetupDialog({ open, onClose }: TwoFactorSetupDialogProp
 									/>
 								</div>
 								{confirm2FA.isError && (
-									<p className="text-sm text-red-500 mb-4" role="alert">{confirm2FA.error.message}</p>
+									<p className="text-sm text-red-500 mb-4" role="alert">
+										{confirm2FA.error.message}
+									</p>
 								)}
 								<div className="flex gap-3 justify-end">
-									<Button variant="outline" onClick={() => setStep("qr")} disabled={confirm2FA.isPending}>
+									<Button
+										variant="outline"
+										onClick={() => setStep("qr")}
+										disabled={confirm2FA.isPending}
+									>
 										Back
 									</Button>
-									<Button onClick={handleVerify} disabled={code.length !== 6 || confirm2FA.isPending}>
+									<Button
+										onClick={handleVerify}
+										disabled={code.length !== 6 || confirm2FA.isPending}
+									>
 										{confirm2FA.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
 										Verify & Enable
 									</Button>
@@ -237,9 +256,14 @@ export function TwoFactorSetupDialog({ open, onClose }: TwoFactorSetupDialogProp
 							<>
 								<div className="flex items-center gap-2 mb-4">
 									<ShieldCheck className="h-5 w-5 text-success" />
-									<h3 id={titleId} className="text-lg font-semibold">Recovery Codes</h3>
+									<h3 id={titleId} className="text-lg font-semibold">
+										Recovery Codes
+									</h3>
 								</div>
-								<div className="p-3 rounded-lg bg-warning/10 border border-warning/30 text-sm mb-4" role="alert">
+								<div
+									className="p-3 rounded-lg bg-warning/10 border border-warning/30 text-sm mb-4"
+									role="alert"
+								>
 									<p className="font-medium text-warning">Save these recovery codes.</p>
 									<p className="text-muted-foreground mt-1">
 										They will not be shown again. Each code can only be used once.

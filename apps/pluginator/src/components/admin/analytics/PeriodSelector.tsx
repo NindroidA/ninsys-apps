@@ -19,9 +19,7 @@ const VALID_PERIODS = new Set<string>(PERIODS.map((p) => p.value));
 export function usePeriod(): [AnalyticsPeriod, (p: AnalyticsPeriod) => void] {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const raw = searchParams.get("period") ?? "30d";
-	const period: AnalyticsPeriod = VALID_PERIODS.has(raw)
-		? (raw as AnalyticsPeriod)
-		: "30d";
+	const period: AnalyticsPeriod = VALID_PERIODS.has(raw) ? (raw as AnalyticsPeriod) : "30d";
 
 	const setPeriod = (p: AnalyticsPeriod) => {
 		setSearchParams({ period: p }, { replace: true });

@@ -5,14 +5,7 @@
 
 import { useAdminUserUsageStats } from "@/hooks/useAdminAnalytics";
 import { Loader2 } from "lucide-react";
-import {
-	Bar,
-	BarChart,
-	ResponsiveContainer,
-	Tooltip,
-	XAxis,
-	YAxis,
-} from "recharts";
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 interface UserUsageStatsProps {
 	userId: string;
@@ -26,9 +19,7 @@ export function UserUsageStats({ userId }: UserUsageStatsProps) {
 			<div className="rounded-xl border border-border bg-card p-6">
 				<div className="flex items-center gap-2">
 					<Loader2 className="h-4 w-4 animate-spin" />
-					<span className="text-sm text-muted-foreground">
-						Loading usage stats...
-					</span>
+					<span className="text-sm text-muted-foreground">Loading usage stats...</span>
 				</div>
 			</div>
 		);
@@ -65,11 +56,7 @@ export function UserUsageStats({ userId }: UserUsageStatsProps) {
 					<p className="text-xs text-muted-foreground mb-2">Daily Activity</p>
 					<ResponsiveContainer width="100%" height={120}>
 						<BarChart data={data.dailyActivity}>
-							<XAxis
-								dataKey="date"
-								tick={{ fontSize: 10 }}
-								className="text-muted-foreground"
-							/>
+							<XAxis dataKey="date" tick={{ fontSize: 10 }} className="text-muted-foreground" />
 							<YAxis hide />
 							<Tooltip
 								contentStyle={{
@@ -79,11 +66,7 @@ export function UserUsageStats({ userId }: UserUsageStatsProps) {
 									fontSize: "12px",
 								}}
 							/>
-							<Bar
-								dataKey="actions"
-								fill="oklch(0.55 0.22 250 / 0.6)"
-								radius={[2, 2, 0, 0]}
-							/>
+							<Bar dataKey="actions" fill="oklch(0.55 0.22 250 / 0.6)" radius={[2, 2, 0, 0]} />
 						</BarChart>
 					</ResponsiveContainer>
 				</div>

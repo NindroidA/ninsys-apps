@@ -10,28 +10,28 @@ import { ToastContainer } from "./components/ui/ToastContainer";
 import "./styles/index.css";
 
 const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      retry: 1,
-      refetchOnWindowFocus: false,
-    },
-  },
+	defaultOptions: {
+		queries: {
+			staleTime: 1000 * 60 * 5, // 5 minutes
+			retry: 1,
+			refetchOnWindowFocus: false,
+		},
+	},
 });
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <HelmetProvider>
-      <QueryClientProvider client={queryClient}>
-        <MotionConfig reducedMotion="user">
-          <BrowserRouter>
-            <ErrorBoundary>
-              <App />
-              <ToastContainer />
-            </ErrorBoundary>
-          </BrowserRouter>
-        </MotionConfig>
-      </QueryClientProvider>
-    </HelmetProvider>
-  </StrictMode>
+	<StrictMode>
+		<HelmetProvider>
+			<QueryClientProvider client={queryClient}>
+				<MotionConfig reducedMotion="user">
+					<BrowserRouter>
+						<ErrorBoundary>
+							<App />
+							<ToastContainer />
+						</ErrorBoundary>
+					</BrowserRouter>
+				</MotionConfig>
+			</QueryClientProvider>
+		</HelmetProvider>
+	</StrictMode>,
 );

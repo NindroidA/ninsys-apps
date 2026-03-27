@@ -12,11 +12,7 @@ interface ComparisonBadgeProps {
 	invertColor?: boolean;
 }
 
-export function ComparisonBadge({
-	current,
-	previous,
-	invertColor,
-}: ComparisonBadgeProps) {
+export function ComparisonBadge({ current, previous, invertColor }: ComparisonBadgeProps) {
 	if (previous === 0 && current === 0) {
 		return (
 			<span className="inline-flex items-center gap-0.5 text-xs text-muted-foreground">
@@ -26,10 +22,7 @@ export function ComparisonBadge({
 		);
 	}
 
-	const change =
-		previous === 0
-			? 100
-			: Math.round(((current - previous) / previous) * 100);
+	const change = previous === 0 ? 100 : Math.round(((current - previous) / previous) * 100);
 
 	const isPositive = change > 0;
 	const isNeutral = change === 0;
@@ -43,12 +36,7 @@ export function ComparisonBadge({
 	const Icon = isNeutral ? Minus : isPositive ? ArrowUp : ArrowDown;
 
 	return (
-		<span
-			className={cn(
-				"inline-flex items-center gap-0.5 text-xs font-medium",
-				colorClass,
-			)}
-		>
+		<span className={cn("inline-flex items-center gap-0.5 text-xs font-medium", colorClass)}>
 			<Icon className="h-3 w-3" />
 			{Math.abs(change)}%
 		</span>

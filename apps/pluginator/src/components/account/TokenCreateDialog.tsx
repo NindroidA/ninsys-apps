@@ -118,7 +118,9 @@ export function TokenCreateDialog({ open, onClose }: TokenCreateDialogProps) {
 							<>
 								<div className="flex items-center gap-2 mb-4">
 									<Key className="h-5 w-5 text-primary" />
-									<h3 id={titleId} className="text-lg font-semibold">Token Created</h3>
+									<h3 id={titleId} className="text-lg font-semibold">
+										Token Created
+									</h3>
 								</div>
 								<div className="p-3 rounded-lg bg-warning/10 border border-warning/30 text-sm mb-4">
 									<p className="font-medium text-warning">This token will only be shown once.</p>
@@ -134,7 +136,11 @@ export function TokenCreateDialog({ open, onClose }: TokenCreateDialogProps) {
 										onClick={handleCopy}
 										aria-label={copied ? "Copied" : "Copy token"}
 									>
-										{copied ? <Check className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4" />}
+										{copied ? (
+											<Check className="h-4 w-4 text-success" />
+										) : (
+											<Copy className="h-4 w-4" />
+										)}
 									</Button>
 								</div>
 								<div className="flex justify-end">
@@ -145,7 +151,9 @@ export function TokenCreateDialog({ open, onClose }: TokenCreateDialogProps) {
 							<>
 								<div className="flex items-center gap-2 mb-4">
 									<Key className="h-5 w-5 text-primary" />
-									<h3 id={titleId} className="text-lg font-semibold">Generate Access Token</h3>
+									<h3 id={titleId} className="text-lg font-semibold">
+										Generate Access Token
+									</h3>
 								</div>
 								<p className="text-sm text-muted-foreground mb-4">
 									Give your token a descriptive name so you can identify it later.
@@ -163,7 +171,9 @@ export function TokenCreateDialog({ open, onClose }: TokenCreateDialogProps) {
 									/>
 								</div>
 								{createToken.isError && (
-									<p className="text-sm text-red-500 mb-4" role="alert">{createToken.error.message}</p>
+									<p className="text-sm text-red-500 mb-4" role="alert">
+										{createToken.error.message}
+									</p>
 								)}
 								<div className="flex gap-3 justify-end">
 									<Button variant="outline" onClick={onClose} disabled={createToken.isPending}>

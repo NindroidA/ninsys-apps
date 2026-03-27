@@ -42,11 +42,31 @@ export const commands: Command[] = [
 		permissions: [],
 		examples: ["/ticket", "/ticket support I need help"],
 		subcommands: [
-			{ name: "workflow-enable", description: "Enable ticket workflow statuses", usage: "/ticket workflow-enable" },
-			{ name: "workflow-add-status", description: "Add a workflow status", usage: "/ticket workflow-add-status <id> <label> <emoji> <color>" },
-			{ name: "workflow-remove-status", description: "Remove a workflow status", usage: "/ticket workflow-remove-status <id>" },
-			{ name: "set-status", description: "Set ticket workflow status", usage: "/ticket set-status <status>" },
-			{ name: "assign", description: "Assign a ticket to a staff member", usage: "/ticket assign <user>" },
+			{
+				name: "workflow-enable",
+				description: "Enable ticket workflow statuses",
+				usage: "/ticket workflow-enable",
+			},
+			{
+				name: "workflow-add-status",
+				description: "Add a workflow status",
+				usage: "/ticket workflow-add-status <id> <label> <emoji> <color>",
+			},
+			{
+				name: "workflow-remove-status",
+				description: "Remove a workflow status",
+				usage: "/ticket workflow-remove-status <id>",
+			},
+			{
+				name: "set-status",
+				description: "Set ticket workflow status",
+				usage: "/ticket set-status <status>",
+			},
+			{
+				name: "assign",
+				description: "Assign a ticket to a staff member",
+				usage: "/ticket assign <user>",
+			},
 		],
 	},
 	{
@@ -109,10 +129,26 @@ export const commands: Command[] = [
 		permissions: ["Manage Messages"],
 		examples: ["/announce maintenance-short", "/announce server-update version:1.2.0"],
 		subcommands: [
-			{ name: "template-create", description: "Create a new announcement template", usage: "/announce template-create <name>" },
-			{ name: "template-list", description: "List all announcement templates", usage: "/announce template-list" },
-			{ name: "template-preview", description: "Preview a template", usage: "/announce template-preview <name>" },
-			{ name: "template-delete", description: "Delete a custom template", usage: "/announce template-delete <name>" },
+			{
+				name: "template-create",
+				description: "Create a new announcement template",
+				usage: "/announce template-create <name>",
+			},
+			{
+				name: "template-list",
+				description: "List all announcement templates",
+				usage: "/announce template-list",
+			},
+			{
+				name: "template-preview",
+				description: "Preview a template",
+				usage: "/announce template-preview <name>",
+			},
+			{
+				name: "template-delete",
+				description: "Delete a custom template",
+				usage: "/announce template-delete <name>",
+			},
 		],
 	},
 
@@ -125,9 +161,21 @@ export const commands: Command[] = [
 		permissions: ["Administrator"],
 		examples: ["/bait setup", "/bait status"],
 		subcommands: [
-			{ name: "keyword-add", description: "Add a detection keyword", usage: "/bait keyword-add <word> [weight]" },
-			{ name: "keyword-remove", description: "Remove a detection keyword", usage: "/bait keyword-remove <word>" },
-			{ name: "keyword-list", description: "List all detection keywords", usage: "/bait keyword-list" },
+			{
+				name: "keyword-add",
+				description: "Add a detection keyword",
+				usage: "/bait keyword-add <word> [weight]",
+			},
+			{
+				name: "keyword-remove",
+				description: "Remove a detection keyword",
+				usage: "/bait keyword-remove <word>",
+			},
+			{
+				name: "keyword-list",
+				description: "List all detection keywords",
+				usage: "/bait keyword-list",
+			},
 			{ name: "test-mode", description: "Toggle test mode (log only)", usage: "/bait test-mode" },
 		],
 	},
@@ -175,9 +223,21 @@ export const commands: Command[] = [
 		permissions: ["Manage Messages"],
 		examples: ["/memory search server rules", "/memory add"],
 		subcommands: [
-			{ name: "setup", description: "Set up a memory channel", usage: "/memory-setup channel <forum>" },
-			{ name: "tag-add", description: "Add a tag to a memory channel", usage: "/memory-setup tag-add <channel> <name> <type>" },
-			{ name: "tag-remove", description: "Remove a tag", usage: "/memory-setup tag-remove <channel> <tag>" },
+			{
+				name: "setup",
+				description: "Set up a memory channel",
+				usage: "/memory-setup channel <forum>",
+			},
+			{
+				name: "tag-add",
+				description: "Add a tag to a memory channel",
+				usage: "/memory-setup tag-add <channel> <name> <type>",
+			},
+			{
+				name: "tag-remove",
+				description: "Remove a tag",
+				usage: "/memory-setup tag-remove <channel> <tag>",
+			},
 		],
 	},
 

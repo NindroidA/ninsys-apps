@@ -83,11 +83,8 @@ export function useAdminKPIs(period: AnalyticsPeriod) {
 	return useQuery({
 		queryKey: ["admin-analytics", "kpis", period],
 		queryFn: async () => {
-			const res = await api.get<AdminKPIs>(
-				`/v2/pluginator/admin/analytics/kpis?period=${period}`,
-			);
-			if (!res.success || !res.data)
-				throw new Error(res.error || "Failed to load KPIs");
+			const res = await api.get<AdminKPIs>(`/v2/pluginator/admin/analytics/kpis?period=${period}`);
+			if (!res.success || !res.data) throw new Error(res.error || "Failed to load KPIs");
 			return res.data;
 		},
 		staleTime: 1000 * 30,
@@ -101,8 +98,7 @@ export function useAdminTrends(period: AnalyticsPeriod) {
 			const res = await api.get<AdminTrends>(
 				`/v2/pluginator/admin/analytics/trends?period=${period}`,
 			);
-			if (!res.success || !res.data)
-				throw new Error(res.error || "Failed to load trends");
+			if (!res.success || !res.data) throw new Error(res.error || "Failed to load trends");
 			return res.data;
 		},
 		staleTime: 1000 * 30,
@@ -113,11 +109,8 @@ export function useAdminDistributions() {
 	return useQuery({
 		queryKey: ["admin-analytics", "distributions"],
 		queryFn: async () => {
-			const res = await api.get<AdminDistributions>(
-				"/v2/pluginator/admin/analytics/distributions",
-			);
-			if (!res.success || !res.data)
-				throw new Error(res.error || "Failed to load distributions");
+			const res = await api.get<AdminDistributions>("/v2/pluginator/admin/analytics/distributions");
+			if (!res.success || !res.data) throw new Error(res.error || "Failed to load distributions");
 			return res.data;
 		},
 		staleTime: 1000 * 60,
@@ -131,8 +124,7 @@ export function useAdminLeaderboards(period: AnalyticsPeriod) {
 			const res = await api.get<AdminLeaderboards>(
 				`/v2/pluginator/admin/analytics/leaderboards?period=${period}&limit=10`,
 			);
-			if (!res.success || !res.data)
-				throw new Error(res.error || "Failed to load leaderboards");
+			if (!res.success || !res.data) throw new Error(res.error || "Failed to load leaderboards");
 			return res.data;
 		},
 		staleTime: 1000 * 30,
@@ -143,29 +135,22 @@ export function useAdminSystemHealth() {
 	return useQuery({
 		queryKey: ["admin-analytics", "system-health"],
 		queryFn: async () => {
-			const res = await api.get<AdminSystemHealth>(
-				"/v2/pluginator/admin/analytics/system-health",
-			);
-			if (!res.success || !res.data)
-				throw new Error(res.error || "Failed to load system health");
+			const res = await api.get<AdminSystemHealth>("/v2/pluginator/admin/analytics/system-health");
+			if (!res.success || !res.data) throw new Error(res.error || "Failed to load system health");
 			return res.data;
 		},
 		staleTime: 1000 * 60,
 	});
 }
 
-export function useAdminUserUsageStats(
-	userId: string,
-	period: AnalyticsPeriod = "30d",
-) {
+export function useAdminUserUsageStats(userId: string, period: AnalyticsPeriod = "30d") {
 	return useQuery({
 		queryKey: ["admin-analytics", "user-usage", userId, period],
 		queryFn: async () => {
 			const res = await api.get<AdminUserUsageStats>(
 				`/v2/pluginator/admin/users/${userId}/usage-stats?period=${period}`,
 			);
-			if (!res.success || !res.data)
-				throw new Error(res.error || "Failed to load usage stats");
+			if (!res.success || !res.data) throw new Error(res.error || "Failed to load usage stats");
 			return res.data;
 		},
 		enabled: !!userId,

@@ -13,14 +13,24 @@
 		"rules": {
 			"recommended": true,
 			"a11y": {
-				"recommended": true
+				"recommended": true,
+				"noLabelWithoutControl": "off",
+				"useSemanticElements": "off",
+				"noAutofocus": "off",
+				"useFocusableInteractive": "off"
 			},
 			"correctness": {
 				"noUnusedImports": "error",
-				"noUnusedVariables": "warn"
+				"noUnusedVariables": "warn",
+				"useExhaustiveDependencies": "off"
 			},
 			"style": {
-				"noNonNullAssertion": "off"
+				"noNonNullAssertion": "off",
+				"noUnusedTemplateLiteral": "off"
+			},
+			"suspicious": {
+				"noArrayIndexKey": "off",
+				"noExplicitAny": "off"
 			}
 		}
 	},

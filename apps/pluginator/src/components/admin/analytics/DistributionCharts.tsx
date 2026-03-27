@@ -38,9 +38,7 @@ function DonutCard({ title, data, colors }: DonutCardProps) {
 
 	return (
 		<div className="rounded-xl border border-border bg-card p-6">
-			<h3 className="text-sm font-semibold text-muted-foreground mb-4">
-				{title}
-			</h3>
+			<h3 className="text-sm font-semibold text-muted-foreground mb-4">{title}</h3>
 			<div className="flex items-center gap-6">
 				<div className="w-32 h-32 shrink-0">
 					<ResponsiveContainer width="100%" height="100%">
@@ -56,10 +54,7 @@ function DonutCard({ title, data, colors }: DonutCardProps) {
 								className="stroke-card"
 							>
 								{safeData.map((entry) => (
-									<Cell
-										key={entry.name}
-										fill={colors[entry.name] ?? "#6b7280"}
-									/>
+									<Cell key={entry.name} fill={colors[entry.name] ?? "#6b7280"} />
 								))}
 							</Pie>
 							<text
@@ -76,13 +71,9 @@ function DonutCard({ title, data, colors }: DonutCardProps) {
 				</div>
 				<div className="flex-1 space-y-2">
 					{data.map((entry) => {
-						const pct =
-							total > 0 ? Math.round((entry.value / total) * 100) : 0;
+						const pct = total > 0 ? Math.round((entry.value / total) * 100) : 0;
 						return (
-							<div
-								key={entry.name}
-								className="flex items-center justify-between text-sm"
-							>
+							<div key={entry.name} className="flex items-center justify-between text-sm">
 								<div className="flex items-center gap-2">
 									<div
 										className="h-2.5 w-2.5 rounded-full shrink-0"
@@ -90,9 +81,7 @@ function DonutCard({ title, data, colors }: DonutCardProps) {
 											backgroundColor: colors[entry.name] ?? "#6b7280",
 										}}
 									/>
-									<span className="capitalize">
-										{entry.name.replace("_", " ")}
-									</span>
+									<span className="capitalize">{entry.name.replace("_", " ")}</span>
 								</div>
 								<div className="flex items-center gap-2 text-muted-foreground">
 									<span>{entry.value.toLocaleString()}</span>
@@ -125,29 +114,15 @@ export function DistributionCharts() {
 
 	if (error || !data) {
 		return (
-			<div className="text-center py-8 text-muted-foreground">
-				Failed to load distributions.
-			</div>
+			<div className="text-center py-8 text-muted-foreground">Failed to load distributions.</div>
 		);
 	}
 
 	return (
 		<div className="grid md:grid-cols-3 gap-6">
-			<DonutCard
-				title="Tier Distribution"
-				data={data.tiers}
-				colors={TIER_COLORS}
-			/>
-			<DonutCard
-				title="Auth Methods"
-				data={data.authMethods}
-				colors={AUTH_COLORS}
-			/>
-			<DonutCard
-				title="User Roles"
-				data={data.roles}
-				colors={ROLE_COLORS}
-			/>
+			<DonutCard title="Tier Distribution" data={data.tiers} colors={TIER_COLORS} />
+			<DonutCard title="Auth Methods" data={data.authMethods} colors={AUTH_COLORS} />
+			<DonutCard title="User Roles" data={data.roles} colors={ROLE_COLORS} />
 		</div>
 	);
 }
