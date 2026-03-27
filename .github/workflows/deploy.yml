@@ -199,7 +199,7 @@ jobs:
 
             echo "Deploying:$SERVICES"
             docker-compose pull $SERVICES
-            docker-compose up -d --force-recreate --pull always $SERVICES
+            docker-compose up -d --force-recreate $SERVICES
 
             # Verify containers started
             sleep 3
