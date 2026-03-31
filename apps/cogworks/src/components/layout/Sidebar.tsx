@@ -9,6 +9,7 @@ import {
 	BookOpen,
 	Brain,
 	CalendarDays,
+	ChevronDown,
 	ChevronLeft,
 	Download,
 	FileText,
@@ -27,6 +28,7 @@ import {
 	UserPlus,
 } from "lucide-react";
 import type { ComponentType } from "react";
+import { useCallback, useState } from "react";
 import { Link, NavLink, useParams } from "react-router-dom";
 
 interface NavItem {
@@ -75,11 +77,38 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
 	{ to: "data", label: "Data Export", icon: Download },
 ];
 
+const LS_KEY = "cogworks_sidebar_sections";
+
+function readCollapsedSections(): Record<string, boolean> {
+	try {
+		const raw = localStorage.getItem(LS_KEY);
+		if (raw) return JSON.parse(raw) as Record<string, boolean>;
+	} catch {
+		// ignore
+	}
+	return {};
+}
+
 export function Sidebar() {
 	const { guildId } = useParams<{ guildId: string }>();
 	const { guild } = useCurrentGuild();
 	const { isOwner } = useAuth();
 	const { isCollapsed, setCollapsed } = useSidebarStore();
+
+	const [collapsedSections, setCollapsedSections] =
+		useState<Record<string, boolean>>(readCollapsedSections);
+
+	const toggleSection = useCallback((section: string) => {
+		setCollapsedSections((prev) => {
+			const next = { ...prev, [section]: !prev[section] };
+			try {
+				localStorage.setItem(LS_KEY, JSON.stringify(next));
+			} catch {
+				// ignore
+			}
+			return next;
+		});
+	}, []);
 
 	const guildIcon = guild ? getGuildIconUrl(guild.id, guild.icon, 64) : null;
 	const basePath = `/dashboard/${guildId ?? ""}`;
@@ -139,45 +168,60 @@ export function Sidebar() {
 
 			{/* Navigation */}
 			<nav className="flex-1 overflow-y-auto py-2 px-2">
-				{SIDEBAR_ITEMS.map((item) => {
-					if (isSection(item)) {
-						if (isCollapsed) {
-							return <div key={item.section} className="mx-3 my-2 h-px bg-border" />;
-						}
-						return (
-							<div
-								key={item.section}
-								className="px-2 pt-4 pb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground"
-							>
-								{item.section}
-							</div>
-						);
-					}
-
-					if (item.ownerOnly && !isOwner) return null;
-
-					const Icon = item.icon;
-					return (
-						<NavLink
-							key={item.to}
-							to={`${basePath}/${item.to}`}
-							end={item.end}
-							className={({ isActive }) =>
-								cn(
-									"flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
-									isActive
-										? "bg-primary/10 text-primary font-medium"
-										: "text-muted-foreground hover:bg-muted hover:text-foreground",
-									isCollapsed && "justify-center px-0",
-								)
+				{(() => {
+					let currentSection: string | null = null;
+					return SIDEBAR_ITEMS.map((item) => {
+						if (isSection(item)) {
+							currentSection = item.section;
+							if (isCollapsed) {
+								return <div key={item.section} className="mx-3 my-2 h-px bg-border" />;
 							}
-							title={isCollapsed ? item.label : undefined}
-						>
-							<Icon className="h-4 w-4 flex-shrink-0" />
-							{!isCollapsed && <span className="truncate">{item.label}</span>}
-						</NavLink>
-					);
-				})}
+							const sectionCollapsed = !!collapsedSections[item.section];
+							return (
+								<button
+									key={item.section}
+									type="button"
+									onClick={() => toggleSection(item.section)}
+									className="flex w-full items-center justify-between px-2 pt-4 pb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
+								>
+									<span>{item.section}</span>
+									<ChevronDown
+										className={cn("h-3 w-3 transition-transform", sectionCollapsed && "-rotate-90")}
+									/>
+								</button>
+							);
+						}
+
+						if (item.ownerOnly && !isOwner) return null;
+
+						// Hide items belonging to a collapsed section (only when sidebar is expanded)
+						if (!isCollapsed && currentSection !== null && collapsedSections[currentSection]) {
+							return null;
+						}
+
+						const Icon = item.icon;
+						return (
+							<NavLink
+								key={item.to}
+								to={`${basePath}/${item.to}`}
+								end={item.end}
+								className={({ isActive }) =>
+									cn(
+										"flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
+										isActive
+											? "bg-primary/10 text-primary font-medium"
+											: "text-muted-foreground hover:bg-muted hover:text-foreground",
+										isCollapsed && "justify-center px-0",
+									)
+								}
+								title={isCollapsed ? item.label : undefined}
+							>
+								<Icon className="h-4 w-4 flex-shrink-0" />
+								{!isCollapsed && <span className="truncate">{item.label}</span>}
+							</NavLink>
+						);
+					});
+				})()}
 			</nav>
 
 			{/* Footer */}

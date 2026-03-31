@@ -1,6 +1,8 @@
+import { AnnouncementBanner } from "@/components/dashboard/AnnouncementBanner";
 import { BotOfflineBanner } from "@/components/dashboard/BotOfflineBanner";
 import { Breadcrumbs } from "@/components/dashboard/Breadcrumbs";
 import { DashboardErrorBoundary } from "@/components/dashboard/DashboardErrorBoundary";
+import { MaintenanceBanner } from "@/components/dashboard/MaintenanceBanner";
 import { useBotHealth } from "@/hooks/useBotHealth";
 import { useSidebarStore } from "@/stores/sidebarStore";
 import { AnimatePresence, motion } from "framer-motion";
@@ -60,6 +62,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
 			{/* Content area */}
 			<div className="flex-1 min-w-0">
+				<AnnouncementBanner />
+				<MaintenanceBanner />
 				<DashboardHeader />
 				<BotOfflineBanner />
 				<main className="px-4 py-6 pb-24 sm:px-6 lg:px-8">

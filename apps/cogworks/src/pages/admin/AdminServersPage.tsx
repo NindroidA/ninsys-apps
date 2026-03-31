@@ -95,6 +95,12 @@ export function AdminServersPage() {
 												<span className="text-xs text-muted-foreground">No systems</span>
 											)}
 										</div>
+										<a
+											href={`/dashboard/${server.id}`}
+											className="text-xs text-primary hover:underline flex-shrink-0 ml-2"
+										>
+											Manage →
+										</a>
 									</div>
 								</Card>
 							);

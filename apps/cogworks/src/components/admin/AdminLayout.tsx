@@ -1,11 +1,14 @@
 import { cn } from "@ninsys/ui/lib";
 import {
 	Activity,
+	AlertCircle,
 	BarChart3,
 	ChevronLeft,
+	Gauge,
 	LayoutDashboard,
 	Radio,
 	Server,
+	ServerCog,
 	Settings,
 } from "lucide-react";
 import type { ComponentType } from "react";
@@ -21,8 +24,11 @@ interface NavItem {
 const ADMIN_NAV: NavItem[] = [
 	{ to: "", label: "Overview", icon: LayoutDashboard, end: true },
 	{ to: "servers", label: "Servers", icon: Server },
+	{ to: "server-events", label: "Server Events", icon: ServerCog },
 	{ to: "analytics", label: "Analytics", icon: BarChart3 },
 	{ to: "health", label: "System Health", icon: Activity },
+	{ to: "errors", label: "Error Logs", icon: AlertCircle },
+	{ to: "rate-limits", label: "Rate Limits", icon: Gauge },
 	{ to: "bot-status", label: "Bot Status", icon: Radio },
 	{ to: "tools", label: "Admin Tools", icon: Settings },
 ];

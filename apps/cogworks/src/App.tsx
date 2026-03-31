@@ -67,9 +67,9 @@ const RolesPage = lazy(() =>
 		default: m.RolesPage,
 	})),
 );
-const DashboardStatusPage = lazy(() =>
-	import("@/pages/dashboard/StatusPage").then((m) => ({
-		default: m.DashboardStatusPage,
+const AdminBotStatusPage = lazy(() =>
+	import("@/pages/admin/AdminBotStatusPage").then((m) => ({
+		default: m.AdminBotStatusPage,
 	})),
 );
 const DataExportPage = lazy(() =>
@@ -182,6 +182,21 @@ const AdminHealthPage = lazy(() =>
 const AdminToolsPage = lazy(() =>
 	import("@/pages/admin/AdminToolsPage").then((m) => ({
 		default: m.AdminToolsPage,
+	})),
+);
+const AdminErrorsPage = lazy(() =>
+	import("@/pages/admin/AdminErrorsPage").then((m) => ({
+		default: m.AdminErrorsPage,
+	})),
+);
+const AdminRateLimitsPage = lazy(() =>
+	import("@/pages/admin/AdminRateLimitsPage").then((m) => ({
+		default: m.AdminRateLimitsPage,
+	})),
+);
+const AdminServerEventsPage = lazy(() =>
+	import("@/pages/admin/AdminServerEventsPage").then((m) => ({
+		default: m.AdminServerEventsPage,
 	})),
 );
 
@@ -321,7 +336,10 @@ export default function App() {
 						<Route path="servers" element={<AdminServersPage />} />
 						<Route path="analytics" element={<AdminAnalyticsPage />} />
 						<Route path="health" element={<AdminHealthPage />} />
-						<Route path="bot-status" element={<DashboardStatusPage />} />
+						<Route path="bot-status" element={<AdminBotStatusPage />} />
+						<Route path="errors" element={<AdminErrorsPage />} />
+						<Route path="rate-limits" element={<AdminRateLimitsPage />} />
+						<Route path="server-events" element={<AdminServerEventsPage />} />
 						<Route path="tools" element={<AdminToolsPage />} />
 						<Route path="*" element={<Navigate to="/admin" replace />} />
 					</Route>

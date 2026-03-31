@@ -78,9 +78,7 @@ export function Select({
 					} else {
 						const next = Math.min(highlightIndex + 1, options.length - 1);
 						setHighlightIndex(next);
-						listRef.current?.children[next]?.scrollIntoView({
-							block: "nearest",
-						});
+						listRef.current?.children[next]?.scrollIntoView({ block: "nearest" });
 					}
 					break;
 				}
@@ -89,9 +87,7 @@ export function Select({
 					if (isOpen) {
 						const prev = Math.max(highlightIndex - 1, 0);
 						setHighlightIndex(prev);
-						listRef.current?.children[prev]?.scrollIntoView({
-							block: "nearest",
-						});
+						listRef.current?.children[prev]?.scrollIntoView({ block: "nearest" });
 					}
 					break;
 				}
@@ -105,7 +101,11 @@ export function Select({
 	);
 
 	return (
-		<div ref={containerRef} className={cn("relative", className)}>
+		<div
+			ref={containerRef}
+			className={cn("relative", className)}
+			style={isOpen ? { zIndex: 9999, isolation: "isolate" } : undefined}
+		>
 			{label && (
 				<label htmlFor={id} className="text-sm font-medium mb-1.5 block">
 					{label}
@@ -154,7 +154,7 @@ export function Select({
 			</button>
 
 			{isOpen && (
-				<div className="absolute top-full left-0 right-0 mt-1 rounded-lg border border-border bg-card shadow-lg z-50 overflow-hidden">
+				<div className="absolute top-full left-0 right-0 mt-1 rounded-lg border border-border bg-background shadow-lg overflow-hidden">
 					<div
 						ref={listRef}
 						id={`${id}-listbox`}

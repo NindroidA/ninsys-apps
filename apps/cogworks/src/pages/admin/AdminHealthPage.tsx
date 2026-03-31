@@ -1,11 +1,22 @@
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { useAdminHealth } from "@/hooks/useAdmin";
+import { useHealthHistory } from "@/hooks/useAdminEnhanced";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { Card } from "@ninsys/ui/components";
 import { FadeIn } from "@ninsys/ui/components/animations";
 import { cn } from "@ninsys/ui/lib";
 import { Database, Globe, Server } from "lucide-react";
 import type { ComponentType } from "react";
+import { useMemo } from "react";
+import {
+	Area,
+	AreaChart,
+	CartesianGrid,
+	ResponsiveContainer,
+	Tooltip,
+	XAxis,
+	YAxis,
+} from "recharts";
 
 function statusColor(status: string | undefined): string {
 	if (!status) return "text-muted-foreground";
@@ -74,59 +85,162 @@ function HealthCard({
 	);
 }
 
+function formatChartTime(timestamp: string): string {
+	return new Date(timestamp).toLocaleTimeString(undefined, {
+		hour: "2-digit",
+		minute: "2-digit",
+	});
+}
+
 export function AdminHealthPage() {
-	usePageTitle("System Health — Admin");
+	usePageTitle("System Health \u2014 Admin");
 	const { data: health, isLoading } = useAdminHealth();
+	const { data: history } = useHealthHistory(24);
+
+	const apiChartData = useMemo(
+		() =>
+			(history ?? []).map((snap) => ({
+				time: formatChartTime(snap.createdAt),
+				responseTime: snap.apiResponseTimeMs ?? 0,
+			})),
+		[history],
+	);
+
+	const botChartData = useMemo(
+		() =>
+			(history ?? []).map((snap) => ({
+				time: formatChartTime(snap.createdAt),
+				latency: snap.botLatencyMs ?? 0,
+			})),
+		[history],
+	);
+
+	const tooltipStyle = {
+		backgroundColor: "hsl(var(--card))",
+		border: "1px solid hsl(var(--border))",
+		borderRadius: "8px",
+		fontSize: "12px",
+	};
 
 	return (
 		<FadeIn>
 			<PageHeader title="System Health" description="API, bot, and database health monitoring" />
 
-			<div className="grid grid-cols-1 lg:grid-cols-3 gap-4 max-w-5xl">
-				<HealthCard
-					title="API"
-					icon={Globe}
-					status={health?.api?.status}
-					loading={isLoading}
-					metrics={[
-						{
-							label: "Response Time",
-							value: health?.api?.responseTimeMs != null ? `${health.api.responseTimeMs}ms` : "—",
-						},
-					]}
-				/>
-				<HealthCard
-					title="Bot"
-					icon={Server}
-					status={health?.bot?.status}
-					loading={isLoading}
-					metrics={[
-						{
-							label: "Gateway Latency",
-							value: health?.bot?.gatewayLatency != null ? `${health.bot.gatewayLatency}ms` : "—",
-						},
-						{
-							label: "Shards",
-							value: health?.bot?.shardCount ?? "—",
-						},
-					]}
-				/>
-				<HealthCard
-					title="Database"
-					icon={Database}
-					status={health?.database?.status}
-					loading={isLoading}
-					metrics={[
-						{
-							label: "Pool Size",
-							value: health?.database?.poolSize ?? "—",
-						},
-						{
-							label: "Active Connections",
-							value: health?.database?.activeConnections ?? "—",
-						},
-					]}
-				/>
+			<div className="space-y-6 max-w-5xl">
+				{/* Health status cards */}
+				<div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+					<HealthCard
+						title="API"
+						icon={Globe}
+						status={health?.api?.status}
+						loading={isLoading}
+						metrics={[
+							{
+								label: "Response Time",
+								value:
+									health?.api?.responseTimeMs != null ? `${health.api.responseTimeMs}ms` : "\u2014",
+							},
+						]}
+					/>
+					<HealthCard
+						title="Bot"
+						icon={Server}
+						status={health?.bot?.status}
+						loading={isLoading}
+						metrics={[
+							{
+								label: "Gateway Latency",
+								value:
+									health?.bot?.gatewayLatency != null ? `${health.bot.gatewayLatency}ms` : "\u2014",
+							},
+							{
+								label: "Shards",
+								value: health?.bot?.shardCount ?? "\u2014",
+							},
+						]}
+					/>
+					<HealthCard
+						title="Database"
+						icon={Database}
+						status={health?.database?.status}
+						loading={isLoading}
+						metrics={[
+							{
+								label: "Pool Size",
+								value: health?.database?.poolSize ?? "\u2014",
+							},
+							{
+								label: "Active Connections",
+								value: health?.database?.activeConnections ?? "\u2014",
+							},
+						]}
+					/>
+				</div>
+
+				{/* Response Time Charts */}
+				{apiChartData.length > 0 && (
+					<Card className="p-6">
+						<h3 className="text-sm font-semibold mb-1">API Response Time</h3>
+						<p className="text-xs text-muted-foreground mb-4">
+							Response time in milliseconds over the last 24 hours
+						</p>
+						<ResponsiveContainer width="100%" height={240}>
+							<AreaChart data={apiChartData}>
+								<CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+								<XAxis dataKey="time" tick={{ fontSize: 11, fill: "rgba(255,255,255,0.5)" }} />
+								<YAxis
+									tick={{ fontSize: 11, fill: "rgba(255,255,255,0.5)" }}
+									unit="ms"
+									allowDecimals={false}
+								/>
+								<Tooltip contentStyle={tooltipStyle} />
+								<Area
+									type="monotone"
+									dataKey="responseTime"
+									stroke="#3b82f6"
+									fill="rgba(59, 130, 246, 0.12)"
+									strokeWidth={2}
+									name="Response Time (ms)"
+								/>
+							</AreaChart>
+						</ResponsiveContainer>
+					</Card>
+				)}
+
+				{botChartData.length > 0 && (
+					<Card className="p-6">
+						<h3 className="text-sm font-semibold mb-1">Bot Gateway Latency</h3>
+						<p className="text-xs text-muted-foreground mb-4">
+							Gateway latency in milliseconds over the last 24 hours
+						</p>
+						<ResponsiveContainer width="100%" height={240}>
+							<AreaChart data={botChartData}>
+								<CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+								<XAxis dataKey="time" tick={{ fontSize: 11, fill: "rgba(255,255,255,0.5)" }} />
+								<YAxis
+									tick={{ fontSize: 11, fill: "rgba(255,255,255,0.5)" }}
+									unit="ms"
+									allowDecimals={false}
+								/>
+								<Tooltip contentStyle={tooltipStyle} />
+								<Area
+									type="monotone"
+									dataKey="latency"
+									stroke="#8b5cf6"
+									fill="rgba(139, 92, 246, 0.12)"
+									strokeWidth={2}
+									name="Gateway Latency (ms)"
+								/>
+							</AreaChart>
+						</ResponsiveContainer>
+					</Card>
+				)}
+
+				{apiChartData.length === 0 && botChartData.length === 0 && !isLoading && (
+					<div className="text-center py-12 border border-dashed border-border rounded-lg">
+						<p className="text-muted-foreground">No health history data available</p>
+					</div>
+				)}
 			</div>
 		</FadeIn>
 	);

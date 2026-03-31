@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import { AnnouncementBanner } from "../dashboard/AnnouncementBanner";
+import { MaintenanceBanner } from "../dashboard/MaintenanceBanner";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
 
@@ -9,6 +11,8 @@ interface LayoutProps {
 export function Layout({ children }: LayoutProps) {
 	return (
 		<div className="min-h-screen flex flex-col bg-background">
+			<AnnouncementBanner />
+			<MaintenanceBanner />
 			<Header />
 			<main className="flex-1">{children}</main>
 			<Footer />
