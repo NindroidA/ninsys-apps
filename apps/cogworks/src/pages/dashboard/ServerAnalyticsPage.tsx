@@ -1,3 +1,8 @@
+import { ActivityHeatmap } from "@/components/analytics/ActivityHeatmap";
+import { ChannelActivity } from "@/components/analytics/ChannelActivity";
+import { GrowthChart } from "@/components/analytics/GrowthChart";
+import { KpiCards } from "@/components/analytics/KpiCards";
+import { PeriodSelector, useAnalyticsPeriodParam } from "@/components/analytics/PeriodSelector";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { ChannelPicker } from "@/components/discord/ChannelPicker";
 import { ConfigSection } from "@/components/forms/ConfigSection";
@@ -5,25 +10,17 @@ import { StatusToggle } from "@/components/forms/StatusToggle";
 import { Select } from "@/components/ui/Select";
 import { Tabs } from "@/components/ui/Tabs";
 import {
+	useAnalyticsChannels,
 	useAnalyticsConfig,
-	useAnalyticsDashboard,
+	useAnalyticsGrowth,
+	useAnalyticsHours,
+	useAnalyticsOverview,
 	useUpdateAnalyticsConfig,
 } from "@/hooks/useAnalytics";
 import { useCurrentGuild } from "@/hooks/useCurrentGuild";
 import { usePageTitle } from "@/hooks/usePageTitle";
-import { Card } from "@ninsys/ui/components";
 import { FadeIn } from "@ninsys/ui/components/animations";
-import {
-	BarChart3,
-	Hash,
-	MessageSquare,
-	Mic,
-	Settings,
-	TrendingUp,
-	UserMinus,
-	UserPlus,
-	Users,
-} from "lucide-react";
+import { BarChart3, Settings } from "lucide-react";
 import { useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 
@@ -65,7 +62,7 @@ function AnalyticsConfigTab({ guildId }: { guildId: string }) {
 	if (isLoading) return <TabFallback />;
 	if (!config)
 		return (
-			<div className="text-center py-12 border border-dashed border-border rounded-lg">
+			<div className="text-center py-12 border border-dashed border-border rounded-lg max-w-4xl">
 				<p className="text-muted-foreground">This feature is not configured yet.</p>
 				<p className="text-xs text-muted-foreground mt-1">
 					Set it up via Discord commands or check back later.
@@ -74,7 +71,7 @@ function AnalyticsConfigTab({ guildId }: { guildId: string }) {
 		);
 
 	return (
-		<div className="space-y-6">
+		<div className="space-y-6 max-w-4xl">
 			<StatusToggle
 				enabled={config.enabled}
 				onChange={(enabled) => updateConfig.mutate({ enabled })}
@@ -119,127 +116,32 @@ function AnalyticsConfigTab({ guildId }: { guildId: string }) {
 // --- Dashboard Tab ---
 
 function AnalyticsDashboardTab({ guildId }: { guildId: string }) {
-	const { data: dashboard, isLoading } = useAnalyticsDashboard(guildId);
+	const [period, setPeriod] = useAnalyticsPeriodParam();
 
-	if (isLoading) return <TabFallback />;
-	if (!dashboard) {
-		return (
-			<p className="text-sm text-muted-foreground py-8 text-center">
-				No analytics data available yet. Enable analytics to start tracking.
-			</p>
-		);
-	}
-
-	const { overview } = dashboard;
+	const { data: overview, isLoading: overviewLoading } = useAnalyticsOverview(guildId, period);
+	const { data: growth, isLoading: growthLoading } = useAnalyticsGrowth(guildId, period);
+	const { data: channels, isLoading: channelsLoading } = useAnalyticsChannels(guildId, period);
+	const { data: hours, isLoading: hoursLoading } = useAnalyticsHours(guildId, period);
 
 	return (
-		<div className="space-y-6">
-			{/* Overview Stats */}
-			<div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-				<Card className="p-4">
-					<div className="flex items-center gap-2 mb-1">
-						<MessageSquare className="h-4 w-4 text-primary" />
-						<span className="text-xs text-muted-foreground">Messages</span>
-					</div>
-					<p className="text-xl font-bold">{overview.messages.toLocaleString()}</p>
-				</Card>
-				<Card className="p-4">
-					<div className="flex items-center gap-2 mb-1">
-						<Users className="h-4 w-4 text-primary" />
-						<span className="text-xs text-muted-foreground">Active Members</span>
-					</div>
-					<p className="text-xl font-bold">{overview.activeMembers.toLocaleString()}</p>
-				</Card>
-				<Card className="p-4">
-					<div className="flex items-center gap-2 mb-1">
-						<UserPlus className="h-4 w-4 text-green-500" />
-						<span className="text-xs text-muted-foreground">Joins</span>
-					</div>
-					<p className="text-xl font-bold">{overview.joins.toLocaleString()}</p>
-				</Card>
-				<Card className="p-4">
-					<div className="flex items-center gap-2 mb-1">
-						<UserMinus className="h-4 w-4 text-red-500" />
-						<span className="text-xs text-muted-foreground">Leaves</span>
-					</div>
-					<p className="text-xl font-bold">{overview.leaves.toLocaleString()}</p>
-				</Card>
-				<Card className="p-4">
-					<div className="flex items-center gap-2 mb-1">
-						<Mic className="h-4 w-4 text-primary" />
-						<span className="text-xs text-muted-foreground">Voice Hours</span>
-					</div>
-					<p className="text-xl font-bold">
-						{Math.round(overview.voiceMinutes / 60).toLocaleString()}
-					</p>
-				</Card>
+		<div className="space-y-6 max-w-6xl">
+			{/* Period selector */}
+			<div className="flex items-center justify-between flex-wrap gap-2">
+				<p className="text-sm text-muted-foreground">Server activity and growth metrics · UTC</p>
+				<PeriodSelector value={period} onChange={setPeriod} />
 			</div>
 
-			{/* Growth Chart Placeholder */}
-			<ConfigSection title="Member Growth" description="Server member count over time">
-				{dashboard.growth.length > 0 ? (
-					<div className="space-y-2">
-						{dashboard.growth.slice(-7).map((point) => (
-							<div key={point.date} className="flex items-center justify-between text-sm">
-								<span className="text-muted-foreground">{point.date}</span>
-								<span className="font-medium flex items-center gap-1">
-									<TrendingUp className="h-3 w-3 text-green-500" />
-									{point.memberCount.toLocaleString()}
-								</span>
-							</div>
-						))}
-					</div>
-				) : (
-					<p className="text-sm text-muted-foreground">
-						Growth data will appear as it is collected.
-					</p>
-				)}
-			</ConfigSection>
+			{/* KPI cards */}
+			<KpiCards overview={overview} isLoading={overviewLoading} />
 
-			{/* Top Channels */}
-			<ConfigSection title="Top Channels" description="Most active channels by message count">
-				{dashboard.topChannels.length > 0 ? (
-					<div className="space-y-2">
-						{dashboard.topChannels.slice(0, 10).map((ch) => {
-							const maxCount = dashboard.topChannels[0]?.messageCount ?? 1;
-							const pct = Math.round((ch.messageCount / maxCount) * 100);
-							return (
-								<div key={ch.channelId} className="space-y-1">
-									<div className="flex items-center justify-between text-sm">
-										<span className="flex items-center gap-1">
-											<Hash className="h-3 w-3 text-muted-foreground" />
-											{ch.channelName}
-										</span>
-										<span className="text-muted-foreground">
-											{ch.messageCount.toLocaleString()}
-										</span>
-									</div>
-									<div className="h-1.5 rounded-full bg-muted overflow-hidden">
-										<div
-											className="h-full rounded-full bg-primary transition-[width]"
-											style={{ width: `${pct}%` }}
-										/>
-									</div>
-								</div>
-							);
-						})}
-					</div>
-				) : (
-					<p className="text-sm text-muted-foreground">
-						Channel activity data will appear as it is collected.
-					</p>
-				)}
-			</ConfigSection>
+			{/* Growth chart */}
+			<GrowthChart growth={growth} period={period} isLoading={growthLoading} />
 
-			{/* Activity Heatmap Placeholder */}
-			<ConfigSection
-				title="Activity Heatmap"
-				description={`Peak hour: ${dashboard.peakHour}:00 UTC`}
-			>
-				<p className="text-sm text-muted-foreground">
-					Activity heatmap visualization coming soon. Data is being collected in the background.
-				</p>
-			</ConfigSection>
+			{/* Channel activity + Activity heatmap */}
+			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+				<ChannelActivity channels={channels} isLoading={channelsLoading} />
+				<ActivityHeatmap hours={hours} isLoading={hoursLoading} />
+			</div>
 		</div>
 	);
 }
@@ -255,13 +157,20 @@ export function ServerAnalyticsPage() {
 
 	const handleTabChange = useCallback(
 		(tab: string) => {
-			setSearchParams({ tab }, { replace: true });
+			setSearchParams(
+				(prev) => {
+					const next = new URLSearchParams(prev);
+					next.set("tab", tab);
+					return next;
+				},
+				{ replace: true },
+			);
 		},
 		[setSearchParams],
 	);
 
 	return (
-		<FadeIn className="max-w-4xl">
+		<FadeIn>
 			<PageHeader
 				title="Server Analytics"
 				description="Track server activity, growth, and engagement metrics"

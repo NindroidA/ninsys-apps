@@ -51,3 +51,10 @@ CLAUDE.md
 
 # Planning System
 .plans/
+
+# Superpowers
+.superpowers/
+
+# Mempalace (local MCP knowledge graph)
+entities.json
+mempalace.yaml

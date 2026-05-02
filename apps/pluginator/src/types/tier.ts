@@ -4,6 +4,8 @@
 
 export type Tier = "free" | "plus" | "pro" | "max";
 
+export type BillingPeriod = "monthly" | "annual";
+
 export interface TierLimits {
 	updateChecksPerDay: number;
 	downloadsPerDay: number;
@@ -33,6 +35,7 @@ export interface SubscriptionInfo {
 	tier: Tier;
 	limits: TierLimits;
 	hasPlusDiscount: boolean;
+	billingPeriod: BillingPeriod | null; // null for free/plus
 	status: SubscriptionStatus;
 	cancelAtPeriodEnd: boolean;
 	currentPeriodEnd: string | null;

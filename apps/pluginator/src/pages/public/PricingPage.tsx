@@ -3,7 +3,7 @@ import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { COMPARISON_FEATURES, getPricingTiers } from "@/config/pricing";
 import { useAuth } from "@/hooks/useAuth";
 import { useCancelSubscription, useChangePlan, useSubscription } from "@/hooks/useSubscription";
-import { TIER_DISPLAY, type Tier, getTierLevel } from "@/types/tier";
+import { type BillingPeriod, TIER_DISPLAY, type Tier, getTierLevel } from "@/types/tier";
 import { FadeIn } from "@ninsys/ui/components/animations";
 import { ParallaxElement, ScrollProgress } from "@ninsys/ui/components/scroll";
 import { motion } from "framer-motion";
@@ -22,6 +22,7 @@ export function PricingPage() {
 	const [showCancelDialog, setShowCancelDialog] = useState(false);
 	const [showDowngradeDialog, setShowDowngradeDialog] = useState(false);
 	const [downgradeTier, setDowngradeTier] = useState<Tier | null>(null);
+	const [billingPeriod, setBillingPeriod] = useState<BillingPeriod>("monthly");
 
 	const isAuthenticated = !!user;
 	const currentTier = subscription?.tier ?? "free";
@@ -53,7 +54,7 @@ export function PricingPage() {
 		// Plus is independent: show "Purchased" or "Get Plus"
 		if (tier === "plus") {
 			if (hasPlusDiscount) return "Purchased";
-			return "Get Plus";
+			return "Buy Now";
 		}
 
 		if (tier === currentTier) return "Current Plan";
@@ -116,10 +117,11 @@ export function PricingPage() {
 			return;
 		}
 
-		// Upgrade (via checkout)
+		// Upgrade (via checkout with billing period)
 		if (tierLevel > currentLevel) {
 			setLoadingTier(tier);
-			navigate(`/checkout?tier=${tier}`);
+			const billingParam = billingPeriod !== "monthly" ? `&billing=${billingPeriod}` : "";
+			navigate(`/checkout?tier=${tier}${billingParam}`);
 			return;
 		}
 
@@ -149,7 +151,10 @@ export function PricingPage() {
 	async function handleDowngradeConfirm() {
 		if (!downgradeTier) return;
 		try {
-			await changePlan.mutateAsync(downgradeTier);
+			await changePlan.mutateAsync({
+				tier: downgradeTier,
+				billingPeriod: subscription?.billingPeriod ?? billingPeriod,
+			});
 			setShowDowngradeDialog(false);
 			setDowngradeTier(null);
 		} catch {
@@ -229,28 +234,66 @@ export function PricingPage() {
 					</div>
 				</FadeIn>
 
+				{/* Billing Period Toggle */}
+				<FadeIn delay={0.17}>
+					<div className="flex justify-center mb-8">
+						<div className="inline-flex items-center rounded-full bg-muted/50 border border-border p-1">
+							<button
+								type="button"
+								onClick={() => setBillingPeriod("monthly")}
+								className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+									billingPeriod === "monthly"
+										? "bg-primary text-primary-foreground shadow-sm"
+										: "text-muted-foreground hover:text-foreground"
+								}`}
+							>
+								Monthly
+							</button>
+							<button
+								type="button"
+								onClick={() => setBillingPeriod("annual")}
+								className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+									billingPeriod === "annual"
+										? "bg-primary text-primary-foreground shadow-sm"
+										: "text-muted-foreground hover:text-foreground"
+								}`}
+							>
+								Annual
+								<span className="ml-1.5 text-xs opacity-80">Save up to 25%</span>
+							</button>
+						</div>
+					</div>
+				</FadeIn>
+
 				{/* Pricing Cards */}
 				<FadeIn delay={0.2}>
 					<div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto mb-20">
-						{tiers.map((tier) => (
-							<PricingCard
-								key={tier.tier}
-								tier={tier.tier}
-								name={tier.name}
-								price={tier.price}
-								originalPrice={tier.originalPrice}
-								period={tier.priceSubtext || ""}
-								description={tier.description}
-								features={tier.features}
-								highlighted={tier.highlighted}
-								ctaText={getCtaText(tier.tier)}
-								ctaDisabled={isCtaDisabled(tier.tier)}
-								ctaLoading={loadingTier === tier.tier}
-								ctaStyle={getCtaStyle(tier.tier)}
-								onCtaClick={() => handleCtaClick(tier.tier)}
-								className={tier.highlighted ? "" : "opacity-90"}
-							/>
-						))}
+						{tiers.map((tier) => {
+							const isAnnual = billingPeriod === "annual" && tier.annualPrice;
+							return (
+								<PricingCard
+									key={tier.tier}
+									tier={tier.tier}
+									name={tier.name}
+									price={isAnnual ? tier.annualPrice! : tier.price}
+									originalPrice={isAnnual ? tier.annualOriginalPrice : tier.originalPrice}
+									period={isAnnual ? (tier.annualPriceSubtext ?? "") : (tier.priceSubtext ?? "")}
+									description={tier.description}
+									features={
+										isAnnual && tier.annualSavings
+											? [...tier.features, tier.annualSavings]
+											: tier.features
+									}
+									highlighted={tier.highlighted}
+									ctaText={getCtaText(tier.tier)}
+									ctaDisabled={isCtaDisabled(tier.tier)}
+									ctaLoading={loadingTier === tier.tier}
+									ctaStyle={getCtaStyle(tier.tier)}
+									onCtaClick={() => handleCtaClick(tier.tier)}
+									className={tier.highlighted ? "" : "opacity-90"}
+								/>
+							);
+						})}
 					</div>
 				</FadeIn>
 

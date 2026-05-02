@@ -20,4 +20,6 @@ export interface DiscordRole {
 	name: string;
 	color: number | string;
 	position: number;
+	/** True if the role is managed by an integration / bot. Present when the API includes it. */
+	managed?: boolean;
 }

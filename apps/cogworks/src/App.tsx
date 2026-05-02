@@ -121,6 +121,11 @@ const ApplicationWorkflowPage = lazy(() =>
 		default: m.ApplicationWorkflowPage,
 	})),
 );
+const PermissionsPage = lazy(() =>
+	import("@/pages/dashboard/PermissionsPage").then((m) => ({
+		default: m.PermissionsPage,
+	})),
+);
 
 // Lazy-loaded doc pages
 const DocsIndexPage = lazy(() =>
@@ -319,6 +324,7 @@ export default function App() {
 							<Route path="sla" element={<SlaPage />} />
 							<Route path="routing" element={<RoutingPage />} />
 							<Route path="app-workflow" element={<ApplicationWorkflowPage />} />
+							<Route path="permissions" element={<PermissionsPage />} />
 							<Route path="*" element={<Navigate to="." replace />} />
 						</Route>
 					</Route>

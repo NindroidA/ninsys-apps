@@ -212,7 +212,7 @@ export function UsageDashboard() {
 								{subscription?.priceFormatted && (
 									<div className="flex items-center gap-2 text-sm text-muted-foreground">
 										<CreditCard className="h-3.5 w-3.5" />
-										<span>{subscription.priceFormatted}/month</span>
+										<span>{subscription.priceFormatted}</span>
 									</div>
 								)}
 								{periodEndDate && (
@@ -319,9 +319,10 @@ interface UsageCardProps {
 
 function UsageCard({ title, icon, stat }: UsageCardProps) {
 	const isUnlimited = stat.limit === -1;
-	const percentage = isUnlimited ? 0 : (stat.used / stat.limit) * 100;
-	const isWarning = !isUnlimited && percentage >= 80;
-	const isDanger = !isUnlimited && percentage >= 100;
+	const isUnavailable = stat.limit === 0;
+	const percentage = isUnlimited || isUnavailable ? 0 : (stat.used / stat.limit) * 100;
+	const isWarning = !isUnlimited && !isUnavailable && percentage >= 80;
+	const isDanger = !isUnlimited && !isUnavailable && percentage >= 100;
 
 	return (
 		<Card
@@ -331,33 +332,42 @@ function UsageCard({ title, icon, stat }: UsageCardProps) {
 				{icon}
 				<span className="text-sm font-medium">{title}</span>
 			</div>
-			<div className="text-2xl font-bold">
-				{stat.used}
-				<span className="text-muted-foreground text-sm font-normal">
-					{isUnlimited ? " / Unlimited" : ` / ${stat.limit}`}
-				</span>
-			</div>
-			{!isUnlimited && (
-				<div className="mt-2">
-					<div className="h-2 bg-muted rounded-full overflow-hidden">
-						<div
-							className={`h-full transition-all ${
-								isDanger ? "bg-destructive" : isWarning ? "bg-warning" : "bg-primary"
-							}`}
-							style={{ width: `${Math.min(100, percentage)}%` }}
-						/>
+			{isUnavailable ? (
+				<>
+					<div className="text-2xl font-bold text-muted-foreground/50">N/A</div>
+					<p className="text-xs text-muted-foreground mt-1">Not available on your plan</p>
+				</>
+			) : (
+				<>
+					<div className="text-2xl font-bold">
+						{stat.used}
+						<span className="text-muted-foreground text-sm font-normal">
+							{isUnlimited ? " / Unlimited" : ` / ${stat.limit}`}
+						</span>
 					</div>
-				</div>
+					{!isUnlimited && (
+						<div className="mt-2">
+							<div className="h-2 bg-muted rounded-full overflow-hidden">
+								<div
+									className={`h-full transition-all ${
+										isDanger ? "bg-destructive" : isWarning ? "bg-warning" : "bg-primary"
+									}`}
+									style={{ width: `${Math.min(100, percentage)}%` }}
+								/>
+							</div>
+						</div>
+					)}
+					<p className="text-xs text-muted-foreground mt-1">
+						{isUnlimited ? "No limit" : `${stat.remaining} remaining today`}
+					</p>
+				</>
 			)}
-			<p className="text-xs text-muted-foreground mt-1">
-				{isUnlimited ? "No limit" : `${stat.remaining} remaining today`}
-			</p>
 		</Card>
 	);
 }
 
 function isLowUsage(stat: UsageStat): boolean {
-	if (stat.limit === -1) return false;
+	if (stat.limit === -1 || stat.limit === 0) return false;
 	return stat.remaining <= Math.ceil(stat.limit * 0.2);
 }
 

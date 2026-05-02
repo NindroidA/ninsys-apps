@@ -13,8 +13,14 @@ export const API_BASE = "/v2/cogworks";
  * Full URL for browser redirects (OAuth login).
  * fetch() calls use API_BASE (proxied by Vite/nginx), but window.location
  * redirects bypass the proxy, so they need the actual API origin in dev.
+ *
+ * In dev, reads VITE_API_URL (set via .env.local). Falls back to the
+ * conventional local port if unset. In production, the proxy handles
+ * routing so a relative path is sufficient.
  */
-export const API_REDIRECT_URL = import.meta.env.DEV ? `http://localhost:3001${API_BASE}` : API_BASE;
+export const API_REDIRECT_URL = import.meta.env.DEV
+	? `${import.meta.env.VITE_API_URL || "http://localhost:3001"}${API_BASE}`
+	: API_BASE;
 
 // --- CSRF token management (in-memory only) ---
 

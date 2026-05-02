@@ -14,6 +14,7 @@ const ROUTE_LABELS: Record<string, string> = {
 	roles: "Role Management",
 	status: "Bot Status",
 	data: "Data Export",
+	permissions: "Permissions",
 };
 
 export function Breadcrumbs() {

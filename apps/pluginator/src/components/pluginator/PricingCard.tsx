@@ -1,6 +1,7 @@
 import type { Tier } from "@/types/tier";
 import { Button } from "@ninsys/ui/components";
 import { cn } from "@ninsys/ui/lib";
+import { AnimatePresence, motion } from "framer-motion";
 import { Check, Loader2, Sparkles } from "lucide-react";
 
 interface PricingCardProps {
@@ -67,18 +68,10 @@ export function PricingCard({
 			className={cn(
 				"relative rounded-2xl p-8 h-full flex flex-col transition-all",
 				styles.card,
-				highlighted && "scale-105 shadow-2xl",
+				highlighted && "shadow-2xl",
 				className,
 			)}
 		>
-			{highlighted && (
-				<div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-					<span className="px-4 py-1 rounded-full bg-primary text-primary-foreground text-sm font-medium">
-						Most Popular
-					</span>
-				</div>
-			)}
-
 			<div className="mb-6">
 				<span
 					className={cn(
@@ -88,19 +81,31 @@ export function PricingCard({
 				>
 					{name}
 				</span>
-				<div className="flex items-baseline gap-2">
-					{originalPrice && (
-						<span className="text-lg text-muted-foreground/60 line-through">{originalPrice}</span>
-					)}
-					<span className="text-4xl font-bold">{price}</span>
-					{price !== "Custom" && <span className="text-muted-foreground">{period}</span>}
-				</div>
-				{originalPrice && (
-					<div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-400/15 via-blue-500/15 to-indigo-500/15 border border-blue-500/30 text-blue-400">
-						<Sparkles className="h-3 w-3" />
-						Plus discount
-					</div>
-				)}
+				<AnimatePresence mode="wait">
+					<motion.div
+						key={`${price}-${period}`}
+						initial={{ opacity: 0, y: 4 }}
+						animate={{ opacity: 1, y: 0 }}
+						exit={{ opacity: 0, y: -4 }}
+						transition={{ duration: 0.2 }}
+					>
+						<div className="flex items-baseline gap-2">
+							{originalPrice && (
+								<span className="text-lg text-muted-foreground/60 line-through">
+									{originalPrice}
+								</span>
+							)}
+							<span className="text-4xl font-bold">{price}</span>
+							{price !== "Custom" && <span className="text-muted-foreground">{period}</span>}
+						</div>
+						{originalPrice && (
+							<div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-400/15 via-blue-500/15 to-indigo-500/15 border border-blue-500/30 text-blue-400">
+								<Sparkles className="h-3 w-3" />
+								Plus discount
+							</div>
+						)}
+					</motion.div>
+				</AnimatePresence>
 				<p className="text-muted-foreground mt-2">{description}</p>
 			</div>
 

@@ -3,7 +3,7 @@
  */
 
 import { api } from "@/lib/api";
-import type { SubscriptionInfo, Tier } from "@/types/tier";
+import type { BillingPeriod, SubscriptionInfo, Tier } from "@/types/tier";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface CheckoutResponse {
@@ -27,12 +27,20 @@ export function useSubscription() {
 	});
 }
 
+interface CreateCheckoutParams {
+	tier: Tier;
+	billingPeriod?: BillingPeriod;
+}
+
 export function useCreateCheckout() {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: async (tier: Tier) => {
-			const res = await api.post<CheckoutResponse>("/v2/pluginator/checkout", { tier });
+		mutationFn: async ({ tier, billingPeriod }: CreateCheckoutParams) => {
+			const res = await api.post<CheckoutResponse>("/v2/pluginator/checkout", {
+				tier,
+				billingPeriod: billingPeriod ?? "monthly",
+			});
 			if (!res.success || !res.data) {
 				throw new Error(res.error || "Failed to create checkout session");
 			}
@@ -74,12 +82,19 @@ export function useCancelSubscription() {
 	});
 }
 
+interface ChangePlanParams {
+	tier: Tier;
+	billingPeriod?: BillingPeriod;
+}
+
 export function useChangePlan() {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: async (tier: Tier) => {
-			const res = await api.post("/v2/pluginator/subscription/change-plan", { tier });
+		mutationFn: async ({ tier, billingPeriod }: ChangePlanParams) => {
+			const body: { tier: Tier; billingPeriod?: BillingPeriod } = { tier };
+			if (billingPeriod) body.billingPeriod = billingPeriod;
+			const res = await api.post("/v2/pluginator/subscription/change-plan", body);
 			if (!res.success) {
 				throw new Error(res.error || "Failed to change plan");
 			}

@@ -4,7 +4,7 @@
 
 import { useCreateCheckout } from "@/hooks/useSubscription";
 import { isValidStripeUrl } from "@/lib/stripe";
-import type { Tier } from "@/types/tier";
+import type { BillingPeriod, Tier } from "@/types/tier";
 import { FadeIn } from "@ninsys/ui/components/animations";
 import { Loader2 } from "lucide-react";
 import { useEffect, useRef } from "react";
@@ -14,6 +14,7 @@ export function CheckoutPage() {
 	const [searchParams] = useSearchParams();
 	const navigate = useNavigate();
 	const tier = searchParams.get("tier") as Tier | null;
+	const billing = searchParams.get("billing") as BillingPeriod | null;
 	const createCheckout = useCreateCheckout();
 
 	const hasTriggered = useRef(false);
@@ -26,20 +27,23 @@ export function CheckoutPage() {
 		if (hasTriggered.current) return;
 		hasTriggered.current = true;
 
-		createCheckout.mutate(tier, {
-			onSuccess: (data) => {
-				// Validate URL before redirecting to prevent open redirect
-				if (isValidStripeUrl(data.url)) {
-					window.location.href = data.url;
-				} else {
-					navigate("/pricing?error=invalid_checkout_url");
-				}
+		createCheckout.mutate(
+			{ tier, billingPeriod: billing ?? undefined },
+			{
+				onSuccess: (data) => {
+					// Validate URL before redirecting to prevent open redirect
+					if (isValidStripeUrl(data.url)) {
+						window.location.href = data.url;
+					} else {
+						navigate("/pricing?error=invalid_checkout_url");
+					}
+				},
+				onError: () => {
+					// Error details not logged to prevent information disclosure
+					navigate("/pricing?error=checkout_failed");
+				},
 			},
-			onError: () => {
-				// Error details not logged to prevent information disclosure
-				navigate("/pricing?error=checkout_failed");
-			},
-		});
+		);
 	}, [tier, createCheckout, navigate]);
 
 	return (
