@@ -77,8 +77,8 @@ const DEFAULT_STATE: ConfigFormState = {
 const ACTION_OPTIONS = [
 	{ value: "ban", label: "Ban", description: "Permanently ban the user" },
 	{ value: "kick", label: "Kick", description: "Remove user from server" },
-	{ value: "mute", label: "Mute", description: "Timeout the user" },
-	{ value: "warn", label: "Warn", description: "Send a warning to the user" },
+	{ value: "timeout", label: "Timeout", description: "Temporarily time the user out" },
+	{ value: "log-only", label: "Log Only", description: "Record the detection without acting" },
 ] as const;
 
 const MAX_CHANNELS = 3;
