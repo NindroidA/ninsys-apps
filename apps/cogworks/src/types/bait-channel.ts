@@ -1,4 +1,4 @@
-export type BaitChannelAction = "ban" | "kick" | "mute" | "warn";
+export type BaitChannelAction = "ban" | "kick" | "timeout" | "log-only";
 
 export interface BaitChannelConfig {
 	guildId: string;

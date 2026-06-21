@@ -131,8 +131,8 @@ export function BaitLogsTab({ guildId }: BaitLogsTabProps) {
 						{ value: "", label: "All Actions" },
 						{ value: "ban", label: "Ban" },
 						{ value: "kick", label: "Kick" },
-						{ value: "mute", label: "Mute" },
-						{ value: "warn", label: "Warn" },
+						{ value: "timeout", label: "Timeout" },
+						{ value: "log-only", label: "Log Only" },
 					]}
 					aria-label="Filter by action"
 				/>
