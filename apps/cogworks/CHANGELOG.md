@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.4.1] - 2026-10-06
+
+### Fixed
+
+- **Delete actions**: deleting or clearing ticket types, restrictions, roles, memory channels and tags, reaction-role menus and options, positions, rules, templates and the status no longer shows an error toast after a successful delete. A success response without `data` now counts as success, so the confirm dialog closes and the row leaves the list.
+- **Session refresh**: the 30-minute session refresh no longer sends you to the login page on a rate limit, server error, network error or CSRF hiccup. Only a real expired session (401) redirects.
+- **Offline banner**: the "trouble connecting to Cogworks" banner now appears when the bot is offline and clears itself when it comes back. The health check reads the raw `/status` response. An `online: false` with an epoch `lastUpdate` (the API has not heard from the bot since it restarted, or a dev bot that never registers) counts as unknown and does not show the banner.
+
+### Changed
+
+- **Pages with no bot backend**: XP & Levels, Starboard, Events, Onboarding, Ticket SLA, Smart Routing, Incidents and the analytics Config tab are hidden until their bot backend ships. Direct links show a "not in the dashboard yet" page. Each one can be turned back on by removing its line from `UNAVAILABLE_MODULES` in `src/lib/constants.ts`.
+
+### Added
+
+- **Tests**: `bun test` unit tests for `throwOnApiError`, the bot health check and the hidden-module list (`bun run test` in `apps/cogworks`).
+
 ## 0.1.2
 
 ### Patch Changes

@@ -233,16 +233,17 @@ export function apiDelete<T>(endpoint: string, body?: unknown): Promise<ApiRespo
 /**
  * Throws if the API response was unsuccessful. Returns the data if successful.
  * Use inside mutationFn to convert API errors into thrown Errors for React Query.
+ *
+ * A success response without `data` is still a success: delete routes and other
+ * actions reply `{ success: true }` with no body. In that case this returns
+ * `undefined`, so callers that need the payload must check it before use.
  */
 export function throwOnApiError<T>(result: ApiResponse<T>, fallbackMessage: string): T {
 	if (!result.success) {
 		const msg = typeof result.error === "string" ? result.error : fallbackMessage;
 		throw new Error(msg);
 	}
-	if (result.data === undefined) {
-		throw new Error(fallbackMessage);
-	}
-	return result.data;
+	return result.data as T;
 }
 
 /**

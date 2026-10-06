@@ -19,15 +19,20 @@ import {
 } from "@/hooks/useAnalytics";
 import { useCurrentGuild } from "@/hooks/useCurrentGuild";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import { isModuleAvailable } from "@/lib/constants";
 import { FadeIn } from "@ninsys/ui/components/animations";
 import { BarChart3, Settings } from "lucide-react";
 import { useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 
+// The digest settings tab has no bot backend yet (see UNAVAILABLE_MODULES)
+const CONFIG_TAB_AVAILABLE = isModuleAvailable("analytics-settings");
+const DEFAULT_TAB = CONFIG_TAB_AVAILABLE ? "config" : "dashboard";
+
 const TABS = [
 	{ id: "config", label: "Config", icon: Settings },
 	{ id: "dashboard", label: "Dashboard", icon: BarChart3 },
-];
+].filter((tab) => tab.id !== "config" || CONFIG_TAB_AVAILABLE);
 
 const FREQUENCY_OPTIONS = [
 	{ value: "weekly", label: "Weekly" },
@@ -153,7 +158,8 @@ export function ServerAnalyticsPage() {
 	usePageTitle("Server Analytics");
 
 	const [searchParams, setSearchParams] = useSearchParams();
-	const activeTab = searchParams.get("tab") ?? "config";
+	const requestedTab = searchParams.get("tab") ?? DEFAULT_TAB;
+	const activeTab = TABS.some((tab) => tab.id === requestedTab) ? requestedTab : DEFAULT_TAB;
 
 	const handleTabChange = useCallback(
 		(tab: string) => {
