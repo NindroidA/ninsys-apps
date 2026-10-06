@@ -1,11 +1,17 @@
-import { apiPost, clearCsrfToken } from "@/lib/api";
-import { useQueryClient } from "@tanstack/react-query";
+import { apiPost } from "@/lib/api";
 import { useEffect, useRef } from "react";
 
 const REFRESH_INTERVAL = 1000 * 60 * 30; // 30 minutes
 
+/**
+ * Keeps the session alive by calling /auth/refresh every 30 minutes.
+ *
+ * Only a real 401 ends the session, and handleResponse already clears the CSRF
+ * token and redirects to /login for that. Anything else (429, 5xx, a network
+ * error, a CSRF blip) is transient: the user stays on the page with their
+ * unsaved edits, and the next tick tries again.
+ */
 export function useSessionRefresh(isAuthenticated: boolean) {
-	const queryClient = useQueryClient();
 	const intervalRef = useRef<ReturnType<typeof setInterval>>(null);
 
 	useEffect(() => {
@@ -16,21 +22,14 @@ export function useSessionRefresh(isAuthenticated: boolean) {
 
 		intervalRef.current = setInterval(async () => {
 			try {
-				const result = await apiPost("/auth/refresh");
-				if (!result.success) {
-					clearCsrfToken();
-					queryClient.clear();
-					window.location.href = "/login";
-				}
+				await apiPost("/auth/refresh");
 			} catch {
-				clearCsrfToken();
-				queryClient.clear();
-				window.location.href = "/login";
+				// Network error: not a sign the session ended. Retry on the next tick.
 			}
 		}, REFRESH_INTERVAL);
 
 		return () => {
 			if (intervalRef.current) clearInterval(intervalRef.current);
 		};
-	}, [isAuthenticated, queryClient]);
+	}, [isAuthenticated]);
 }

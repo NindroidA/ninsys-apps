@@ -1,12 +1,16 @@
 import { Layout } from "@/components/layout";
+import { usePageTitle } from "@/hooks/usePageTitle";
+import { UNAVAILABLE_MODULES, isModuleAvailable } from "@/lib/constants";
 import { CommandsPage } from "@/pages/CommandsPage";
 import { FeaturesPage } from "@/pages/FeaturesPage";
 import { HomePage } from "@/pages/HomePage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 import { StatusPage } from "@/pages/StatusPage";
+import { Button } from "@ninsys/ui/components";
 import { PageTransition } from "@ninsys/ui/components/animations";
-import { Suspense, lazy, useEffect } from "react";
-import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
+import { Construction } from "lucide-react";
+import { type ReactNode, Suspense, lazy, useEffect } from "react";
+import { Link, Navigate, Outlet, Route, Routes, useLocation, useParams } from "react-router-dom";
 
 // Lazy-loaded dashboard pages
 const LoginPage = lazy(() =>
@@ -223,6 +227,32 @@ function LoadingFallback() {
 	);
 }
 
+/** Shown on direct links to a module whose bot backend has not shipped yet. */
+function ModuleUnavailablePage({ label }: { label: string }) {
+	const { guildId } = useParams<{ guildId: string }>();
+	usePageTitle(label);
+
+	return (
+		<div className="flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
+			<Construction className="h-12 w-12 text-muted-foreground/50 mb-4" />
+			<h1 className="text-2xl font-semibold mb-2">{label} isn't in the dashboard yet</h1>
+			<p className="text-sm text-muted-foreground max-w-md mb-6">
+				This page isn't connected to the bot yet. It will show up in the sidebar as soon as it's
+				ready.
+			</p>
+			<Link to={guildId ? `/dashboard/${guildId}` : "/dashboard"}>
+				<Button variant="outline">Back to dashboard</Button>
+			</Link>
+		</div>
+	);
+}
+
+/** The module's page, or the placeholder while it is listed in UNAVAILABLE_MODULES. */
+function moduleRoute(module: string, page: ReactNode): ReactNode {
+	if (isModuleAvailable(module)) return page;
+	return <ModuleUnavailablePage label={UNAVAILABLE_MODULES[module] ?? module} />;
+}
+
 function ScrollToTop() {
 	const { pathname } = useLocation();
 	useEffect(() => {
@@ -292,7 +322,7 @@ export default function App() {
 						}
 					>
 						<Route index element={<GuildSelectorPage />} />
-						<Route path="incidents" element={<IncidentsPage />} />
+						<Route path="incidents" element={moduleRoute("incidents", <IncidentsPage />)} />
 
 						<Route
 							path=":guildId"
@@ -316,13 +346,13 @@ export default function App() {
 							<Route path="roles" element={<RolesPage />} />
 							<Route path="systems" element={<SystemSettingsPage />} />
 							<Route path="data" element={<DataExportPage />} />
-							<Route path="xp" element={<XpPage />} />
-							<Route path="starboard" element={<StarboardPage />} />
-							<Route path="events" element={<EventsPage />} />
+							<Route path="xp" element={moduleRoute("xp", <XpPage />)} />
+							<Route path="starboard" element={moduleRoute("starboard", <StarboardPage />)} />
+							<Route path="events" element={moduleRoute("events", <EventsPage />)} />
 							<Route path="server-analytics" element={<ServerAnalyticsPage />} />
-							<Route path="onboarding" element={<OnboardingPage />} />
-							<Route path="sla" element={<SlaPage />} />
-							<Route path="routing" element={<RoutingPage />} />
+							<Route path="onboarding" element={moduleRoute("onboarding", <OnboardingPage />)} />
+							<Route path="sla" element={moduleRoute("sla", <SlaPage />)} />
+							<Route path="routing" element={moduleRoute("routing", <RoutingPage />)} />
 							<Route path="app-workflow" element={<ApplicationWorkflowPage />} />
 							<Route path="permissions" element={<PermissionsPage />} />
 							<Route path="*" element={<Navigate to="." replace />} />

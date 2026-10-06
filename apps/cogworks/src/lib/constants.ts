@@ -44,3 +44,25 @@ export function getDefaultAvatarUrl(userId: string): string {
 		return "https://cdn.discordapp.com/embed/avatars/0.png";
 	}
 }
+
+/**
+ * Dashboard modules whose bot backend does not exist yet, keyed by route
+ * segment (or tab id) with the label shown on the "not available yet" page.
+ * Their sidebar entries and tabs are hidden, and direct links show a friendly
+ * placeholder instead of a page full of failing requests.
+ * Delete a line to re-enable that module once its backend lands.
+ */
+export const UNAVAILABLE_MODULES: Readonly<Record<string, string>> = {
+	xp: "XP & Levels",
+	starboard: "Starboard",
+	events: "Events",
+	onboarding: "Onboarding",
+	sla: "Ticket SLA",
+	routing: "Smart Routing",
+	incidents: "Incidents",
+	"analytics-settings": "Analytics settings",
+};
+
+export function isModuleAvailable(module: string): boolean {
+	return !Object.prototype.hasOwnProperty.call(UNAVAILABLE_MODULES, module);
+}
