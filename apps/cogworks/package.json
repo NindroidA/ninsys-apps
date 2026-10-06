@@ -7,8 +7,9 @@
 		"dev": "vite",
 		"build": "tsc -b && vite build",
 		"preview": "vite preview",
-		"lint": "biome check src/",
-		"typecheck": "tsc --noEmit"
+		"lint": "biome check src/ tests/",
+		"typecheck": "tsc --noEmit",
+		"test": "bun test"
 	},
 	"dependencies": {
 		"@ninsys/ui": "workspace:*",
