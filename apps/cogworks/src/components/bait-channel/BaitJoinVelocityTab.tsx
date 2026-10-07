@@ -19,24 +19,24 @@ const TIME_RANGES = [
 interface HourlyBucket {
 	time: string;
 	count: number;
-	burstCount: number;
+	suspiciousCount: number;
 }
 
 export function BaitJoinVelocityTab({ guildId }: BaitJoinVelocityTabProps) {
 	const [rangeDays, setRangeDays] = useState(7);
-	const { data: events = [], isLoading } = useBaitJoinEvents(guildId, 500);
+	const { data: events = [], isLoading } = useBaitJoinEvents(guildId);
 
 	const cutoff = useMemo(() => Date.now() - rangeDays * 24 * 60 * 60 * 1000, [rangeDays]);
 
 	const filtered = useMemo(
-		() => events.filter((e) => new Date(e.timestamp).getTime() >= cutoff),
+		() => events.filter((e) => new Date(e.joinedAt).getTime() >= cutoff),
 		[events, cutoff],
 	);
 
 	const chartData = useMemo(() => {
 		const buckets = new Map<string, HourlyBucket>();
 		for (const event of filtered) {
-			const d = new Date(event.timestamp);
+			const d = new Date(event.joinedAt);
 			const key =
 				rangeDays <= 3
 					? `${d.getMonth() + 1}/${d.getDate()} ${d.getHours()}:00`
@@ -44,25 +44,25 @@ export function BaitJoinVelocityTab({ guildId }: BaitJoinVelocityTabProps) {
 			const existing = buckets.get(key);
 			if (existing) {
 				existing.count++;
-				if (event.isBurst) existing.burstCount++;
+				if (event.isSuspicious) existing.suspiciousCount++;
 			} else {
 				buckets.set(key, {
 					time: key,
 					count: 1,
-					burstCount: event.isBurst ? 1 : 0,
+					suspiciousCount: event.isSuspicious ? 1 : 0,
 				});
 			}
 		}
 		return Array.from(buckets.values());
 	}, [filtered, rangeDays]);
 
-	const burstActive = filtered.some(
-		(e) => e.isBurst && Date.now() - new Date(e.timestamp).getTime() < 5 * 60 * 1000,
+	const suspiciousNow = filtered.some(
+		(e) => e.isSuspicious && Date.now() - new Date(e.joinedAt).getTime() < 5 * 60 * 1000,
 	);
 
 	const currentRate = useMemo(() => {
 		const fiveMinAgo = Date.now() - 5 * 60 * 1000;
-		return filtered.filter((e) => new Date(e.timestamp).getTime() >= fiveMinAgo).length;
+		return filtered.filter((e) => new Date(e.joinedAt).getTime() >= fiveMinAgo).length;
 	}, [filtered]);
 
 	if (isLoading) {
@@ -81,12 +81,12 @@ export function BaitJoinVelocityTab({ guildId }: BaitJoinVelocityTabProps) {
 				<div className="flex items-center gap-2">
 					<Activity
 						className={`h-4 w-4 ${
-							burstActive ? "text-red-500 animate-pulse" : "text-muted-foreground"
+							suspiciousNow ? "text-red-500 animate-pulse" : "text-muted-foreground"
 						}`}
 					/>
 					<span className="text-sm">
-						{burstActive ? (
-							<span className="text-red-500 font-medium">Burst Detected</span>
+						{suspiciousNow ? (
+							<span className="text-red-500 font-medium">Suspicious Joins</span>
 						) : (
 							<span className="text-muted-foreground">Normal</span>
 						)}
@@ -145,10 +145,10 @@ export function BaitJoinVelocityTab({ guildId }: BaitJoinVelocityTabProps) {
 							/>
 							<Area
 								type="monotone"
-								dataKey="burstCount"
+								dataKey="suspiciousCount"
 								stroke="#ef4444"
 								fill="rgba(239, 68, 68, 0.15)"
-								name="Burst Joins"
+								name="Suspicious Joins"
 							/>
 						</AreaChart>
 					</ResponsiveContainer>
@@ -162,9 +162,9 @@ export function BaitJoinVelocityTab({ guildId }: BaitJoinVelocityTabProps) {
 					<p className="text-xl font-bold mt-1">{filtered.length}</p>
 				</Card>
 				<Card className="p-4">
-					<p className="text-xs text-muted-foreground">Burst Events</p>
+					<p className="text-xs text-muted-foreground">Suspicious Joins</p>
 					<p className="text-xl font-bold mt-1 text-red-500">
-						{filtered.filter((e) => e.isBurst).length}
+						{filtered.filter((e) => e.isSuspicious).length}
 					</p>
 				</Card>
 				<Card className="p-4">

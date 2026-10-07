@@ -1,15 +1,72 @@
 import { apiDelete, apiGet, apiPost, apiPut, throwOnApiError } from "@/lib/api";
+import { deepEqual } from "@/lib/utils";
 import { toast } from "@/stores/toastStore";
 import type { PaginatedResponse } from "@/types/api";
 import type {
 	BaitChannelConfig,
 	BaitChannelLog,
 	BaitChannelStats,
+	BaitChannelStatsResponse,
 	BaitChannelWhitelist,
 	BaitKeyword,
 	JoinEvent,
 } from "@/types/bait-channel";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+/** The bot's column defaults. It can't store an empty message. */
+export const DEFAULT_BAN_REASON = "Posted in bait channel - Potential bot/scammer";
+export const DEFAULT_WARNING_MESSAGE =
+	"⚠️ You have posted in a restricted channel. This channel is monitored for unauthorized access.";
+
+/**
+ * The config PUT body: only the settings that changed. The API validates every
+ * field it gets, and the bot can't clear the bait channel or the messages, so an
+ * emptied message is saved as the bot's default and a cleared channel is left out.
+ */
+export function baitConfigChanges<
+	T extends { channelId: string | null; banReason: string; warningMessage: string },
+>(form: T, original: T): Partial<T> {
+	const next = withDefaultMessages(form);
+	const changes: Partial<T> = {};
+	for (const key of Object.keys(next) as (keyof T)[]) {
+		if (key === "channelId" && next.channelId === null) continue;
+		if (!deepEqual(next[key], original[key])) changes[key] = next[key];
+	}
+	return changes;
+}
+
+/** An emptied message is the bot's default text (the form shows it again on save). */
+export function withDefaultMessages<T extends { banReason: string; warningMessage: string }>(
+	form: T,
+): T {
+	return {
+		...form,
+		banReason: form.banReason.trim() ? form.banReason : DEFAULT_BAN_REASON,
+		warningMessage: form.warningMessage.trim() ? form.warningMessage : DEFAULT_WARNING_MESSAGE,
+	};
+}
+
+/** The bot sends score buckets as an object; the chart wants rows. */
+export function normalizeBaitStats(raw: BaitChannelStatsResponse): BaitChannelStats {
+	return {
+		total: raw.total ?? 0,
+		actionBreakdown: raw.actionBreakdown ?? {},
+		overrideRate: raw.overrideRate ?? 0,
+		overriddenCount: raw.overriddenCount ?? 0,
+		scoreDistribution: Object.entries(raw.scoreDistribution ?? {}).map(([bucket, count]) => ({
+			bucket,
+			count,
+		})),
+		topFlags: raw.topFlags ?? [],
+	};
+}
+
+/** The names of the flags that fired on a detection. */
+export function firedFlags(flags: BaitChannelLog["detectionFlags"]): string[] {
+	return Object.entries(flags ?? {})
+		.filter(([, fired]) => fired)
+		.map(([flag]) => flag);
+}
 
 // --- Config ---
 
@@ -17,9 +74,14 @@ export function useBaitChannelConfig(guildId: string) {
 	return useQuery({
 		queryKey: ["bait-channel", "config", guildId],
 		queryFn: async () => {
-			const result = await apiGet<BaitChannelConfig>(`/guilds/${guildId}/bait-channel/config`);
-			if (!result.success || !result.data) return null;
-			return result.data;
+			const result = await apiGet<BaitChannelConfig | null>(
+				`/guilds/${guildId}/bait-channel/config`,
+			);
+			// The API answers 502/503 when it can't read the bot's half of the settings.
+			// Throw so the tab shows an error: a form of defaults would overwrite them on save.
+			if (!result.success) throw new Error(result.error ?? "Failed to load bait channel settings");
+			// null: bait channel not set up for this guild.
+			return result.data ?? null;
 		},
 		staleTime: 1000 * 60 * 5,
 		enabled: !!guildId,
@@ -58,10 +120,16 @@ export function useBaitChannelWhitelist(guildId: string) {
 			const result = await apiGet<BaitChannelWhitelist>(
 				`/guilds/${guildId}/bait-channel/whitelist`,
 			);
+			// 404: bait channel not set up. Any other failure throws, like the config: an
+			// empty list here would replace the real one on save.
+			if (!result.success && result.status === 404) return null;
 			if (!result.success || !result.data) {
-				return { roleIds: [], userIds: [] } as BaitChannelWhitelist;
+				throw new Error(result.error ?? "Failed to load the whitelist");
 			}
-			return result.data;
+			return {
+				whitelistedRoles: result.data.whitelistedRoles ?? [],
+				whitelistedUsers: result.data.whitelistedUsers ?? [],
+			};
 		},
 		staleTime: 1000 * 60 * 5,
 		enabled: !!guildId,
@@ -96,24 +164,25 @@ export function useUpdateBaitChannelWhitelist(guildId: string) {
 interface BaitLogParams {
 	page?: number;
 	limit?: number;
+	/** A stored actionTaken value ('ban', 'kick', 'timeout', 'logged', ...). */
 	action?: string;
-	minScore?: number;
-	maxScore?: number;
+	scoreMin?: number;
 }
 
 export function useBaitChannelLogs(guildId: string, params: BaitLogParams = {}) {
-	const { page = 1, limit = 20, action, minScore, maxScore } = params;
+	const { page = 1, limit = 20, action, scoreMin } = params;
 
 	return useQuery({
-		queryKey: ["bait-channel", "logs", guildId, { page, limit, action, minScore, maxScore }],
+		queryKey: ["bait-channel", "logs", guildId, { page, limit, action, scoreMin }],
 		queryFn: async () => {
 			const searchParams = new URLSearchParams({
 				page: String(page),
 				limit: String(limit),
+				sort: "createdAt",
+				order: "DESC",
 			});
 			if (action) searchParams.set("action", action);
-			if (minScore !== undefined) searchParams.set("minScore", String(minScore));
-			if (maxScore !== undefined) searchParams.set("maxScore", String(maxScore));
+			if (scoreMin !== undefined) searchParams.set("scoreMin", String(scoreMin));
 
 			const result = await apiGet<PaginatedResponse<BaitChannelLog>>(
 				`/guilds/${guildId}/bait-channel/logs?${searchParams}`,
@@ -137,9 +206,12 @@ export function useOverrideBaitLog(guildId: string) {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: async (userId: string) => {
+		// The bot overrides the user's newest detection. logId is for when the API and
+		// the bot accept it; until then it is ignored.
+		mutationFn: async ({ userId, logId }: { userId: string; logId: number }) => {
 			const result = await apiPost(`/guilds/${guildId}/bait-channel/override`, {
 				userId,
+				logId,
 			});
 			return throwOnApiError(result, "Failed to override detection");
 		},
@@ -164,11 +236,11 @@ export function useBaitChannelStats(guildId: string, days = 30) {
 	return useQuery({
 		queryKey: ["bait-channel", "stats", guildId, days],
 		queryFn: async () => {
-			const result = await apiGet<BaitChannelStats>(
+			const result = await apiGet<BaitChannelStatsResponse>(
 				`/guilds/${guildId}/bait-channel/detection-stats?days=${days}`,
 			);
 			if (!result.success || !result.data) return null;
-			return result.data;
+			return normalizeBaitStats(result.data);
 		},
 		staleTime: 1000 * 60 * 5,
 		enabled: !!guildId,
@@ -181,12 +253,11 @@ export function useBaitKeywords(guildId: string) {
 	return useQuery({
 		queryKey: ["bait-channel", "keywords", guildId],
 		queryFn: async () => {
-			const result = await apiGet<BaitKeyword[] | { keywords: BaitKeyword[] }>(
+			const result = await apiGet<{ keywords: BaitKeyword[] }>(
 				`/guilds/${guildId}/bait-channel/keywords`,
 			);
 			if (!result.success || !result.data) return [];
-			const raw = result.data;
-			return Array.isArray(raw) ? raw : (raw.keywords ?? []);
+			return result.data.keywords ?? [];
 		},
 		staleTime: 1000 * 60 * 5,
 		enabled: !!guildId,
@@ -255,16 +326,16 @@ export function useResetBaitKeywords(guildId: string) {
 
 // --- Join Events ---
 
+/** The bot returns at most 200 events, newest first. */
 export function useBaitJoinEvents(guildId: string, limit = 200) {
 	return useQuery({
 		queryKey: ["bait-channel", "join-events", guildId, limit],
 		queryFn: async () => {
-			const result = await apiGet<JoinEvent[] | { events: JoinEvent[] }>(
+			const result = await apiGet<{ joinEvents: JoinEvent[]; count: number }>(
 				`/guilds/${guildId}/bait-channel/join-events?limit=${limit}`,
 			);
 			if (!result.success || !result.data) return [];
-			const raw = result.data;
-			return Array.isArray(raw) ? raw : (raw.events ?? []);
+			return result.data.joinEvents ?? [];
 		},
 		staleTime: 1000 * 60 * 2,
 		enabled: !!guildId,
