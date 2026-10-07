@@ -235,7 +235,7 @@ export function useAddRestriction(guildId: string) {
 	return useMutation({
 		mutationFn: async (data: {
 			userId: string;
-			typeId: string | null;
+			typeId: string;
 			reason: string;
 		}) => {
 			const result = await apiPost<UserTicketRestriction>(
@@ -281,11 +281,12 @@ export function useRemoveRestriction(guildId: string) {
 interface ActiveTicketParams {
 	page?: number;
 	limit?: number;
+	/** The API reads "open" as not closed and "all" as no filter. */
 	status?: "open" | "closed" | "all";
 }
 
 export function useActiveTickets(guildId: string, params: ActiveTicketParams = {}) {
-	const { page = 1, limit = 20, status = "all" } = params;
+	const { page = 1, limit = 20, status = "open" } = params;
 
 	return useQuery({
 		queryKey: ["tickets", "active", guildId, { page, limit, status }],
@@ -293,8 +294,8 @@ export function useActiveTickets(guildId: string, params: ActiveTicketParams = {
 			const searchParams = new URLSearchParams({
 				page: String(page),
 				limit: String(limit),
+				status,
 			});
-			if (status !== "all") searchParams.set("status", status);
 
 			const result = await apiGet<PaginatedResponse<Ticket>>(
 				`/guilds/${guildId}/tickets/active?${searchParams}`,
