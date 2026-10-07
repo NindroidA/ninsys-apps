@@ -1,7 +1,9 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useSessionRefresh } from "@/hooks/useSessionRefresh";
+import { ADMIN_TOTP_REQUIRED_EVENT, verifyOutcome } from "@/lib/adminTotp";
 import { apiPost } from "@/lib/api";
 import { Button, Card, Input } from "@ninsys/ui/components";
+import { useQueryClient } from "@tanstack/react-query";
 import { Loader2, Lock } from "lucide-react";
 import { type ReactNode, useCallback, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
@@ -60,6 +62,20 @@ export function SuperAdminRoute({ children }: SuperAdminRouteProps) {
 	const [verifying, setVerifying] = useState(false);
 	const [failures, setFailures] = useState(0);
 	const [lockedUntil, setLockedUntil] = useState<number | null>(null);
+	const queryClient = useQueryClient();
+
+	// The API's own TOTP grant is missing or expired: ask for a code again, and drop
+	// the admin data that failed so it reloads after verifying.
+	useEffect(() => {
+		const onTotpRequired = () => {
+			resetSuperAdminSession();
+			setVerified(false);
+			queryClient.removeQueries({ queryKey: ["admin"] });
+			queryClient.removeQueries({ queryKey: ["bot-status-full"] });
+		};
+		window.addEventListener(ADMIN_TOTP_REQUIRED_EVENT, onTotpRequired);
+		return () => window.removeEventListener(ADMIN_TOTP_REQUIRED_EVENT, onTotpRequired);
+	}, [queryClient]);
 
 	// Re-check session validity when user changes
 	useEffect(() => {
@@ -106,11 +122,16 @@ export function SuperAdminRoute({ children }: SuperAdminRouteProps) {
 		setVerifying(true);
 		setError(null);
 		try {
-			const result = await apiPost<{ verified: boolean }>("/admin/totp/verify", {
-				code,
-			});
-			if (result.success && result.data?.verified && user?.id) {
-				setStoredSession(user.id, Date.now() + SESSION_TTL_MS);
+			const result = await apiPost<{ verified: boolean; expiresAt?: string }>(
+				"/admin/totp/verify",
+				{ code },
+			);
+			const outcome = verifyOutcome(result, SESSION_TTL_MS);
+			if (outcome.kind === "error") {
+				// Rate limited or a server error: show why, and don't count it as a wrong code.
+				setError(outcome.message);
+			} else if (outcome.kind === "verified" && user?.id) {
+				setStoredSession(user.id, outcome.expiresAt);
 				setVerified(true);
 				setFailures(0);
 			} else {

@@ -5,6 +5,7 @@
  * No tokens stored in the frontend. Mutating requests include CSRF token.
  */
 
+import { ADMIN_TOTP_REQUIRED_EVENT, isAdminTotpRequired } from "@/lib/adminTotp";
 import type { ApiResponse } from "@/types/api";
 
 export const API_BASE = "/v2/cogworks";
@@ -126,6 +127,11 @@ async function handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
 			error: CSRF_RETRY_SENTINEL,
 			timestamp: new Date().toISOString(),
 		};
+	}
+
+	// Ask SuperAdminRoute for the TOTP form again; the error text is returned below.
+	if (isAdminTotpRequired(response.status, data.error) && typeof window !== "undefined") {
+		window.dispatchEvent(new Event(ADMIN_TOTP_REQUIRED_EVENT));
 	}
 
 	// 401 Unauthorized — session expired, redirect to login
