@@ -5,6 +5,7 @@
  * No tokens stored in the frontend. Mutating requests include CSRF token.
  */
 
+import { ADMIN_TOTP_REQUIRED_EVENT, isAdminTotpRequired } from "@/lib/adminTotp";
 import type { ApiResponse } from "@/types/api";
 
 export const API_BASE = "/v2/cogworks";
@@ -105,13 +106,16 @@ async function handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
 
 	const data = await response.json();
 
-	// Normalize error field — API may return string or { code, message } object
+	// Normalize error field — API may return string or { code, message } object.
+	// Bot errors the API proxies as-is arrive as data.error (bait channel routes).
 	const errorString: string | undefined =
 		typeof data.error === "string"
 			? data.error
 			: typeof data.error === "object" && data.error?.message
 				? data.error.message
-				: undefined;
+				: typeof data.data?.error === "string"
+					? data.data.error
+					: undefined;
 
 	// CSRF token expired — refresh and signal caller to retry
 	// API returns error as object { code, message } or string
@@ -126,6 +130,11 @@ async function handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
 			error: CSRF_RETRY_SENTINEL,
 			timestamp: new Date().toISOString(),
 		};
+	}
+
+	// Ask SuperAdminRoute for the TOTP form again; the error text is returned below.
+	if (isAdminTotpRequired(response.status, data.error) && typeof window !== "undefined") {
+		window.dispatchEvent(new Event(ADMIN_TOTP_REQUIRED_EVENT));
 	}
 
 	// 401 Unauthorized — session expired, redirect to login
@@ -158,6 +167,7 @@ async function handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
 		return {
 			success: false,
 			error: errorString || `HTTP error ${response.status}`,
+			status: response.status,
 			timestamp: data.timestamp ?? new Date().toISOString(),
 		};
 	}

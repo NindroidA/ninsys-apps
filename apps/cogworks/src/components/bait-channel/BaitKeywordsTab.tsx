@@ -32,9 +32,9 @@ function KeywordRow({
 			<Badge variant="outline" className="text-xs tabular-nums">
 				{keyword.weight}
 			</Badge>
-			<span className="text-xs text-muted-foreground hidden sm:inline">{keyword.addedBy}</span>
+			<span className="text-xs text-muted-foreground hidden sm:inline">{keyword.createdBy}</span>
 			<span className="text-xs text-muted-foreground hidden sm:inline">
-				{new Date(keyword.addedAt).toLocaleDateString()}
+				{new Date(keyword.createdAt).toLocaleDateString()}
 			</span>
 			<button
 				type="button"
