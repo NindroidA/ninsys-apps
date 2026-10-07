@@ -106,13 +106,16 @@ async function handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
 
 	const data = await response.json();
 
-	// Normalize error field — API may return string or { code, message } object
+	// Normalize error field — API may return string or { code, message } object.
+	// Bot errors the API proxies as-is arrive as data.error (bait channel routes).
 	const errorString: string | undefined =
 		typeof data.error === "string"
 			? data.error
 			: typeof data.error === "object" && data.error?.message
 				? data.error.message
-				: undefined;
+				: typeof data.data?.error === "string"
+					? data.data.error
+					: undefined;
 
 	// CSRF token expired — refresh and signal caller to retry
 	// API returns error as object { code, message } or string
@@ -164,6 +167,7 @@ async function handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
 		return {
 			success: false,
 			error: errorString || `HTTP error ${response.status}`,
+			status: response.status,
 			timestamp: data.timestamp ?? new Date().toISOString(),
 		};
 	}

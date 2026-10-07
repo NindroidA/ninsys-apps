@@ -2,8 +2,6 @@ import { useBaitChannelStats } from "@/hooks/useBaitChannel";
 import { Card } from "@ninsys/ui/components";
 import { useMemo, useState } from "react";
 import {
-	Area,
-	AreaChart,
 	Bar,
 	BarChart,
 	Cell,
@@ -23,8 +21,8 @@ interface BaitStatsTabProps {
 const ACTION_COLORS: Record<string, string> = {
 	ban: "#ef4444",
 	kick: "#f97316",
-	mute: "#eab308",
-	warn: "#3b82f6",
+	timeout: "#eab308",
+	logged: "#3b82f6",
 };
 
 const TIME_RANGES = [
@@ -135,21 +133,10 @@ export function BaitStatsTab({ guildId }: BaitStatsTabProps) {
 
 			{/* KPI Cards */}
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-				<StatCard label={`Total Detections (${days}d)`} value={stats.totalDetections30d ?? 0} />
-				<StatCard
-					label="Avg Suspicion Score"
-					value={Math.round(stats.averageSuspicionScore ?? 0)}
-				/>
-				<StatCard
-					label="Override Rate"
-					value={
-						stats.overrideRate != null
-							? `${(stats.overrideRate * 100).toFixed(1)}%`
-							: stats.falsePositiveRate != null
-								? `${(stats.falsePositiveRate * 100).toFixed(1)}%`
-								: "—"
-					}
-				/>
+				<StatCard label={`Total Detections (${days}d)`} value={stats.total} />
+				<StatCard label="Overridden" value={stats.overriddenCount} />
+				{/* The bot already sends a percentage. */}
+				<StatCard label="Override Rate" value={`${stats.overrideRate}%`} />
 				<StatCard label="Most Common Action" value={mostCommonAction} />
 			</div>
 
@@ -189,7 +176,7 @@ export function BaitStatsTab({ guildId }: BaitStatsTabProps) {
 			</Card>
 
 			{/* Score Distribution Histogram */}
-			{stats.scoreDistribution && stats.scoreDistribution.length > 0 && (
+			{stats.total > 0 && (
 				<Card className="p-6">
 					<h3 className="text-sm font-semibold mb-4">Score Distribution</h3>
 					<ResponsiveContainer width="100%" height={200}>
@@ -204,7 +191,7 @@ export function BaitStatsTab({ guildId }: BaitStatsTabProps) {
 			)}
 
 			{/* Top Detection Flags */}
-			{stats.topFlags && stats.topFlags.length > 0 && (
+			{stats.topFlags.length > 0 && (
 				<Card className="p-6">
 					<h3 className="text-sm font-semibold mb-4">Top Detection Flags</h3>
 					<div className="space-y-2">
@@ -231,39 +218,6 @@ export function BaitStatsTab({ guildId }: BaitStatsTabProps) {
 					</div>
 				</Card>
 			)}
-
-			{/* Detections by Day Chart */}
-			<Card className="p-6">
-				<h3 className="text-sm font-semibold mb-4">Detections by Day</h3>
-				{(stats.detectionsByDay?.length ?? 0) > 0 ? (
-					<ResponsiveContainer width="100%" height={250}>
-						<AreaChart data={stats.detectionsByDay}>
-							<XAxis
-								dataKey="date"
-								tick={{ fontSize: 12 }}
-								tickFormatter={(d: string) =>
-									new Date(d).toLocaleDateString(undefined, {
-										month: "short",
-										day: "numeric",
-									})
-								}
-							/>
-							<YAxis tick={{ fontSize: 12 }} allowDecimals={false} />
-							<Tooltip labelFormatter={(d) => new Date(String(d)).toLocaleDateString()} />
-							<Area
-								type="monotone"
-								dataKey="count"
-								stroke="oklch(0.55 0.12 240)"
-								fill="oklch(0.55 0.20 280 / 0.2)"
-							/>
-						</AreaChart>
-					</ResponsiveContainer>
-				) : (
-					<p className="text-sm text-muted-foreground text-center py-8">
-						No detection data to display
-					</p>
-				)}
-			</Card>
 		</div>
 	);
 }

@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.4.3] - 2026-10-06
+
+The Bait Channel pages had drifted from what the API (ninsys-api 2.20.8) and the bot send and accept, so the Stats tab showed wrong numbers, Logs and Join Events were empty or blank, and several settings never saved while the page said they had.
+
+### Fixed
+
+- **Stats**: the override rate no longer shows 100 times too high (the bot already sends a percentage), and Total Detections shows the real count. The Avg Suspicion Score card and the Detections by Day chart are gone, because the bot doesn't compute them. An Overridden count takes their place.
+- **Logs**: the Action column, the flag count and the detail panel's flags show again. The list is newest first, and the "Log Only" filter finds log-only detections. Override shows only where the row is known to be the user's newest detection (the first row per user on the unfiltered first page), because the bot overrides a user's most recent detection, and never on raid-mode rows. A failed override shows the bot's reason.
+- **Join Events** lists joins again, and **Keywords** shows who added each keyword and when (no more "Invalid Date").
+- **Config and Whitelist**: test mode, escalation, weekly summary, DM-before-action and the whitelist now save. A save sends only the settings you changed. If the API can't load the settings (for example, the bot is offline), the tab shows an error and a retry button instead of a form of defaults that would overwrite your settings. A server without a bait channel shows how to set one up on both tabs.
+- **Config**: the grace period is capped at 60 seconds, like `/baitchannel setup`. An emptied ban reason or warning saves as the bot's default text and the box shows that text again; Reset restores it too. Bot Configuration → "Reset all custom messages" now works for the bait messages.
+
+### Changed
+
+- **Config**: the Additional Bait Channels section is removed until the bot can save extra channels from the dashboard. Before, it showed "saved" but nothing was stored.
+
+### Added
+
+- **Tests**: unit tests for the stats mapper, the flag list, the changed-settings diff and the API client's error handling on bait routes.
+
 ## [1.4.2] - 2026-10-06
 
 The API now checks the Super Admin TOTP code itself (ninsys-api 2.20.9): verifying sets a 15-minute grant, and every other admin route needs it. The dashboard now handles the cases where that grant is missing or expired.
