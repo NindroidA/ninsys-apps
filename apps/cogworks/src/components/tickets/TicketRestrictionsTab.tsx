@@ -29,11 +29,12 @@ function AddRestrictionForm({
 	const id = useId();
 
 	const [userId, setUserId] = useState("");
-	const [typeId, setTypeId] = useState<string | null>(null);
+	// The bot stores restrictions per ticket type, so a type is required.
+	const [typeId, setTypeId] = useState("");
 	const [reason, setReason] = useState("");
 
 	const handleSubmit = useCallback(() => {
-		if (!userId.trim()) return;
+		if (!userId.trim() || !typeId) return;
 		addRestriction.mutate(
 			{ userId: userId.trim(), typeId, reason: reason.trim() },
 			{ onSuccess: onClose },
@@ -69,10 +70,10 @@ function AddRestrictionForm({
 				</div>
 
 				<Select
-					value={typeId ?? ""}
-					onChange={(v) => setTypeId(v || null)}
+					value={typeId}
+					onChange={setTypeId}
 					options={[
-						{ value: "", label: "All types" },
+						{ value: "", label: "Select a ticket type..." },
 						...types.map((t) => ({ value: t.typeId, label: t.displayName })),
 					]}
 					label="Ticket Type"
@@ -95,7 +96,10 @@ function AddRestrictionForm({
 					<Button variant="ghost" onClick={onClose} disabled={addRestriction.isPending}>
 						Cancel
 					</Button>
-					<Button onClick={handleSubmit} disabled={!userId.trim() || addRestriction.isPending}>
+					<Button
+						onClick={handleSubmit}
+						disabled={!userId.trim() || !typeId || addRestriction.isPending}
+					>
 						{addRestriction.isPending ? "Adding..." : "Add Restriction"}
 					</Button>
 				</div>

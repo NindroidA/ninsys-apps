@@ -9,7 +9,7 @@ import {
 	useTicketDetail,
 	useTicketTypes,
 } from "@/hooks/useTickets";
-import type { Ticket } from "@/types/tickets";
+import { type Ticket, isTicketClosed, ticketStatusBadge } from "@/types/tickets";
 import { Button, Input } from "@ninsys/ui/components";
 import { cn } from "@ninsys/ui/lib";
 import { AnimatePresence, motion } from "framer-motion";
@@ -103,7 +103,7 @@ function TicketDetailPanel({
 
 					<div className="space-y-4">
 						<div className="flex items-center gap-3">
-							<StatusBadge status={ticket.status} />
+							<StatusBadge status={ticketStatusBadge(ticket.status)} />
 							<span className="text-sm text-muted-foreground">#{ticket.id.slice(0, 8)}</span>
 						</div>
 
@@ -114,7 +114,9 @@ function TicketDetailPanel({
 							</div>
 							<div>
 								<p className="text-xs text-muted-foreground">Created By</p>
-								<p className="text-sm font-medium mt-0.5">{ticket.createdByUsername}</p>
+								<p className="text-sm font-medium mt-0.5">
+									{ticket.createdByUsername ?? ticket.createdBy}
+								</p>
 							</div>
 							<div>
 								<p className="text-xs text-muted-foreground">Assigned To</p>
@@ -123,7 +125,7 @@ function TicketDetailPanel({
 							<div>
 								<p className="text-xs text-muted-foreground">Created At</p>
 								<p className="text-sm font-medium mt-0.5">
-									{new Date(ticket.createdAt).toLocaleString()}
+									{ticket.createdAt ? new Date(ticket.createdAt).toLocaleString() : "—"}
 								</p>
 							</div>
 						</div>
@@ -148,7 +150,7 @@ function TicketDetailPanel({
 							</div>
 						)}
 
-						{ticket.status === "open" && (
+						{!isTicketClosed(ticket.status) && (
 							<div className="pt-4 border-t border-border space-y-2">
 								{/* Assign action */}
 								{showAssign ? (
@@ -218,7 +220,7 @@ function TicketDetailPanel({
 
 export function TicketActiveTab({ guildId }: TicketActiveTabProps) {
 	const [page, setPage] = useState(1);
-	const [statusFilter, setStatusFilter] = useState<"all" | "open" | "closed">("all");
+	const [statusFilter, setStatusFilter] = useState<"all" | "open" | "closed">("open");
 	const [typeFilter, setTypeFilter] = useState<string>("all");
 	const { data, isLoading } = useActiveTickets(guildId, {
 		page,
@@ -239,7 +241,7 @@ export function TicketActiveTab({ guildId }: TicketActiveTabProps) {
 	const typeNames = useMemo(() => {
 		const names = new Set<string>();
 		for (const t of data?.data ?? []) {
-			names.add(t.type);
+			if (t.type) names.add(t.type);
 		}
 		// Also add from ticket types config
 		for (const t of ticketTypes) {
@@ -266,12 +268,12 @@ export function TicketActiveTab({ guildId }: TicketActiveTabProps) {
 			{
 				key: "createdBy",
 				header: "Created By",
-				render: (row) => <span className="text-sm">{row.createdByUsername}</span>,
+				render: (row) => <span className="text-sm">{row.createdByUsername ?? row.createdBy}</span>,
 			},
 			{
 				key: "status",
 				header: "Status",
-				render: (row) => <StatusBadge status={row.status} />,
+				render: (row) => <StatusBadge status={ticketStatusBadge(row.status)} />,
 			},
 			{
 				key: "assignedTo",
@@ -287,7 +289,7 @@ export function TicketActiveTab({ guildId }: TicketActiveTabProps) {
 				header: "Created",
 				render: (row) => (
 					<span className="text-sm text-muted-foreground">
-						{new Date(row.createdAt).toLocaleDateString()}
+						{row.createdAt ? new Date(row.createdAt).toLocaleDateString() : "—"}
 					</span>
 				),
 			},
@@ -306,9 +308,9 @@ export function TicketActiveTab({ guildId }: TicketActiveTabProps) {
 						setPage(1);
 					}}
 					options={[
-						{ value: "all", label: "All Status" },
-						{ value: "open", label: "Open" },
+						{ value: "open", label: "Active" },
 						{ value: "closed", label: "Closed" },
+						{ value: "all", label: "All Status" },
 					]}
 					aria-label="Filter by status"
 				/>
@@ -346,7 +348,7 @@ export function TicketActiveTab({ guildId }: TicketActiveTabProps) {
 						icon: Eye,
 						onClick: () => setSelectedTicket(row),
 					},
-					...(row.status === "open"
+					...(!isTicketClosed(row.status)
 						? [
 								{
 									label: "Close",

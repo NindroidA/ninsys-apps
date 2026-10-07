@@ -109,28 +109,35 @@ export function useDeleteMemoryConfig(guildId: string) {
 
 // --- Tags ---
 
+/** GET .../tags answers { category: [...], status: [...] }. */
+type MemoryTagsResponse = Partial<
+	MemoryTagGroup & { category: MemoryTag[]; status: MemoryTag[]; tags: MemoryTag[] }
+>;
+
+export function toMemoryTagGroup(d: MemoryTagsResponse): MemoryTagGroup {
+	if (Array.isArray(d.tags)) {
+		return {
+			categories: d.tags.filter((t) => t.tagType === "category"),
+			statuses: d.tags.filter((t) => t.tagType === "status"),
+		};
+	}
+	return {
+		categories: d.category ?? d.categories ?? [],
+		statuses: d.status ?? d.statuses ?? [],
+	};
+}
+
 export function useMemoryTags(guildId: string, configId: string | null) {
 	return useQuery({
 		queryKey: ["memory", "tags", guildId, configId],
 		queryFn: async () => {
-			const result = await apiGet<MemoryTagGroup | { tags: MemoryTag[] }>(
+			const result = await apiGet<MemoryTagsResponse>(
 				`/guilds/${guildId}/memory/configs/${configId}/tags`,
 			);
 			if (!result.success || !result.data) {
 				return { categories: [], statuses: [] } as MemoryTagGroup;
 			}
-			const d = result.data;
-			// Handle both { categories, statuses } and { tags: [...] } shapes
-			if ("tags" in d && Array.isArray(d.tags)) {
-				return {
-					categories: d.tags.filter((t: MemoryTag) => t.tagType === "category"),
-					statuses: d.tags.filter((t: MemoryTag) => t.tagType === "status"),
-				} as MemoryTagGroup;
-			}
-			return {
-				categories: (d as MemoryTagGroup).categories ?? [],
-				statuses: (d as MemoryTagGroup).statuses ?? [],
-			};
+			return toMemoryTagGroup(result.data);
 		},
 		staleTime: 1000 * 60 * 5,
 		enabled: !!guildId && !!configId,
@@ -273,12 +280,12 @@ export function useCreateMemoryItem(guildId: string) {
 	const queryClient = useQueryClient();
 
 	return useMutation({
+		// The bot always starts an item as 'Open'; the category tag is applied to the thread.
 		mutationFn: async (data: {
 			memoryConfigId: string;
 			title: string;
 			description?: string;
-			categoryTag?: string;
-			statusTag?: string;
+			categoryTagId?: number;
 		}) => {
 			const result = await apiPost<MemoryItem>(`/guilds/${guildId}/memory/items`, data);
 			return throwOnApiError(result, "Failed to create memory item");
@@ -325,15 +332,16 @@ export function useUpdateMemoryItemStatus(guildId: string) {
 	const queryClient = useQueryClient();
 
 	return useMutation({
+		// `status` is the status tag's name, which is what the item stores.
 		mutationFn: async ({
 			itemId,
-			statusTag,
+			status,
 		}: {
 			itemId: string;
-			statusTag: string;
+			status: string;
 		}) => {
 			const result = await apiPut<MemoryItem>(`/guilds/${guildId}/memory/items/${itemId}/status`, {
-				statusTag,
+				status,
 			});
 			return throwOnApiError(result, "Failed to update status");
 		},

@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.4.4] - 2026-10-06
+
+Now that the API (ninsys-api 2.20.8) returns real rows for the Active lists and accepts the dashboard's requests, several pages still showed buttons that could never apply, crashed, or sent values the API rejected. The dashboard now follows the bot's statuses and the API's shapes.
+
+### Fixed
+
+- **Tickets → Active**: Close and Assign show on every open ticket (the bot's `opened`, `created` and workflow statuses), not just on one status that never occurs. The filter defaults to Active, and "All Status" includes closed tickets. Status badges read Open / Admin Only.
+- **Tickets → Restrictions**: the "All types" option is gone (the bot stores restrictions per type), so a restriction needs a ticket type.
+- **Applications → Active**: Approve and Deny show until an application is accepted, rejected or archived. Opening an application no longer breaks the panel. The filter defaults to Pending, and "All Status" now really lists everything.
+- **Memory**: the status and category controls appear again. Changing an item's status works and highlights the current one. The Channel column shows the channel name. The create form drops the Status choice (new items always start as Open) and applies the category you pick. Renaming a tag refreshes the tag list.
+- **Reaction Roles → Create Menu** needs a target channel, so Create stays disabled until you pick one (the bot posts the menu there).
+- **Archive Viewer**: the header shows the server ID when the archive has no server name (older bot exports don't include one).
+
+### Added
+
+- **Tests**: unit tests for the ticket and application status rules and the memory tags response.
+
 ## [1.4.1] - 2026-10-06
 
 ### Fixed
