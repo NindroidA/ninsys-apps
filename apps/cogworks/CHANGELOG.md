@@ -20,6 +20,19 @@ The Bait Channel pages had drifted from what the API (ninsys-api 2.20.8) and the
 
 - **Tests**: unit tests for the stats mapper, the flag list, the changed-settings diff and the API client's error handling on bait routes.
 
+## [1.4.2] - 2026-10-06
+
+The API now checks the Super Admin TOTP code itself (ninsys-api 2.20.9): verifying sets a 15-minute grant, and every other admin route needs it. The dashboard now handles the cases where that grant is missing or expired.
+
+### Fixed
+
+- **Super Admin**: when the API asks for TOTP again (its grant expired or is missing), the TOTP form comes back instead of empty admin pages, and you stay logged in. The admin data that failed is reloaded after you verify. The session follows the API's expiry when the API sends one.
+- **Super Admin TOTP form**: a verify request that fails (rate limited or a server error) shows the reason and no longer counts as a wrong code toward the 30-second lockout.
+
+### Added
+
+- **Tests**: unit tests for the TOTP rules and the API client's handling of the TOTP 403.
+
 ## [1.4.1] - 2026-10-06
 
 ### Fixed
