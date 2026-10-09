@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @ninsys/ui@1.0.2
+
 ## 0.1.2
 
 ### Patch Changes
