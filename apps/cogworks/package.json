@@ -1,6 +1,6 @@
 {
 	"name": "@ninsys/cogworks",
-	"version": "1.4.4",
+	"version": "1.4.5",
 	"private": true,
 	"type": "module",
 	"scripts": {
@@ -27,7 +27,7 @@
 		"@vitejs/plugin-react": "^4.3.4",
 		"tailwindcss": "^4.0.0",
 		"typescript": "^5.7.2",
-		"vite": "^6.0.0",
+		"vite": "^6.4.6",
 		"vite-tsconfig-paths": "^5.1.4"
 	}
 }

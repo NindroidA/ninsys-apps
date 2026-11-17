@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.4.5] - 2026-11-16
+
+### Security
+
+- Takes `@ninsys/ui` 1.0.2: react-router-dom ^7.18.4 and a lockfile refresh with in-range fixes for open advisories, including vite 6.4.6.
+
 ## [1.4.4] - 2026-10-06
 
 Now that the API (ninsys-api 2.20.8) returns real rows for the Active lists and accepts the dashboard's requests, several pages still showed buttons that could never apply, crashed, or sent values the API rejected. The dashboard now follows the bot's statuses and the API's shapes.
