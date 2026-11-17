@@ -1,6 +1,6 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useCurrentGuild } from "@/hooks/useCurrentGuild";
-import { getGuildIconUrl } from "@/lib/constants";
+import { getGuildIconUrl, isModuleAvailable } from "@/lib/constants";
 import { getInitials } from "@/lib/utils";
 import { useSidebarStore } from "@/stores/sidebarStore";
 import { cn } from "@ninsys/ui/lib";
@@ -196,6 +196,9 @@ export function Sidebar() {
 						}
 
 						if (item.ownerOnly && !isOwner) return null;
+
+						// Modules without a bot backend yet (see UNAVAILABLE_MODULES)
+						if (!isModuleAvailable(item.to)) return null;
 
 						// Hide items belonging to a collapsed section (only when sidebar is expanded)
 						if (!isCollapsed && currentSection !== null && collapsedSections[currentSection]) {

@@ -202,11 +202,12 @@ export function useActiveApplications(guildId: string, params: ActiveApplication
 	return useQuery({
 		queryKey: ["applications", "active", guildId, { page, limit, status, positionId }],
 		queryFn: async () => {
+			// Always send the status: with none, the API lists pending applications only.
 			const searchParams = new URLSearchParams({
 				page: String(page),
 				limit: String(limit),
+				status,
 			});
-			if (status !== "all") searchParams.set("status", status);
 			if (positionId) searchParams.set("positionId", positionId);
 
 			const result = await apiGet<PaginatedResponse<Application>>(

@@ -97,7 +97,7 @@ function TagRow({
 }) {
 	const [isEditing, setIsEditing] = useState(false);
 	const [editName, setEditName] = useState(tag.name);
-	const updateTag = useUpdateMemoryTag(guildId, tag.configId);
+	const updateTag = useUpdateMemoryTag(guildId, tag.memoryConfigId);
 
 	const handleSave = useCallback(() => {
 		if (!editName.trim() || editName === tag.name) {

@@ -7,9 +7,11 @@ import { useCallback, useMemo, useState } from "react";
 
 interface ArchiveMetadata {
 	guildId: string;
-	guildName: string;
+	/** Missing from older bot exports, null when the bot couldn't see the server. */
+	guildName?: string | null;
 	exportDate: string;
-	system: string;
+	/** Only per-system exports set it; the offboarding archive doesn't. */
+	system?: string;
 	entryCount: number;
 	version: string;
 }
@@ -270,7 +272,9 @@ export function ArchiveViewerPage() {
 							<Card className="p-5">
 								<div className="flex items-center justify-between mb-3">
 									<div>
-										<h2 className="text-lg font-semibold">{data.metadata.guildName}</h2>
+										<h2 className="text-lg font-semibold">
+											{data.metadata.guildName ?? `Server ${data.metadata.guildId}`}
+										</h2>
 										<p className="text-xs text-muted-foreground">
 											Exported {new Date(data.metadata.exportDate).toLocaleDateString()} ·{" "}
 											{data.metadata.entryCount} entries · v{data.metadata.version}

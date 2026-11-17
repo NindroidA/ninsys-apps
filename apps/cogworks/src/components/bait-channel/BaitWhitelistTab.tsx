@@ -1,3 +1,4 @@
+import { BaitLoadError, BaitNotSetUp } from "@/components/bait-channel/BaitLoadError";
 import { RolePicker } from "@/components/discord/RolePicker";
 import { ConfigSection } from "@/components/forms/ConfigSection";
 import { SaveBar } from "@/components/forms/SaveBar";
@@ -12,7 +13,14 @@ interface BaitWhitelistTabProps {
 }
 
 export function BaitWhitelistTab({ guildId }: BaitWhitelistTabProps) {
-	const { data: whitelist, isLoading } = useBaitChannelWhitelist(guildId);
+	const {
+		data: whitelist,
+		isLoading,
+		isError,
+		error,
+		refetch,
+		isFetching,
+	} = useBaitChannelWhitelist(guildId);
 	const updateWhitelist = useUpdateBaitChannelWhitelist(guildId);
 
 	const [roleIds, setRoleIds] = useState<string[]>([]);
@@ -25,10 +33,10 @@ export function BaitWhitelistTab({ guildId }: BaitWhitelistTabProps) {
 
 	useEffect(() => {
 		if (whitelist) {
-			setRoleIds([...(whitelist.roleIds ?? [])]);
-			setUserIds([...(whitelist.userIds ?? [])]);
-			setOriginalRoleIds([...(whitelist.roleIds ?? [])]);
-			setOriginalUserIds([...(whitelist.userIds ?? [])]);
+			setRoleIds([...whitelist.whitelistedRoles]);
+			setUserIds([...whitelist.whitelistedUsers]);
+			setOriginalRoleIds([...whitelist.whitelistedRoles]);
+			setOriginalUserIds([...whitelist.whitelistedUsers]);
 		}
 	}, [whitelist]);
 
@@ -36,7 +44,7 @@ export function BaitWhitelistTab({ guildId }: BaitWhitelistTabProps) {
 
 	const handleSave = useCallback(() => {
 		updateWhitelist.mutate(
-			{ roleIds, userIds },
+			{ whitelistedRoles: roleIds, whitelistedUsers: userIds },
 			{
 				onSuccess: () => {
 					setOriginalRoleIds(roleIds);
@@ -77,6 +85,19 @@ export function BaitWhitelistTab({ guildId }: BaitWhitelistTabProps) {
 			</div>
 		);
 	}
+
+	if (isError) {
+		return (
+			<BaitLoadError
+				what="whitelist"
+				error={error}
+				onRetry={() => refetch()}
+				retrying={isFetching}
+			/>
+		);
+	}
+
+	if (whitelist === null) return <BaitNotSetUp />;
 
 	return (
 		<div className="space-y-6 ">

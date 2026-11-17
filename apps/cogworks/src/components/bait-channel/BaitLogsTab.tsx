@@ -1,6 +1,6 @@
 import { type Column, DataTable } from "@/components/ui/DataTable";
 import { Select } from "@/components/ui/Select";
-import { useBaitChannelLogs, useOverrideBaitLog } from "@/hooks/useBaitChannel";
+import { firedFlags, useBaitChannelLogs, useOverrideBaitLog } from "@/hooks/useBaitChannel";
 import type { BaitChannelLog } from "@/types/bait-channel";
 import { Badge, Button } from "@ninsys/ui/components";
 import { AnimatePresence, motion } from "framer-motion";
@@ -14,9 +14,12 @@ interface BaitLogsTabProps {
 const ACTION_COLORS: Record<string, string> = {
 	ban: "bg-red-500/10 text-red-500",
 	kick: "bg-orange-500/10 text-orange-500",
-	mute: "bg-yellow-500/10 text-yellow-600",
-	warn: "bg-blue-500/10 text-blue-500",
+	timeout: "bg-yellow-500/10 text-yellow-600",
+	logged: "bg-blue-500/10 text-blue-500",
 };
+
+/** Raid-mode rows use userId 'SYSTEM'; the override API takes a Discord user id. */
+const SNOWFLAKE = /^\d{17,20}$/;
 
 function scoreColor(score: number): string {
 	if (score < 30) return "text-green-500";
@@ -34,6 +37,21 @@ export function BaitLogsTab({ guildId }: BaitLogsTabProps) {
 		action: actionFilter || undefined,
 	});
 	const overrideLog = useOverrideBaitLog(guildId);
+
+	// The bot overrides a user's newest detection. Until the API and bot accept
+	// logId, offer it only where a row is known to be that: the first row per user
+	// on the unfiltered first page (the list is newest first).
+	const overridableIds = useMemo(() => {
+		const seen = new Set<string>();
+		const ids = new Set<number>();
+		if (page !== 1 || actionFilter) return ids;
+		for (const row of data?.data ?? []) {
+			if (seen.has(row.userId)) continue;
+			seen.add(row.userId);
+			if (!row.overridden && SNOWFLAKE.test(row.userId)) ids.add(row.id);
+		}
+		return ids;
+	}, [data?.data, page, actionFilter]);
 
 	const columns = useMemo<Column<BaitChannelLog>[]>(
 		() => [
@@ -61,26 +79,28 @@ export function BaitLogsTab({ guildId }: BaitLogsTabProps) {
 				),
 			},
 			{
-				key: "action",
+				key: "actionTaken",
 				header: "Action",
 				render: (row) => (
 					<Badge
 						variant="outline"
-						className={`text-xs capitalize ${ACTION_COLORS[row.action] ?? ""}`}
+						className={`text-xs capitalize ${ACTION_COLORS[row.actionTaken] ?? ""}`}
 					>
-						{row.action}
+						{row.actionTaken}
 					</Badge>
 				),
 			},
 			{
 				key: "flags",
 				header: "Flags",
-				render: (row) => (
-					<span className="text-xs text-muted-foreground">
-						{row.flagsDetected?.length ?? 0} flag
-						{(row.flagsDetected?.length ?? 0) !== 1 ? "s" : ""}
-					</span>
-				),
+				render: (row) => {
+					const count = firedFlags(row.detectionFlags).length;
+					return (
+						<span className="text-xs text-muted-foreground">
+							{count} flag{count !== 1 ? "s" : ""}
+						</span>
+					);
+				},
 			},
 			{
 				key: "override",
@@ -98,13 +118,15 @@ export function BaitLogsTab({ guildId }: BaitLogsTabProps) {
 							</span>
 						);
 					}
+					if (!overridableIds.has(row.id)) return null;
 					return (
 						<Button
 							variant="ghost"
 							className="h-7 px-2 text-xs"
+							title="Mark this user's most recent detection as a false positive"
 							onClick={(e) => {
 								e.stopPropagation();
-								overrideLog.mutate(row.userId);
+								overrideLog.mutate({ userId: row.userId, logId: row.id });
 							}}
 							disabled={overrideLog.isPending}
 						>
@@ -115,7 +137,7 @@ export function BaitLogsTab({ guildId }: BaitLogsTabProps) {
 				},
 			},
 		],
-		[overrideLog],
+		[overrideLog, overridableIds],
 	);
 
 	return (
@@ -132,7 +154,7 @@ export function BaitLogsTab({ guildId }: BaitLogsTabProps) {
 						{ value: "ban", label: "Ban" },
 						{ value: "kick", label: "Kick" },
 						{ value: "timeout", label: "Timeout" },
-						{ value: "log-only", label: "Log Only" },
+						{ value: "logged", label: "Log Only" },
 					]}
 					aria-label="Filter by action"
 				/>
@@ -142,7 +164,7 @@ export function BaitLogsTab({ guildId }: BaitLogsTabProps) {
 				data={data?.data ?? []}
 				columns={columns}
 				isLoading={isLoading}
-				getRowKey={(row) => row.id}
+				getRowKey={(row) => String(row.id)}
 				pagination={data?.pagination}
 				onPageChange={setPage}
 				emptyState={{
@@ -183,8 +205,8 @@ export function BaitLogsTab({ guildId }: BaitLogsTabProps) {
 							<div>
 								<p className="text-xs text-muted-foreground mb-1">Flags Detected</p>
 								<div className="flex flex-wrap gap-1">
-									{(selectedLog.flagsDetected?.length ?? 0) > 0 ? (
-										(selectedLog.flagsDetected ?? []).map((flag) => (
+									{firedFlags(selectedLog.detectionFlags).length > 0 ? (
+										firedFlags(selectedLog.detectionFlags).map((flag) => (
 											<Badge key={flag} variant="outline" className="text-xs">
 												{flag}
 											</Badge>
@@ -207,7 +229,7 @@ export function BaitLogsTab({ guildId }: BaitLogsTabProps) {
 								</div>
 								<div>
 									<p className="text-xs text-muted-foreground">Action</p>
-									<p className="capitalize mt-0.5">{selectedLog.action}</p>
+									<p className="capitalize mt-0.5">{selectedLog.actionTaken}</p>
 								</div>
 								<div>
 									<p className="text-xs text-muted-foreground">Time</p>

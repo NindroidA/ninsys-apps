@@ -4,7 +4,11 @@ import { ConfigSection } from "@/components/forms/ConfigSection";
 import { SaveBar } from "@/components/forms/SaveBar";
 import { StatusToggle } from "@/components/forms/StatusToggle";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
-import { useUpdateBaitChannelConfig } from "@/hooks/useBaitChannel";
+import {
+	DEFAULT_BAN_REASON,
+	DEFAULT_WARNING_MESSAGE,
+	useUpdateBaitChannelConfig,
+} from "@/hooks/useBaitChannel";
 import { useConfig, useUpdateConfig } from "@/hooks/useConfig";
 import { useCurrentGuild } from "@/hooks/useCurrentGuild";
 import { useOverview } from "@/hooks/useOverview";
@@ -103,7 +107,11 @@ export function ConfigPage() {
 		setIsResetting(true);
 		try {
 			await Promise.allSettled([
-				updateBaitConfig.mutateAsync({ banReason: null, warningMessage: null }),
+				// The bot can't store an empty message; "reset" means its default text.
+				updateBaitConfig.mutateAsync({
+					banReason: DEFAULT_BAN_REASON,
+					warningMessage: DEFAULT_WARNING_MESSAGE,
+				}),
 				updateRulesConfig.mutateAsync({ customText: null }),
 			]);
 			toast.success("All custom messages reset to defaults");

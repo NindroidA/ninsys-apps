@@ -23,18 +23,20 @@ export function CreateMenuDialog({
 	const nameId = useId();
 	const descId = useId();
 
+	// The bot posts the menu message when it creates it, so a channel is required.
 	const handleCreate = useCallback(() => {
-		if (!name.trim()) return;
+		if (!name.trim() || !channelId) return;
 		createMenu.mutate(
 			{
 				name: name.trim(),
 				description: description.trim() || undefined,
-				channelId: channelId ?? undefined,
+				channelId,
 				mode,
 			},
 			{
 				onSuccess: (data) => {
-					if (data?.id) onCreated(data.id);
+					// The API returns the bot's numeric menu id.
+					if (data?.id) onCreated(String(data.id));
 				},
 			},
 		);
@@ -77,7 +79,6 @@ export function CreateMenuDialog({
 					filter="text"
 					label="Target Channel"
 					placeholder="Select channel for the role menu message"
-					clearable
 					disabled={createMenu.isPending}
 				/>
 
@@ -118,7 +119,10 @@ export function CreateMenuDialog({
 					<Button variant="ghost" onClick={onCancel} disabled={createMenu.isPending}>
 						Cancel
 					</Button>
-					<Button onClick={handleCreate} disabled={!name.trim() || createMenu.isPending}>
+					<Button
+						onClick={handleCreate}
+						disabled={!name.trim() || !channelId || createMenu.isPending}
+					>
 						{createMenu.isPending ? "Creating..." : "Create Menu"}
 					</Button>
 				</div>

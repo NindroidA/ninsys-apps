@@ -4,6 +4,7 @@
 
 ### Patch Changes
 
+- Security: vite ^6.4.6 (in-range fix for the open vite dev-server advisory)
 - Updated dependencies
   - @ninsys/ui@1.0.2
 

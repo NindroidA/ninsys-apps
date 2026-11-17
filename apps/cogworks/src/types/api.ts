@@ -2,6 +2,8 @@ export interface ApiResponse<T> {
 	success: boolean;
 	data?: T;
 	error?: string;
+	/** HTTP status of a failed response (set by the API client for non-2xx JSON replies). */
+	status?: number;
 	timestamp: string;
 }
 

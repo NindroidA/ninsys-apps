@@ -56,6 +56,7 @@ export interface UserTicketRestriction {
 	guildId: string;
 	userId: string;
 	username: string;
+	/** The bot stores restrictions per type; older rows may still be null. */
 	typeId: string | null;
 	reason: string;
 	createdAt: string;
@@ -69,19 +70,37 @@ export interface StatusHistoryEntry {
 	timestamp: string;
 }
 
+/**
+ * The bot's ticket status: 'created', 'opened', 'adminOnly', 'error', a workflow
+ * status id ('in-progress', ...), or 'closed'. Anything but 'closed' is active.
+ */
+export type TicketStatus = string;
+
+export function isTicketClosed(status: TicketStatus): boolean {
+	return status === "closed";
+}
+
+/** Maps the bot's values onto the names the status badge knows; workflow ids pass through. */
+export function ticketStatusBadge(status: TicketStatus): string {
+	if (status === "created" || status === "opened") return "open";
+	if (status === "adminOnly") return "admin_only";
+	return status;
+}
+
+/** A tickets row. The API sends the id as a string; it doesn't send the optional fields yet. */
 export interface Ticket {
 	id: string;
 	guildId: string;
-	channelId: string;
+	channelId: string | null;
 	createdBy: string;
-	createdByUsername: string;
-	type: string;
-	status: "open" | "closed";
-	assignedTo: string | null;
-	assignedAt: string | null;
-	lastActivityAt: string | null;
-	statusHistory: StatusHistoryEntry[] | null;
+	createdByUsername?: string;
+	type: string | null;
+	status: TicketStatus;
+	assignedTo?: string | null;
+	assignedAt?: string | null;
+	lastActivityAt?: string | null;
+	statusHistory?: StatusHistoryEntry[] | null;
 	workflowStatus?: WorkflowStatus | null;
-	createdAt: string;
-	closedAt: string | null;
+	createdAt?: string;
+	closedAt?: string | null;
 }

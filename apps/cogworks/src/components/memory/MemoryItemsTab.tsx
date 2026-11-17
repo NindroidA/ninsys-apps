@@ -38,7 +38,6 @@ function CreateItemForm({
 	const createItem = useCreateMemoryItem(guildId);
 	const { data: tags } = useMemoryTags(guildId, selectedConfigId || null);
 	const [categoryTag, setCategoryTag] = useState("");
-	const [statusTag, setStatusTag] = useState("");
 
 	const titleId = useId();
 	const descId = useId();
@@ -50,20 +49,18 @@ function CreateItemForm({
 				memoryConfigId: selectedConfigId,
 				title: title.trim(),
 				description: description.trim() || undefined,
-				categoryTag: categoryTag || undefined,
-				statusTag: statusTag || undefined,
+				categoryTagId: categoryTag ? Number(categoryTag) : undefined,
 			},
 			{
 				onSuccess: () => {
 					setTitle("");
 					setDescription("");
 					setCategoryTag("");
-					setStatusTag("");
 					onDone();
 				},
 			},
 		);
-	}, [title, description, selectedConfigId, categoryTag, statusTag, createItem, onDone]);
+	}, [title, description, selectedConfigId, categoryTag, createItem, onDone]);
 
 	return (
 		<div className="rounded-lg border border-primary/50 overflow-visible">
@@ -75,7 +72,6 @@ function CreateItemForm({
 						onChange={(v) => {
 							setSelectedConfigId(v);
 							setCategoryTag("");
-							setStatusTag("");
 						}}
 						options={[
 							{ value: "", label: "Select channel..." },
@@ -113,37 +109,20 @@ function CreateItemForm({
 					/>
 				</div>
 
-				{selectedConfigId && tags && (
-					<div className="grid grid-cols-2 gap-4">
-						{(tags?.categories ?? []).length > 0 && (
-							<Select
-								value={categoryTag}
-								onChange={setCategoryTag}
-								options={[
-									{ value: "", label: "None" },
-									...(tags?.categories ?? []).map((t) => ({
-										value: t.id,
-										label: t.emoji ? `${t.emoji} ${t.name}` : t.name,
-									})),
-								]}
-								label="Category"
-							/>
-						)}
-						{(tags?.statuses ?? []).length > 0 && (
-							<Select
-								value={statusTag}
-								onChange={setStatusTag}
-								options={[
-									{ value: "", label: "None" },
-									...(tags?.statuses ?? []).map((t) => ({
-										value: t.id,
-										label: t.emoji ? `${t.emoji} ${t.name}` : t.name,
-									})),
-								]}
-								label="Status"
-							/>
-						)}
-					</div>
+				{/* New items always start as Open (the bot sets it); change it from the item. */}
+				{selectedConfigId && (tags?.categories ?? []).length > 0 && (
+					<Select
+						value={categoryTag}
+						onChange={setCategoryTag}
+						options={[
+							{ value: "", label: "None" },
+							...(tags?.categories ?? []).map((t) => ({
+								value: String(t.id),
+								label: t.emoji ? `${t.emoji} ${t.name}` : t.name,
+							})),
+						]}
+						label="Category"
+					/>
 				)}
 
 				<div className="flex items-center gap-2 justify-end">
@@ -166,10 +145,12 @@ function CreateItemForm({
 
 function ItemDetailPanel({
 	item,
+	channelName,
 	guildId,
 	onClose,
 }: {
 	item: MemoryItem;
+	channelName: string;
 	guildId: string;
 	onClose: () => void;
 }) {
@@ -195,9 +176,11 @@ function ItemDetailPanel({
 		);
 	}, [editTitle, editDesc, item.id, updateItem, onClose]);
 
+	// The panel holds a snapshot of the row, so track the status it last saved.
+	const [status, setStatus] = useState(item.status);
 	const handleStatusChange = useCallback(
-		(statusTag: string) => {
-			updateStatus.mutate({ itemId: item.id, statusTag });
+		(name: string) => {
+			updateStatus.mutate({ itemId: item.id, status: name }, { onSuccess: () => setStatus(name) });
 		},
 		[item.id, updateStatus],
 	);
@@ -274,10 +257,10 @@ function ItemDetailPanel({
 										<button
 											key={s.id}
 											type="button"
-											onClick={() => handleStatusChange(s.id)}
+											onClick={() => handleStatusChange(s.name)}
 											disabled={updateStatus.isPending}
 											className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
-												item.statusTag === s.id
+												status === s.name
 													? "bg-primary text-primary-foreground"
 													: "bg-muted text-muted-foreground hover:bg-muted/80"
 											}`}
@@ -292,11 +275,11 @@ function ItemDetailPanel({
 						<div className="grid grid-cols-2 gap-4 text-sm">
 							<div>
 								<p className="text-xs text-muted-foreground">Channel</p>
-								<p className="font-medium mt-0.5">{item.channelName}</p>
+								<p className="font-medium mt-0.5">{channelName}</p>
 							</div>
 							<div>
 								<p className="text-xs text-muted-foreground">Created By</p>
-								<p className="font-medium mt-0.5">{item.createdByUsername}</p>
+								<p className="font-medium mt-0.5">{item.createdBy}</p>
 							</div>
 							<div>
 								<p className="text-xs text-muted-foreground">Created</p>
@@ -367,23 +350,11 @@ export function MemoryItemsTab({ guildId }: MemoryItemsTabProps) {
 
 	const showChannelColumn = !channelFilter;
 
-	// Load tags for the active config (or first config) to resolve tag IDs to names
-	const activeConfigId = channelFilter || (configs[0]?.id ?? null);
-	const { data: activeTags } = useMemoryTags(guildId, activeConfigId);
-
-	// Build tag ID → display name lookup
-	const tagNameMap = useMemo(() => {
-		const map = new Map<string, string>();
-		if (activeTags) {
-			for (const t of activeTags.statuses ?? []) {
-				map.set(t.id, t.emoji ? `${t.emoji} ${t.name}` : t.name);
-			}
-			for (const t of activeTags.categories ?? []) {
-				map.set(t.id, t.emoji ? `${t.emoji} ${t.name}` : t.name);
-			}
-		}
-		return map;
-	}, [activeTags]);
+	// Items carry their channel's config id, not its name.
+	const channelNames = useMemo(
+		() => new Map(configs.map((c) => [String(c.id), c.channelName])),
+		[configs],
+	);
 
 	const columns = useMemo<Column<MemoryItem>[]>(() => {
 		const cols: Column<MemoryItem>[] = [
@@ -393,24 +364,12 @@ export function MemoryItemsTab({ guildId }: MemoryItemsTabProps) {
 				render: (row) => <span className="text-sm font-medium">{row.title}</span>,
 			},
 			{
-				key: "statusTag",
+				key: "status",
 				header: "Status",
 				render: (row) =>
-					row.statusTag ? (
+					row.status ? (
 						<Badge variant="outline" className="text-xs">
-							{tagNameMap.get(row.statusTag) ?? row.statusTag}
-						</Badge>
-					) : (
-						<span className="text-xs text-muted-foreground">—</span>
-					),
-			},
-			{
-				key: "categoryTag",
-				header: "Category",
-				render: (row) =>
-					row.categoryTag ? (
-						<Badge variant="outline" className="text-xs">
-							{tagNameMap.get(row.categoryTag) ?? row.categoryTag}
+							{row.status}
 						</Badge>
 					) : (
 						<span className="text-xs text-muted-foreground">—</span>
@@ -420,11 +379,11 @@ export function MemoryItemsTab({ guildId }: MemoryItemsTabProps) {
 
 		if (showChannelColumn) {
 			cols.push({
-				key: "channelName",
+				key: "channel",
 				header: "Channel",
 				render: (row) => (
 					<Badge variant="outline" className="text-xs bg-primary/5">
-						{row.channelName}
+						{channelNames.get(String(row.memoryConfigId)) ?? "—"}
 					</Badge>
 				),
 			});
@@ -432,9 +391,9 @@ export function MemoryItemsTab({ guildId }: MemoryItemsTabProps) {
 
 		cols.push(
 			{
-				key: "createdByUsername",
+				key: "createdBy",
 				header: "Created By",
-				render: (row) => <span className="text-sm">{row.createdByUsername}</span>,
+				render: (row) => <span className="text-sm">{row.createdBy}</span>,
 			},
 			{
 				key: "createdAt",
@@ -448,7 +407,7 @@ export function MemoryItemsTab({ guildId }: MemoryItemsTabProps) {
 		);
 
 		return cols;
-	}, [showChannelColumn, tagNameMap]);
+	}, [showChannelColumn, channelNames]);
 
 	if (configsLoading) {
 		return (
@@ -543,6 +502,7 @@ export function MemoryItemsTab({ guildId }: MemoryItemsTabProps) {
 					<ItemDetailPanel
 						key={selectedItem.id}
 						item={selectedItem}
+						channelName={channelNames.get(String(selectedItem.memoryConfigId)) ?? "—"}
 						guildId={guildId}
 						onClose={() => setSelectedItem(null)}
 					/>

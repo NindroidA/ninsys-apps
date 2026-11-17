@@ -9,7 +9,11 @@ import {
 	useDenyApplication,
 	usePositions,
 } from "@/hooks/useApplications";
-import type { Application } from "@/types/applications";
+import {
+	type Application,
+	applicationStatusBadge,
+	canReviewApplication,
+} from "@/types/applications";
 import { Button } from "@ninsys/ui/components";
 import { AnimatePresence, motion } from "framer-motion";
 import { Archive, CheckCircle, ClipboardList, Eye, X, XCircle } from "lucide-react";
@@ -49,11 +53,11 @@ function ApplicationDetailPanel({
 		return () => document.removeEventListener("keydown", handleKeyDown);
 	}, [onClose]);
 
-	const responseEntries = useMemo(() => Object.entries(app.responses), [app.responses]);
+	const responseEntries = useMemo(() => Object.entries(app.responses ?? {}), [app.responses]);
 
-	const canApprove = app.status === "pending";
-	const canDeny = app.status === "pending";
-	const canArchive = app.status !== "archived";
+	const canApprove = canReviewApplication(app.status);
+	const canDeny = canReviewApplication(app.status);
+	const canArchive = app.status !== "closed";
 
 	return (
 		<>
@@ -88,23 +92,25 @@ function ApplicationDetailPanel({
 
 					<div className="space-y-4">
 						<div className="flex items-center gap-3">
-							<StatusBadge status={app.status} />
+							<StatusBadge status={applicationStatusBadge(app.status)} />
 							<span className="text-sm text-muted-foreground">#{app.id.slice(0, 8)}</span>
 						</div>
 
 						<div className="grid grid-cols-2 gap-4">
 							<div>
 								<p className="text-xs text-muted-foreground">Position</p>
-								<p className="text-sm font-medium mt-0.5">{app.positionTitle}</p>
+								<p className="text-sm font-medium mt-0.5">{app.positionTitle ?? app.type}</p>
 							</div>
 							<div>
 								<p className="text-xs text-muted-foreground">Applicant</p>
-								<p className="text-sm font-medium mt-0.5">{app.applicantUsername}</p>
+								<p className="text-sm font-medium mt-0.5">
+									{app.applicantUsername ?? app.createdBy}
+								</p>
 							</div>
 							<div>
 								<p className="text-xs text-muted-foreground">Submitted</p>
 								<p className="text-sm font-medium mt-0.5">
-									{new Date(app.createdAt).toLocaleString()}
+									{app.createdAt ? new Date(app.createdAt).toLocaleString() : "—"}
 								</p>
 							</div>
 							{app.reviewedBy && (
@@ -267,7 +273,7 @@ function ApplicationDetailPanel({
 
 export function ApplicationActiveTab({ guildId }: ApplicationActiveTabProps) {
 	const [page, setPage] = useState(1);
-	const [statusFilter, setStatusFilter] = useState<AppStatus>("all");
+	const [statusFilter, setStatusFilter] = useState<AppStatus>("pending");
 	const [positionFilter, setPositionFilter] = useState<string>("");
 	const { data: positions = [] } = usePositions(guildId);
 	const { data, isLoading } = useActiveApplications(guildId, {
@@ -283,24 +289,26 @@ export function ApplicationActiveTab({ guildId }: ApplicationActiveTabProps) {
 			{
 				key: "positionTitle",
 				header: "Position",
-				render: (row) => <span className="text-sm font-medium">{row.positionTitle}</span>,
+				render: (row) => (
+					<span className="text-sm font-medium">{row.positionTitle ?? row.type}</span>
+				),
 			},
 			{
 				key: "applicantUsername",
 				header: "Applicant",
-				render: (row) => <span className="text-sm">{row.applicantUsername}</span>,
+				render: (row) => <span className="text-sm">{row.applicantUsername ?? row.createdBy}</span>,
 			},
 			{
 				key: "status",
 				header: "Status",
-				render: (row) => <StatusBadge status={row.status} />,
+				render: (row) => <StatusBadge status={applicationStatusBadge(row.status)} />,
 			},
 			{
 				key: "createdAt",
 				header: "Submitted",
 				render: (row) => (
 					<span className="text-sm text-muted-foreground">
-						{new Date(row.createdAt).toLocaleDateString()}
+						{row.createdAt ? new Date(row.createdAt).toLocaleDateString() : "—"}
 					</span>
 				),
 			},
@@ -318,11 +326,11 @@ export function ApplicationActiveTab({ guildId }: ApplicationActiveTabProps) {
 						setPage(1);
 					}}
 					options={[
-						{ value: "all", label: "All Status" },
 						{ value: "pending", label: "Pending" },
 						{ value: "approved", label: "Approved" },
 						{ value: "denied", label: "Denied" },
 						{ value: "archived", label: "Archived" },
+						{ value: "all", label: "All Status" },
 					]}
 				/>
 

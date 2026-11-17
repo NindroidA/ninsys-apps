@@ -10,24 +10,23 @@ export interface MemoryChannelConfig {
 
 export interface MemoryTag {
 	id: string;
-	configId: string;
+	memoryConfigId: string;
 	name: string;
 	emoji: string | null;
 	tagType: "category" | "status";
 	isDefault: boolean;
 }
 
+/** A memory_items row. */
 export interface MemoryItem {
 	id: string;
 	memoryConfigId: string;
 	title: string;
 	description: string | null;
-	categoryTag: string | null;
-	statusTag: string | null;
-	tags: string[];
-	channelName: string;
+	/** The status tag's name ('Open', 'In Progress', ...), as the bot stores it. */
+	status: string;
+	threadId: string;
 	createdBy: string;
-	createdByUsername: string;
 	createdAt: string;
 	updatedAt: string;
 }
